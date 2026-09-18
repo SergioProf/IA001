@@ -48,6 +48,16 @@ def value_after_label(text: str) -> str:
     return normalize_text(text.split(":", maxsplit=1)[-1])
 
 
+def labeled_value(rows: list[tuple[Any, ...]], label: str) -> str:
+    """Lê o valor do rótulo, seja na própria célula ou na célula seguinte."""
+    labeled_cell = find_labeled_cell(rows, label)
+    if not labeled_cell:
+        return ""
+    row_index, column_index, text = labeled_cell
+    value = value_after_label(text)
+    return value if value.upper() != label.rstrip(":").upper() else normalize_text(cell_value(rows[row_index], column_index + 1))
+
+
 def cell_value(row: tuple[Any, ...], column: int) -> Any:
     """Lê uma célula com segurança em linhas vazias ou encurtadas do Excel."""
     return row[column] if column < len(row) else None
@@ -95,17 +105,18 @@ def allocate_vacancies(total: Any, class_names: list[str]) -> dict[str, int | No
     return {class_name: base + int(index < remainder) for index, class_name in enumerate(class_names)}
 
 
-def extract_metadata(rows: list[tuple[Any, ...]]) -> tuple[str, str, str]:
-    """Lê período letivo, prédio e sala no cabeçalho de uma aba."""
-    room_cell = find_labeled_cell(rows, "SALA:")
-    semester_cell = find_labeled_cell(rows, "PERÍODO LETIVO:")
-    building_cell = find_labeled_cell(rows, "PRÉDIO:")
-    if not room_cell or not semester_cell:
+def extract_metadata(rows: list[tuple[Any, ...]]) -> tuple[str, str, str, str, str]:
+    """Lê os metadados físicos e acadêmicos do cabeçalho de uma aba."""
+    semester = labeled_value(rows, "PERÍODO LETIVO:")
+    room = labeled_value(rows, "SALA:")
+    if not semester or not room:
         raise ValueError("Cabecalho sem 'Sala:' ou 'Periodo Letivo:'")
     return (
-        value_after_label(semester_cell[2]),
-        value_after_label(building_cell[2]) if building_cell else "",
-        value_after_label(room_cell[2]),
+        semester,
+        labeled_value(rows, "PRÉDIO:"),
+        room,
+        labeled_value(rows, "TIPO DE SALA"),
+        labeled_value(rows, "CAPACIDADE"),
     )
 
 
@@ -229,7 +240,7 @@ def transform_workbook() -> tuple[pd.DataFrame, list[str], list[str]]:
         # Cada aba descreve uma sala e contém cabeçalho, grade e tabela inferior.
         worksheet = workbook[sheet_name]
         rows = list(worksheet.iter_rows(values_only=True))
-        semester, building, room = extract_metadata(rows)
+        semester, building, room, room_type, class_capacity = extract_metadata(rows)
         descriptions = extract_descriptions(rows)
         schedule = extract_schedule(rows)
         processed_sheets.append(sheet_name)
@@ -249,6 +260,8 @@ def transform_workbook() -> tuple[pd.DataFrame, list[str], list[str]]:
                     "semestre": semester,
                     "predio": building,
                     "sala": room,
+                    "tipo_sala": room_type,
+                    "capacidade_turma": class_capacity,
                     "nome_disciplina": description["nome_disciplina"],
                     "cursos": description["cursos"],
                     "vagas_oferecidas": vacancies[record["turma"]],
@@ -267,7 +280,7 @@ def transform_workbook() -> tuple[pd.DataFrame, list[str], list[str]]:
             output_records.append({**record, "curso": course})
 
     columns = [
-        "semestre", "predio", "sala", "codigo_disciplina", "turma", "nome_disciplina", "curso",
+        "semestre", "predio", "sala", "tipo_sala", "capacidade_turma", "codigo_disciplina", "turma", "nome_disciplina", "curso",
         "dia_semana", "hora_inicio", "hora_fim", "numero_periodos", "vagas_oferecidas",
         "vagas_totais_compartilhadas", "turmas_compartilhando_sala",
     ]

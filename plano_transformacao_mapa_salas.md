@@ -10,7 +10,7 @@ Cada linha do CSV representa um encontro de uma turma de um curso em uma sala, d
 
 ## Regras de transformação
 
-1. Cada aba do Excel é uma sala. O nome da sala e o período letivo são lidos do cabeçalho da própria aba.
+1. Cada aba do Excel é uma sala. O nome da sala, o período letivo, o tipo de sala e a capacidade da turma são lidos do cabeçalho da própria aba.
 2. A grade semanal é convertida para registros usando o dia da semana da coluna e o horário da linha.
 3. Identificadores como `ARQ01045 - A/B` são separados em duas turmas: `A` e `B`.
 4. As vagas de turmas compartilhadas são divididas igualmente. Quando o total for ímpar, a primeira turma recebe a vaga restante.
@@ -25,6 +25,6 @@ Cada linha do CSV representa um encontro de uma turma de um curso em uma sala, d
 
 ## Colunas do CSV
 
-`semestre`, `predio`, `sala`, `codigo_disciplina`, `turma`, `nome_disciplina`, `curso`, `dia_semana`, `hora_inicio`, `hora_fim`, `numero_periodos`, `vagas_oferecidas`, `vagas_totais_compartilhadas`, `turmas_compartilhando_sala`.
+`semestre`, `predio`, `sala`, `tipo_sala`, `capacidade_turma`, `codigo_disciplina`, `turma`, `nome_disciplina`, `curso`, `dia_semana`, `hora_inicio`, `hora_fim`, `numero_periodos`, `vagas_oferecidas`, `vagas_totais_compartilhadas`, `turmas_compartilhando_sala`.
 
 Para medir ocupação física, deve-se deduplicar encontros que diferem apenas em `curso`.

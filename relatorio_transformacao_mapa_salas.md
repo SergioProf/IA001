@@ -3,7 +3,7 @@
 - Arquivo de origem: `MapaSalas.xlsx`
 - Abas processadas: 23
 - Registros Tidy: 440
-- Colunas: 14
+- Colunas: 16
 - Registros duplicados: 0
 
 ## Valores ausentes
@@ -11,6 +11,8 @@
 - `semestre`: 0
 - `predio`: 0
 - `sala`: 0
+- `tipo_sala`: 0
+- `capacidade_turma`: 0
 - `codigo_disciplina`: 0
 - `turma`: 0
 - `nome_disciplina`: 0
