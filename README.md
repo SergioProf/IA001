@@ -65,12 +65,16 @@ Consulte `dicionario_dados_mapa_salas.ipynb` para as definições completas e os
 
 ## Como reproduzir
 
+### Requisitos de ambiente
+
+Este projeto foi validado com Python 3.14.7 e as dependências listadas em `requirements.txt`.
+
 ### Transformar os dados originais
 
-Com Python 3 e as dependências instaladas, coloque `MapaSalas.xlsx` na mesma pasta do script e execute:
+Com o ambiente Python configurado e as dependências instaladas, coloque `MapaSalas.xlsx` na mesma pasta do script e execute:
 
 ```powershell
-python -m pip install pandas openpyxl
+python -m pip install -r requirements.txt
 python transformar_mapa_salas.py
 ```
 
@@ -78,10 +82,10 @@ O comando gera ou atualiza `mapa_salas_tidy.csv` em UTF-8 com BOM e `relatorio_t
 
 ### Executar a análise
 
-Instale as bibliotecas usadas pelo notebook e execute suas células em ordem:
+Instale as bibliotecas do projeto e execute o notebook em ordem:
 
 ```powershell
-python -m pip install pandas matplotlib seaborn jupyter
+python -m pip install -r requirements.txt
 jupyter notebook atividade01_proposta_analise_visual.ipynb
 ```
 
