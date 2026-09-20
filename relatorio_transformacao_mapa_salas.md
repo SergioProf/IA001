@@ -2,8 +2,8 @@
 
 - Arquivo de origem: `MapaSalas.xlsx`
 - Abas processadas: 23
-- Registros Tidy: 440
-- Colunas: 16
+- Registros Tidy: 454
+- Colunas: 17
 - Registros duplicados: 0
 
 ## Valores ausentes
@@ -16,6 +16,7 @@
 - `codigo_disciplina`: 0
 - `turma`: 0
 - `nome_disciplina`: 0
+- `docente`: 0
 - `curso`: 0
 - `dia_semana`: 0
 - `hora_inicio`: 0
@@ -29,7 +30,6 @@
 
 - 302: ARQ01053-B/A
 - 303: ARQ01013-C
-- 304: ARQ01044-A/B/C/D
 
 ## Regras aplicadas
 

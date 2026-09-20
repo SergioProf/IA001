@@ -1,15 +1,23 @@
+# Permite usar anotações de tipo modernas em diferentes versões do Python.
 from __future__ import annotations
 
+# Expressões regulares são usadas para limpar textos e interpretar chaves e horários.
 import re
+# defaultdict simplifica o agrupamento dos períodos consecutivos.
 from collections import defaultdict
+# Tipos usados na leitura e no cálculo dos horários.
 from datetime import datetime, time, timedelta
+# Path permite montar caminhos independentes do sistema operacional.
 from pathlib import Path
 from typing import Any
 
+# pandas organiza os registros em DataFrame e grava o CSV final.
 import pandas as pd
+# openpyxl lê as planilhas do arquivo Excel mantendo os valores das células.
 from openpyxl import load_workbook
 
 
+# Todos os arquivos de entrada e saída ficam na pasta deste script.
 BASE_DIR = Path(__file__).resolve().parent
 # Todos os arquivos ficam na mesma pasta deste script.
 SOURCE_FILE = BASE_DIR / "MapaSalas.xlsx"
@@ -22,6 +30,7 @@ WEEKDAYS = ("SEGUNDA", "TERÇA", "QUARTA", "QUINTA", "SEXTA", "SÁBADO", "DOMING
 
 def normalize_text(value: Any) -> str:
     """Converte valores em texto e remove espaços redundantes para comparação."""
+    # O Excel pode retornar None, números, datas ou textos com espaços extras.
     if value is None:
         return ""
     return re.sub(r"\s+", " ", str(value)).strip()
@@ -29,11 +38,13 @@ def normalize_text(value: Any) -> str:
 
 def normalize_key(value: Any) -> str:
     """Padroniza a chave CODIGO-TURMA usada para juntar grade e descrição."""
+    # Remove variações de espaçamento ao redor do hífen para permitir a junção.
     return normalize_text(value).upper().replace(" - ", "-").replace(" -", "-").replace("- ", "-")
 
 
 def find_labeled_cell(rows: list[tuple[Any, ...]], label: str) -> tuple[int, int, str] | None:
     """Localiza uma célula cujo conteúdo começa com o rótulo informado."""
+    # Percorre a planilha até encontrar rótulos como "SALA:" ou "HORA".
     expected = label.upper()
     for row_index, row in enumerate(rows):
         for column_index, value in enumerate(row):
@@ -50,6 +61,7 @@ def value_after_label(text: str) -> str:
 
 def labeled_value(rows: list[tuple[Any, ...]], label: str) -> str:
     """Lê o valor do rótulo, seja na própria célula ou na célula seguinte."""
+    # Alguns campos têm o valor na mesma célula; outros usam a célula seguinte.
     labeled_cell = find_labeled_cell(rows, label)
     if not labeled_cell:
         return ""
@@ -65,6 +77,7 @@ def cell_value(row: tuple[Any, ...], column: int) -> Any:
 
 def parse_class_identifier(value: Any) -> tuple[str, list[str]] | None:
     """Separa 'ARQ01045-A/B' em código 'ARQ01045' e turmas ['A', 'B']."""
+    # A lista de turmas é necessária para criar um registro separado para cada uma.
     match = re.match(r"^([A-Z0-9]+)\s*-\s*([A-Z0-9]+(?:\s*/\s*[A-Z0-9]+)*)$", normalize_key(value))
     if not match:
         return None
@@ -73,6 +86,7 @@ def parse_class_identifier(value: Any) -> tuple[str, list[str]] | None:
 
 def format_time(value: Any) -> str:
     """Padroniza horários vindos do Excel no formato HH:MM."""
+    # Trata tanto horários nativos do Excel quanto textos como "7:30" ou "7h30".
     if isinstance(value, datetime):
         value = value.time()
     if isinstance(value, time):
@@ -86,18 +100,27 @@ def format_time(value: Any) -> str:
 
 def end_time(start: str, periods: int) -> str:
     """Calcula o fim de um encontro sabendo seu início e total de períodos."""
+    # Cada período da grade corresponde a uma hora.
     start_datetime = datetime.strptime(start, "%H:%M")
     return (start_datetime + timedelta(hours=periods)).strftime("%H:%M")
 
 
 def split_courses(value: Any) -> list[str]:
     """Separa cursos registrados juntos, por exemplo 'DVIS/DPRO'."""
+    # Cursos compartilhados viram linhas distintas no arquivo tidy.
     courses = [course.strip() for course in re.split(r"\s*[/;,]\s*", normalize_text(value)) if course.strip()]
     return courses or [""]
 
 
+def extract_teachers(row: tuple[Any, ...], teacher_columns: list[int]) -> list[str]:
+    """Lê os docentes na ordem das colunas, alinhada à ordem das turmas."""
+    # A posição do docente na linha corresponde à posição da turma na chave A/B.
+    return [normalize_text(cell_value(row, column)) for column in teacher_columns]
+
+
 def allocate_vacancies(total: Any, class_names: list[str]) -> dict[str, int | None]:
     """Divide vagas compartilhadas; a primeira turma recebe eventual resto."""
+    # Exemplo: 23 vagas para A/B resulta em 12 para A e 11 para B.
     if pd.isna(total):
         return {class_name: None for class_name in class_names}
     total_int = int(float(total))
@@ -107,6 +130,7 @@ def allocate_vacancies(total: Any, class_names: list[str]) -> dict[str, int | No
 
 def extract_metadata(rows: list[tuple[Any, ...]]) -> tuple[str, str, str, str, str]:
     """Lê os metadados físicos e acadêmicos do cabeçalho de uma aba."""
+    # Esses valores identificam o período, prédio, sala, tipo e capacidade.
     semester = labeled_value(rows, "PERÍODO LETIVO:")
     room = labeled_value(rows, "SALA:")
     if not semester or not room:
@@ -122,6 +146,7 @@ def extract_metadata(rows: list[tuple[Any, ...]]) -> tuple[str, str, str, str, s
 
 def extract_descriptions(rows: list[tuple[Any, ...]]) -> dict[str, dict[str, Any]]:
     """Lê a tabela inferior e cria um dicionário indexado por Sigla Turma."""
+    # A tabela descritiva fornece disciplina, cursos, vagas e docentes.
     header_row = next(
         (
             index
@@ -133,11 +158,21 @@ def extract_descriptions(rows: list[tuple[Any, ...]]) -> dict[str, dict[str, Any
     if header_row is None:
         raise ValueError("Tabela descritiva sem cabecalho 'Sigla Turma'")
 
+    # O dicionário atende às colunas únicas; os índices dos docentes são
+    # preservados em uma lista porque o cabeçalho pode se repetir.
     headers = {normalize_text(value).upper(): index for index, value in enumerate(rows[header_row])}
+    # Cada coluna de docente corresponde, pela posição, a uma turma da linha.
+    teacher_columns = [
+        index
+        for index, value in enumerate(rows[header_row])
+        if normalize_text(value).upper().startswith("NOME DO DOCENTE")
+    ]
     required = ("SIGLA TURMA", "ATIVIDADE", "CURSOS", "VAGAS OFERECIDAS")
     missing = [header for header in required if header not in headers]
     if missing:
         raise ValueError(f"Tabela descritiva sem colunas: {', '.join(missing)}")
+    if not any(header.startswith("NOME DO DOCENTE") for header in headers):
+        raise ValueError("Tabela descritiva sem coluna 'Nome do Docente'")
 
     # A chave permite buscar rapidamente os atributos ao ler a grade semanal.
     descriptions: dict[str, dict[str, Any]] = {}
@@ -151,6 +186,7 @@ def extract_descriptions(rows: list[tuple[Any, ...]]) -> dict[str, dict[str, Any
         descriptions[identifier] = {
             "nome_disciplina": normalize_text(cell_value(row, headers["ATIVIDADE"])),
             "cursos": split_courses(cell_value(row, headers["CURSOS"])),
+            "docentes": extract_teachers(row, teacher_columns),
             "vagas_totais_compartilhadas": cell_value(row, headers["VAGAS OFERECIDAS"]),
         }
     return descriptions
@@ -158,6 +194,7 @@ def extract_descriptions(rows: list[tuple[Any, ...]]) -> dict[str, dict[str, Any
 
 def extract_schedule(rows: list[tuple[Any, ...]]) -> list[dict[str, Any]]:
     """Converte células preenchidas da grade em registros de turma-dia-período."""
+    # A grade semanal é transformada de formato visual para formato tabular.
     hour_header = find_labeled_cell(rows, "HORA")
     if not hour_header:
         raise ValueError("Grade semanal sem cabecalho 'Hora'")
@@ -201,6 +238,7 @@ def extract_schedule(rows: list[tuple[Any, ...]]) -> list[dict[str, Any]]:
 
 def consolidate_periods(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Une períodos consecutivos da mesma turma, sala e dia em um encontro."""
+    # A grade registra cada hora separadamente; o CSV deve registrar o encontro inteiro.
     grouped: dict[tuple[str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for record in records:
         grouped[(record["sala"], record["codigo_disciplina"], record["turma"], record["dia_semana"])].append(record)
@@ -223,6 +261,7 @@ def consolidate_periods(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def make_consolidated_record(block: list[dict[str, Any]]) -> dict[str, Any]:
     """Produz o registro final de uma sequência contínua de períodos."""
+    # Mantém o início do primeiro período e calcula o fim do bloco completo.
     record = block[0].copy()
     record["numero_periodos"] = len(block)
     record["hora_fim"] = end_time(record["hora_inicio"], len(block))
@@ -231,11 +270,13 @@ def make_consolidated_record(block: list[dict[str, Any]]) -> dict[str, Any]:
 
 def transform_workbook() -> tuple[pd.DataFrame, list[str], list[str]]:
     """Processa todas as salas e devolve o DataFrame Tidy e ocorrências pendentes."""
+    # Esta função coordena a leitura das abas e a montagem do resultado final.
     workbook = load_workbook(SOURCE_FILE, data_only=True, read_only=True)
     all_records: list[dict[str, Any]] = []
     missing_descriptions: list[str] = []
     processed_sheets: list[str] = []
 
+    # Cada aba do workbook representa uma sala física.
     for sheet_name in workbook.sheetnames:
         # Cada aba descreve uma sala e contém cabeçalho, grade e tabela inferior.
         worksheet = workbook[sheet_name]
@@ -245,6 +286,7 @@ def transform_workbook() -> tuple[pd.DataFrame, list[str], list[str]]:
         schedule = extract_schedule(rows)
         processed_sheets.append(sheet_name)
 
+        # Enriquece cada ocupação da grade com os dados da tabela descritiva.
         for record in schedule:
             # Junta a ocupação da grade aos dados descritivos da turma.
             description = descriptions.get(record["identificador_original"])
@@ -254,6 +296,8 @@ def transform_workbook() -> tuple[pd.DataFrame, list[str], list[str]]:
             parsed = parse_class_identifier(record["identificador_original"])
             assert parsed is not None
             _, class_names = parsed
+            # A ordem das turmas na chave compartilhada alinha-se à ordem das
+            # colunas de docentes e também orienta a divisão das vagas.
             vacancies = allocate_vacancies(description["vagas_totais_compartilhadas"], class_names)
             record.update(
                 {
@@ -263,6 +307,11 @@ def transform_workbook() -> tuple[pd.DataFrame, list[str], list[str]]:
                     "tipo_sala": room_type,
                     "capacidade_turma": class_capacity,
                     "nome_disciplina": description["nome_disciplina"],
+                    # Busca o docente correspondente à posição da turma na
+                    # chave, sem juntar docentes de turmas diferentes.
+                    "docente": description["docentes"][class_names.index(record["turma"])]
+                    if class_names.index(record["turma"]) < len(description["docentes"])
+                    else "",
                     "cursos": description["cursos"],
                     "vagas_oferecidas": vacancies[record["turma"]],
                     "vagas_totais_compartilhadas": description["vagas_totais_compartilhadas"],
@@ -273,6 +322,7 @@ def transform_workbook() -> tuple[pd.DataFrame, list[str], list[str]]:
 
     # A grade tem um registro por período; a saída deve ter um registro por encontro.
     consolidated = consolidate_periods(all_records)
+    # Desagrega cursos para manter uma linha por curso sem perder o encontro.
     output_records = []
     for record in consolidated:
         # Uma disciplina que atende vários cursos permanece em um CSV, uma linha por curso.
@@ -280,7 +330,7 @@ def transform_workbook() -> tuple[pd.DataFrame, list[str], list[str]]:
             output_records.append({**record, "curso": course})
 
     columns = [
-        "semestre", "predio", "sala", "tipo_sala", "capacidade_turma", "codigo_disciplina", "turma", "nome_disciplina", "curso",
+        "semestre", "predio", "sala", "tipo_sala", "capacidade_turma", "codigo_disciplina", "turma", "nome_disciplina", "docente", "curso",
         "dia_semana", "hora_inicio", "hora_fim", "numero_periodos", "vagas_oferecidas",
         "vagas_totais_compartilhadas", "turmas_compartilhando_sala",
     ]
@@ -289,6 +339,7 @@ def transform_workbook() -> tuple[pd.DataFrame, list[str], list[str]]:
 
 def write_report(data: pd.DataFrame, sheets: list[str], missing_descriptions: list[str]) -> None:
     """Gera um resumo para auditar a transformação e identificar exceções."""
+    # O relatório registra contagens, ausências, duplicidades e regras aplicadas.
     report = [
         "# Relatorio da Transformacao - Mapa de Salas",
         "",
@@ -310,6 +361,7 @@ def write_report(data: pd.DataFrame, sheets: list[str], missing_descriptions: li
 
 def main() -> None:
     """Executa a transformação, grava os arquivos de saída e mostra uma amostra."""
+    # Valida a entrada, transforma os dados e grava CSV e relatório.
     if not SOURCE_FILE.exists():
         raise FileNotFoundError(f"Arquivo de origem nao encontrado: {SOURCE_FILE}")
     data, sheets, missing_descriptions = transform_workbook()
