@@ -2,13 +2,16 @@
 
 ## Objetivo
 
-Criar um único `app.py` para responder às três primeiras perguntas da Atividade 01 e atender aos requisitos de desenvolvimento da Atividade 02.
+Criar um único `app.py` para explorar as três primeiras perguntas descritivas da Atividade 01, acrescentar uma agenda da ocupação atual por sala e atender aos requisitos de desenvolvimento da Atividade 02.
 
 ## Perguntas e visualizações
 
 1. **Distribuição das horas de ocupação por curso e dia:** mapa de calor interativo com Plotly, usando `curso`, `dia_semana` e `numero_periodos`.
 2. **Variação da ocupação ao longo dos horários:** mapa de calor interativo com Plotly, usando intervalos de uma hora e encontros físicos deduplicados.
 3. **Utilização das salas e tipos de espaço:** barras horizontais ordenadas com Matplotlib, usando `sala`, `tipo_sala`, `dia_semana` e `numero_periodos`.
+4. **Ocupação atual de uma sala:** agenda semanal interativa com Plotly, permitindo selecionar a sala e consultar dia, horário, código, disciplina, turma e docente.
+
+Observação: o gráfico 4 é descritivo e mostra a ocupação atual. A pergunta 4 da Atividade 01, sobre reorganizar disciplinas entre salas, dias e horários, não é simulada nem resolvida nesta atividade.
 
 ## Preparação dos dados
 
@@ -21,6 +24,7 @@ Criar um único `app.py` para responder às três primeiras perguntas da Ativida
 
 ## Interação e requisitos
 
+- Tema claro nativo do Streamlit para manter contraste consistente na interface e nos controles.
 - Filtros laterais para curso, sala, tipo de espaço, dia e turno.
 - As visualizações são atualizadas a cada alteração dos filtros.
 - Seleções sem registros exibem uma mensagem explicativa.
@@ -31,6 +35,7 @@ Criar um único `app.py` para responder às três primeiras perguntas da Ativida
 
 - Comparar a ocupação de Arquitetura e Design por turno como análise descritiva.
 - Identificar possíveis sobreposições do mesmo docente no mesmo dia.
+- Consultar a ocupação atual de cada sala em uma agenda semanal interativa.
 - Usar os identificadores anonimizados `Prof01`, `Prof02` etc.
 - Tratar uma sobreposição como alerta para investigação, não como prova de conflito real.
 
@@ -46,3 +51,5 @@ Criar um único `app.py` para responder às três primeiras perguntas da Ativida
 ## Limitações
 
 A base representa somente a programação regular de 2026/2. Horários sem registro não garantem disponibilidade operacional, e a análise não contém todas as preferências docentes, regras de grade ou restrições necessárias para propor uma nova grade viável.
+
+O gráfico 4 não representa um cenário alternativo: ele apenas detalha a programação atual de uma sala. A reorganização da pergunta 4 permanece como possibilidade de análise futura.

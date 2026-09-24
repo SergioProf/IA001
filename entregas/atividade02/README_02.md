@@ -17,7 +17,7 @@ O dashboard investiga a distribuição da ocupação por curso, dia, horário, s
 | `atividade02_dashboard_streamlit.ipynb` | Notebook com o enunciado e o registro preenchido do grupo, das perguntas, das visualizações, dos resultados e das limitações. |
 | `dicionario_dados_mapa_salas_02.ipynb` | Dicionário de dados e cuidados para a análise da Atividade 02. |
 | `mapa_salas_tidy_02.csv` | Base normalizada utilizada pelo dashboard. |
-| `app.py` | Aplicação Streamlit com filtros, três visualizações e análise de possíveis sobreposições docentes. |
+| `app.py` | Aplicação Streamlit com filtros, quatro visualizações e análise de possíveis sobreposições docentes. |
 | `requirements_02.txt` | Dependências fixadas do ambiente para o dashboard e a reprodução do notebook. |
 | `PLANO_APP_STREAMLIT.md` | Plano de implementação e critérios de verificação do dashboard. |
 | `README_02.md` | Instruções de instalação, execução, escopo e registro da entrega. |
@@ -28,14 +28,21 @@ A entrega final também deverá conter eventuais arquivos auxiliares e as instru
 
 O arquivo `app.py` apresenta, nesta ordem:
 
-1. As três perguntas investigadas e a configuração recomendada de filtros para cada uma.
-2. Filtros interativos por curso, sala, tipo de espaço, dia da semana e turno.
+1. As três perguntas descritivas investigadas e a configuração recomendada de filtros para cada uma.
+2. Tema claro nativo do Streamlit e filtros interativos por curso, sala, tipo de espaço, dia da semana e turno.
 3. Indicadores de horas-aula físicas, salas utilizadas e cursos no recorte.
 4. Mapa de calor de horas por curso e dia, produzido com Plotly.
 5. Mapa de calor de ocupação física por dia e horário, produzido com Plotly.
 6. Gráfico de barras de horas por sala e tipo de espaço, produzido com Matplotlib.
-7. Tabela de possíveis sobreposições de horários por docente anonimizado.
-8. Observações metodológicas e checklist dos requisitos da atividade.
+7. Agenda semanal interativa da ocupação atual de uma sala, com código, disciplina, turma, docente e horários.
+8. Tabela de possíveis sobreposições de horários por docente anonimizado.
+9. Observações metodológicas e checklist dos requisitos da atividade.
+
+O tema claro nativo do Streamlit mantém os campos de seleção legíveis e padronizados. Na agenda por sala, a escala de horários permanece fixa de 07:30 a 22:30, a grade interna tem contraste reduzido e a moldura externa recebe maior destaque.
+
+A agenda por sala é uma visualização descritiva da programação registrada. Ela não
+simula a troca de disciplinas entre salas, dias ou horários e, portanto, não
+implementa a reorganização proposta na pergunta 4 da Atividade 01.
 
 Os códigos de curso são apresentados com rótulos mais informativos no dashboard: `ARQU` como Arquitetura e Urbanismo, `DVIS` como Design Visual, `DPRO` como Design de Produto, `CAGR` como Ciências Agrárias e `ENGMEC` como Engenharia Mecânica. Os códigos originais são preservados internamente para os cálculos.
 
@@ -63,7 +70,8 @@ O arquivo `mapa_salas_tidy_02.csv` organiza os encontros da programação em for
 | Vagas e compartilhamento | `vagas_oferecidas`, `vagas_totais_compartilhadas`, `turmas_compartilhando_sala` |
 | Período | `semestre` |
 
-A transformação original associa a grade semanal às informações das turmas, desagrega turmas compartilhadas e consolida períodos consecutivos do mesmo encontro. Para esta atividade, foi necessário incluir também o atributo `docente`, identificando o professor responsável por cada disciplina. Por razões de privacidade, os dados dos docentes foram anonimizados e substituídos por identificadores como `Prof01`, `Prof02` e assim por diante. Essa informação permite considerar, nas análises do dashboard, a possibilidade de conflitos de horário quando o mesmo professor estiver associado a encontros simultâneos ou sobrepostos. Consulte `dicionario_dados_mapa_salas_02.ipynb` antes de definir os cálculos do dashboard.
+### Observação sobre a ampliação dos dados originais: 
+A transformação original associa a grade semanal às informações das turmas, desagrega turmas compartilhadas e consolida períodos consecutivos do mesmo encontro. Para esta atividade, e principalmente para análises futuras de reorganização da grade de horarios, foi necessário incluir também o atributo `docente`, identificando o professor responsável por cada disciplina. Por razões de privacidade, os dados dos docentes foram anonimizados e substituídos por identificadores como `Prof01`, `Prof02` e assim por diante. Essa informação permite considerar, nas análises do dashboard, a possibilidade de conflitos de horário quando o mesmo professor estiver associado a encontros simultâneos ou sobrepostos. Consulte `dicionario_dados_mapa_salas_02.ipynb` antes de definir os cálculos do dashboard.
 
 ## Como preparar o ambiente
 
@@ -107,6 +115,7 @@ jupyter notebook atividade02_dashboard_streamlit.ipynb
 - Compare a capacidade do espaço com as vagas da turma com cuidado: a base pode registrar turmas compartilhadas e a capacidade pode não representar a soma de todas as vagas.
 - Horários livres não aparecem no CSV; células vazias da grade original representam ausência de encontro.
 - A base representa somente a programação regular de 2026/2. Usos eventuais, disponibilidade docente e outras restrições de montagem de grade não estão registrados.
+- O gráfico 4 mostra somente a ocupação atual de cada sala. A pergunta 4, sobre reorganizar horários e salas, continua sem tratamento computacional no dashboard.
 - A aplicação indica quando filtros combinados não encontram registros, em vez de apresentar gráficos vazios sem explicação.
 - A análise de docentes usa identificadores anonimizados, como `Prof01` e `Prof02`. Uma sobreposição indica apenas um conflito potencial na programação registrada.
 
@@ -123,20 +132,20 @@ Também foi verificado que o app compila sem erros e inicia localmente com Strea
 
 ## Checklist de desenvolvimento
 
-- [x] Revisar as perguntas da Atividade 01 e escolher três perguntas para o dashboard.
-- [x] Definir o público do dashboard e o que cada visualização deve responder.
-- [x] Escolher pelo menos duas bibliotecas de visualização e atualizar `requirements_02.txt`.
-- [x] Criar `app.py` e carregar `mapa_salas_tidy_02.csv`.
-- [x] Implementar pelo menos dois controles interativos.
-- [x] Criar pelo menos três visualizações com títulos, rótulos, unidades e fonte.
-- [x] Implementar tratamento para combinações de filtros sem dados.
-- [ ] Executar o app e conferir visualmente todas as combinações relevantes de filtros.
-- [x] Registrar no notebook as escolhas, um resultado observado, uma limitação, o uso de IA e as referências.
-- [x] Atualizar este README com os resultados verificados e o modo de execução.
+- [✓] Revisar as perguntas da Atividade 01 e escolher três perguntas para o dashboard.
+- [✓] Definir o público do dashboard e o que cada visualização deve responder.
+- [✓] Escolher pelo menos duas bibliotecas de visualização e atualizar `requirements_02.txt`.
+- [✓] Criar `app.py` e carregar `mapa_salas_tidy_02.csv`.
+- [✓] Implementar pelo menos dois controles interativos.
+- [✓] Criar quatro visualizações com títulos, rótulos, unidades e fonte.
+- [✓] Implementar tratamento para combinações de filtros sem dados.
+- [✓] Executar o app e conferir visualmente todas as combinações relevantes de filtros.
+- [✓] Registrar no notebook as escolhas, um resultado observado, uma limitação, o uso de IA e as referências.
+- [✓] Atualizar este README com os resultados verificados e o modo de execução.
 
 ## Registro da atividade
 
-O registro detalhado do grupo, das perguntas, das visualizações, do uso dos filtros, dos resultados, das limitações, das mudanças em relação à Atividade 01 e do uso de IA está preenchido em `atividade02_dashboard_streamlit.ipynb`.
+O registro detalhado do trabalho, das perguntas, das visualizações, do uso dos filtros, dos resultados, das limitações, das mudanças em relação à Atividade 01 e do uso de IA está preenchido em `atividade02_dashboard_streamlit.ipynb`.
 
 ## Licença e uso
 

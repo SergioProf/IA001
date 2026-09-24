@@ -1,15 +1,15 @@
-"""Dashboard interativo da Atividade 02.
-
-O aplicativo transforma a proposta de análise da Atividade 01 em uma interface
-interativa. A fonte de dados e este arquivo ficam na mesma pasta, o que torna a
-execução reproduzível com `streamlit run app.py`.
-"""
+# Dashboard interativo da Atividade 02.
+#
+# O aplicativo transforma a proposta de análise da Atividade 01 em uma interface
+# interativa. A fonte de dados e este arquivo ficam na mesma pasta, o que torna
+# a execução reproduzível com `streamlit run app.py`.
 
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 
 
@@ -83,12 +83,10 @@ ROTULOS_CURSO = {
 
 @st.cache_data
 def carregar_dados(caminho_dados: str) -> pd.DataFrame:
-    """Lê o CSV, valida a estrutura e cria colunas úteis para o dashboard.
-
-    O cache evita que o arquivo seja lido novamente a cada interação com um
-    filtro. O caminho é recebido como texto para que o Streamlit consiga
-    acompanhar a dependência de forma estável.
-    """
+    # Lê o CSV, valida a estrutura e cria colunas úteis para o dashboard.
+    # O cache evita que o arquivo seja lido novamente a cada interação com um
+    # filtro. O caminho é recebido como texto para que o Streamlit consiga
+    # acompanhar a dependência de forma estável.
 
     dados = pd.read_csv(caminho_dados, encoding="utf-8-sig")
 
@@ -124,14 +122,14 @@ def carregar_dados(caminho_dados: str) -> pd.DataFrame:
 
 
 def horario_para_minutos(horario: str) -> int:
-    """Converte um horário HH:MM para minutos desde 00:00."""
+    # Converte um horário HH:MM para minutos desde 00:00.
 
     horas, minutos = str(horario).split(":")
     return int(horas) * 60 + int(minutos)
 
 
 def classificar_turno(inicio_minutos: int) -> str:
-    """Classifica o início de uma aula em manhã, tarde ou noite."""
+    # Classifica o início de uma aula em manhã, tarde ou noite.
 
     if inicio_minutos < 12 * 60 + 30:
         return "Manhã"
@@ -141,13 +139,11 @@ def classificar_turno(inicio_minutos: int) -> str:
 
 
 def criar_visao_fisica(dados: pd.DataFrame) -> pd.DataFrame:
-    """Retorna uma linha por encontro físico, sem duplicação por curso.
-
-    A base detalhada contém várias linhas quando uma disciplina atende mais de
-    um curso ou quando turmas compartilham a sala. Para medir o uso físico do
-    espaço, essas linhas representam o mesmo evento e não devem ser somadas
-    várias vezes.
-    """
+    # Retorna uma linha por encontro físico, sem duplicação por curso.
+    # A base detalhada contém várias linhas quando uma disciplina atende mais de
+    # um curso ou quando turmas compartilham a sala. Para medir o uso físico do
+    # espaço, essas linhas representam o mesmo evento e não devem ser somadas
+    # várias vezes.
 
     return dados.drop_duplicates(subset=CHAVE_ENCONTRO_FISICO).copy()
 
@@ -160,11 +156,9 @@ def aplicar_filtros(
     dias: list[str],
     turnos: list[str],
 ) -> pd.DataFrame:
-    """Aplica os filtros escolhidos pelo usuário.
-
-    Cada lista vazia representa a opção "Todos". O filtro é feito com uma
-    cópia para evitar alterações acidentais no DataFrame armazenado em cache.
-    """
+    # Aplica os filtros escolhidos pelo usuário.
+    # Cada lista vazia representa a opção "Todos". O filtro é feito com uma
+    # cópia para evitar alterações acidentais no DataFrame armazenado em cache.
 
     dados_filtrados = dados.copy()
     filtros = {
@@ -190,7 +184,7 @@ def aplicar_filtros(
 
 
 def horas_por_curso_e_dia(dados: pd.DataFrame) -> pd.DataFrame:
-    """Soma horas por curso e dia para responder à primeira pergunta."""
+    # Soma horas por curso e dia para responder à primeira pergunta.
 
     resultado = (
         dados.groupby(["curso", "dia_semana"], as_index=False)["numero_periodos"]
@@ -207,13 +201,11 @@ def horas_por_curso_e_dia(dados: pd.DataFrame) -> pd.DataFrame:
 
 
 def expandir_encontros_em_horas(dados: pd.DataFrame) -> pd.DataFrame:
-    """Cria uma linha para cada hora ocupada de um encontro físico.
-
-    A base registra o começo e o fim de um intervalo contínuo. Para construir
-    o mapa de calor horário, cada período de uma hora é representado por uma
-    linha. O intervalo final é exclusivo: uma aula 09:30-12:30 ocupa 09:30,
-    10:30 e 11:30, totalizando três períodos.
-    """
+    # Cria uma linha para cada hora ocupada de um encontro físico.
+    # A base registra o começo e o fim de um intervalo contínuo. Para construir
+    # o mapa de calor horário, cada período de uma hora é representado por uma
+    # linha. O intervalo final é exclusivo: uma aula 09:30-12:30 ocupa 09:30,
+    # 10:30 e 11:30, totalizando três períodos.
 
     registros_horarios = []
     for _, encontro in dados.iterrows():
@@ -234,7 +226,7 @@ def expandir_encontros_em_horas(dados: pd.DataFrame) -> pd.DataFrame:
 
 
 def minutos_para_horario(minutos: int) -> str:
-    """Converte minutos desde meia-noite para HH:MM."""
+    # Converte minutos desde meia-noite para HH:MM.
 
     horas = minutos // 60
     minutos_resto = minutos % 60
@@ -242,7 +234,7 @@ def minutos_para_horario(minutos: int) -> str:
 
 
 def horas_por_sala_e_tipo(dados: pd.DataFrame) -> pd.DataFrame:
-    """Soma horas físicas por sala e tipo de espaço para a terceira pergunta."""
+    # Soma horas físicas por sala e tipo de espaço para a terceira pergunta.
 
     return (
         dados.groupby(["sala", "tipo_sala"], as_index=False)["numero_periodos"]
@@ -258,13 +250,11 @@ def horas_por_sala_e_tipo(dados: pd.DataFrame) -> pd.DataFrame:
 
 
 def encontrar_sobreposicoes_docentes(dados: pd.DataFrame) -> pd.DataFrame:
-    """Encontra encontros sobrepostos do mesmo docente no mesmo dia.
-
-    A comparação usa intervalos semiabertos [início, fim). Assim, um encontro
-    que termina às 12:30 e outro que começa às 12:30 não é considerado
-    sobreposto. O resultado indica uma possibilidade de conflito na programação
-    registrada, não uma confirmação da indisponibilidade do professor.
-    """
+    # Encontra encontros sobrepostos do mesmo docente no mesmo dia.
+    # A comparação usa intervalos semiabertos [início, fim). Assim, um encontro
+    # que termina às 12:30 e outro que começa às 12:30 não é considerado
+    # sobreposto. O resultado indica uma possibilidade de conflito na programação
+    # registrada, não uma confirmação da indisponibilidade do professor.
 
     colunas_encontro_docente = [
         "docente",
@@ -362,8 +352,10 @@ def encontrar_sobreposicoes_docentes(dados: pd.DataFrame) -> pd.DataFrame:
 
 
 def exibir_grafico_curso_dia(dados: pd.DataFrame) -> None:
-    """Exibe a visualização da primeira pergunta com Plotly."""
+    # Gráfico 1: horas de ocupação por curso e dia da semana.
 
+    # Agrega as horas por curso e dia, mantendo cada curso como unidade de
+    # análise para mostrar a distribuição da carga acadêmica.
     agregado = horas_por_curso_e_dia(dados)
     if agregado.empty:
         st.info("Não há dados para o mapa de calor por curso e dia.")
@@ -375,6 +367,8 @@ def exibir_grafico_curso_dia(dados: pd.DataFrame) -> None:
         lambda codigo: ROTULOS_CURSO.get(codigo, codigo)
     )
 
+    # Converte a tabela agregada em um mapa de calor: cores mais intensas
+    # representam maior quantidade de horas-aula no cruzamento curso/dia.
     figura = px.density_heatmap(
         agregado,
         x="dia_semana",
@@ -390,27 +384,33 @@ def exibir_grafico_curso_dia(dados: pd.DataFrame) -> None:
         },
         title="Horas de ocupação por curso e dia da semana",
     )
+    # Exibe a escala de cores com unidade e insere o gráfico na página.
     figura.update_layout(coloraxis_colorbar_title="Horas-aula")
     st.plotly_chart(figura, use_container_width=True)
     st.caption(
-        "Biblioteca: Plotly. A soma mantém as linhas por curso para mostrar a "
+        "A soma mantém as linhas por curso para mostrar a "
         "distribuição da carga acadêmica. Um encontro compartilhado pode aparecer "
-        "em mais de um curso."
+        "em mais de um curso. Biblioteca: Plotly."
     )
 
 
 def exibir_grafico_horario(dados_fisicos: pd.DataFrame) -> None:
-    """Exibe a visualização da segunda pergunta com Plotly."""
+    # Gráfico 2: ocupação física do prédio por dia e faixa de horário.
 
+    # Expande cada encontro contínuo em períodos de uma hora para permitir a
+    # contagem da ocupação física em cada ponto da grade semanal.
     dados_horarios = expandir_encontros_em_horas(dados_fisicos)
     if dados_horarios.empty:
         st.info("Não há dados para o mapa de calor por horário.")
         return
 
+    # Soma a quantidade de horas ocupadas em cada combinação de dia e horário.
     agregado = (
         dados_horarios.groupby(["dia_semana", "horario"], as_index=False)["horas_aula"]
         .sum()
     )
+    # Monta o mapa de calor da ocupação física, sem contar duas vezes aulas
+    # compartilhadas que já foram deduplicadas antes desta função.
     figura = px.density_heatmap(
         agregado,
         x="dia_semana",
@@ -424,26 +424,50 @@ def exibir_grafico_horario(dados_fisicos: pd.DataFrame) -> None:
             "horario": "Início do período",
             "horas_aula": "Horas de ocupação",
         },
-        title="Ocupação física por dia e horário",
+        title="Ocupação física total do prédio por dia e horário",
     )
-    figura.update_yaxes(categoryorder="array", categoryarray=sorted(agregado["horario"].unique()))
+    # Coloca 07:30 no topo e os horários seguintes abaixo, como em uma agenda.
+    figura.update_yaxes(
+        categoryorder="array",
+        categoryarray=sorted(agregado["horario"].unique()),
+        autorange="reversed",
+    )
+    # Mantém os dias da semana na parte superior do gráfico.
+    figura.update_xaxes(side="top")
+    # Mantém apenas um pequeno intervalo visual entre as colunas dos dias,
+    # equivalente ao espaçamento reduzido usado na agenda por sala.
+    figura.update_traces(xgap=2)
+
+    # Cria separadores maiores nas transições entre manhã, tarde e noite.
+    # Como os horários estão em ordem crescente, os limites ficam entre as
+    # posições 4/5, 5/6 e 10/11 do eixo categórico.
+    for posicao in (4.5, 5.5, 10.5):
+        figura.add_hline(
+            y=posicao,
+            line_color="black",
+            line_width=2,
+            layer="above",
+        )
     figura.update_layout(coloraxis_colorbar_title="Horas de ocupação")
     st.plotly_chart(figura, use_container_width=True)
     st.caption(
-        "Biblioteca: Plotly. Cada encontro físico foi expandido em períodos de uma "
+        "Cada encontro físico foi expandido em períodos de uma "
         "hora. A ausência de registro indica apenas que não há aula registrada "
-        "naquele intervalo."
+        "naquele intervalo. Biblioteca: Plotly."
     )
 
 
 def exibir_grafico_salas(dados_fisicos: pd.DataFrame) -> None:
-    """Exibe a visualização da terceira pergunta com Matplotlib."""
+    # Gráfico 3: horas de ocupação por sala e tipo de espaço.
 
+    # Agrega as horas físicas por sala e tipo de espaço para comparar a
+    # utilização dos ambientes sem duplicar encontros compartilhados.
     agregado = horas_por_sala_e_tipo(dados_fisicos)
     if agregado.empty:
         st.info("Não há dados para o gráfico de salas e tipos de espaço.")
         return
 
+    # Usa barras horizontais para acomodar a lista de salas e seus rótulos.
     figura, eixo = plt.subplots(figsize=(10, max(4, len(agregado) * 0.35)))
     eixo.barh(
         agregado["sala"],
@@ -467,24 +491,175 @@ def exibir_grafico_salas(dados_fisicos: pd.DataFrame) -> None:
             fontsize=8,
         )
 
+    # Ajusta os espaços, exibe a figura no Streamlit e libera o objeto Matplotlib.
     figura.tight_layout()
     st.pyplot(figura)
     plt.close(figura)
     st.caption(
-        "Biblioteca: Matplotlib. As horas são calculadas sobre encontros físicos "
+        "As horas são calculadas sobre encontros físicos "
         "deduplicados; por isso, turmas que compartilham uma sala não inflacionam "
-        "o total do espaço."
+        "o total do espaço. Biblioteca: Matplotlib. "
+    )
+
+
+def exibir_agenda_sala(dados: pd.DataFrame) -> None:
+    # Gráfico 4: agenda semanal interativa de uma sala selecionada.
+
+    # O seletor permite trocar de sala sem alterar a base original.
+    salas = sorted(dados["sala"].dropna().unique())
+    if not salas:
+        st.info("Não há salas disponíveis para exibição.")
+        return
+
+    sala_selecionada = st.selectbox(
+        "Selecione a sala",
+        salas,
+        key="sala_agenda",
+    )
+    encontros = dados[dados["sala"] == sala_selecionada].copy()
+
+    # Uma aula compartilhada pode aparecer uma vez por curso na base detalhada;
+    # aqui ela deve aparecer uma única vez como ocupação física da sala.
+    encontros = encontros.drop_duplicates(subset=CHAVE_ENCONTRO_FISICO).copy()
+
+    # Converte horários para minutos porque o eixo vertical do gráfico usa uma
+    # escala contínua: 07:30 equivale a 450 e 13:30 equivale a 810 minutos.
+    encontros["inicio_minutos"] = encontros["hora_inicio"].map(
+        horario_para_minutos
+    )
+    encontros["fim_minutos"] = encontros["hora_fim"].map(horario_para_minutos)
+    encontros["duracao_minutos"] = (
+        encontros["fim_minutos"] - encontros["inicio_minutos"]
+    )
+    encontros["rotulo"] = (
+        encontros["codigo_disciplina"] + " - " + encontros["turma"].astype(str)
+    )
+
+    # Mantém a mesma cor para todas as ocorrências de uma disciplina na sala.
+    cores = px.colors.qualitative.Set3
+    codigos = sorted(encontros["codigo_disciplina"].unique())
+    cores_por_codigo = {
+        codigo: cores[indice % len(cores)]
+        for indice, codigo in enumerate(codigos)
+    }
+
+    figura = go.Figure()
+
+    # A faixa cinza marca o intervalo de almoço em todos os dias. Ela é criada
+    # como uma barra para que também tenha texto próprio no hover.
+    figura.add_trace(
+        go.Bar(
+            x=ORDEM_DIAS,
+            y=[60] * len(ORDEM_DIAS),
+            base=[750] * len(ORDEM_DIAS),
+            width=0.975,
+            marker_color="gray",
+            opacity=0.45,
+            hovertemplate=(
+                "Intervalo do almoço: horario preferencialmente sem utilização!"
+                "<extra></extra>"
+            ),
+            name="Intervalo do almoço",
+        )
+    )
+    # Cada encontro vira uma barra cuja base é o início e cuja altura é a
+    # duração da aula. O hover consulta os dados acadêmicos do encontro.
+    figura.add_trace(
+        go.Bar(
+            x=encontros["dia_semana"],
+            y=encontros["duracao_minutos"],
+            base=encontros["inicio_minutos"],
+            width=0.975,
+            text=encontros["rotulo"],
+            textposition="inside",
+            marker_color=[
+                cores_por_codigo[codigo]
+                for codigo in encontros["codigo_disciplina"]
+            ],
+            customdata=encontros[
+                [
+                    "codigo_disciplina",
+                    "nome_disciplina",
+                    "docente",
+                    "turma",
+                    "hora_inicio",
+                    "hora_fim",
+                ]
+            ],
+            hovertemplate=(
+                "<b>%{customdata[0]} - %{customdata[3]}</b><br>"
+                "Disciplina: %{customdata[1]}<br>"
+                "Professor: %{customdata[2]}<br>"
+                "Horário: %{customdata[4]} - %{customdata[5]}"
+                "<extra></extra>"
+            ),
+        )
+    )
+
+    # Define marcações horárias de uma em uma hora e organiza os dias no topo.
+    horarios = list(range(450, 1351, 60))
+    figura.update_layout(
+        title=f"Ocupação da {sala_selecionada} por dia e horário",
+        xaxis={
+            "title": "Dia da semana",
+            "categoryorder": "array",
+            "categoryarray": ORDEM_DIAS,
+            "side": "top",
+            "showgrid": True,
+            "gridcolor": "#eeeeee",
+            "gridwidth": 1,
+        },
+        yaxis={
+            "title": "Horário",
+            "tickmode": "array",
+            "tickvals": horarios,
+            "ticktext": [minutos_para_horario(horario) for horario in horarios],
+            "autorange": False,
+            "range": [1350, 450],
+            "showgrid": True,
+            "gridcolor": "#eeeeee",
+            "gridwidth": 1,
+        },
+        height=700,
+        # Sobrepõe as aulas à faixa cinza, mantendo ambas com a mesma largura.
+        barmode="overlay",
+        showlegend=False,
+        hoverlabel={"align": "left"},
+    )
+    figura.add_shape(
+        type="rect",
+        xref="paper",
+        yref="y",
+        x0=0,
+        x1=1,
+        y0=450,
+        y1=1350,
+        line={"color": "#404040", "width": 2},
+        fillcolor="rgba(0, 0, 0, 0)",
+        layer="above",
+    )
+
+    # O gráfico é interativo: o detalhamento aparece ao passar o cursor sobre
+    # cada encontro ou sobre o intervalo de almoço.
+    st.plotly_chart(figura, use_container_width=True)
+    st.caption(
+        "A agenda combina a sala selecionada aos filtros ativos, incluindo "
+        "curso. Passe o cursor sobre cada bloco para consultar o código, a "
+        "disciplina, o professor, a turma e o horário. Biblioteca: Plotly. "
     )
 
 
 def exibir_indicadores(dados_detalhados: pd.DataFrame, dados_fisicos: pd.DataFrame) -> None:
-    """Exibe indicadores resumidos do recorte filtrado."""
+    # Exibe indicadores resumidos do recorte filtrado acima dos gráficos.
 
+    # Calcula os números sobre o recorte atual, separando carga acadêmica
+    # detalhada da quantidade física de horas e salas ocupadas.
     horas_fisicas = dados_fisicos["numero_periodos"].sum()
     quantidade_salas = dados_fisicos["sala"].nunique()
     quantidade_cursos = dados_detalhados["curso"].nunique()
 
     primeira_coluna, segunda_coluna, terceira_coluna = st.columns(3)
+    # Organiza os três indicadores em colunas para leitura rápida do painel.
     primeira_coluna.metric("Horas-aula físicas", f"{horas_fisicas:.0f}")
     segunda_coluna.metric("Salas utilizadas", f"{quantidade_salas}")
     terceira_coluna.metric("Cursos no recorte", f"{quantidade_cursos}")
@@ -496,7 +671,7 @@ def exibir_indicadores(dados_detalhados: pd.DataFrame, dados_fisicos: pd.DataFra
 
 
 def main() -> None:
-    """Monta a página do dashboard e coordena filtros e gráficos."""
+    # Monta a página do dashboard e coordena filtros e gráficos.
 
     st.set_page_config(
         page_title="Mapa de salas - Atividade 02",
@@ -535,7 +710,15 @@ def main() -> None:
         "O gráfico **Utilização das salas e tipos de espaço** compara as "
         "horas-aula por sala, usando encontros físicos deduplicados."
     )
-
+    st.subheader("Perguntas não atendidas nesta entrega")
+    st.markdown(
+        "**4. É possível reorganizar a ocupação dos espaços de modo que "
+        "Arquitetura e Urbanismo se concentre nos turnos da manhã e da noite,"
+        " enquanto Design de Produto e Design Visual se concentrem nos turnos"
+        " da tarde e da noite, mantendo a carga horária semanal e a distribuição"
+        " dos encontros das disciplinas?**  \n"
+    )
+    
     if not CAMINHO_DADOS.exists():
         st.error(f"Arquivo de dados não encontrado: {CAMINHO_DADOS}")
         st.stop()
@@ -578,8 +761,8 @@ def main() -> None:
     dados_fisicos = criar_visao_fisica(dados_filtrados)
 
     st.caption(
-        "Fonte: mapa_salas_tidy_02.csv. Docentes são identificadores anonimizados "
-        "(por exemplo, Prof01 e Prof02)."
+        "Docentes são identificadores anonimizados "
+        "(por exemplo, Prof01 e Prof02). Fonte: mapa_salas_tidy_02.csv."
     )
 
     if dados_filtrados.empty:
@@ -599,6 +782,9 @@ def main() -> None:
 
     st.subheader("3. Utilização das salas e tipos de espaço")
     exibir_grafico_salas(dados_fisicos)
+
+    st.subheader("4. Agenda interativa por sala")
+    exibir_agenda_sala(dados_filtrados)
 
     st.subheader("Possíveis sobreposições de horários por docente")
     st.write(
@@ -628,14 +814,14 @@ def main() -> None:
     # para o grupo antes de entregar o dashboard.
     st.subheader("Checklist de atendimento da atividade")
     st.markdown(
-        "- [x] Investiga pelo menos duas perguntas da Atividade 01.\n"
-        "- [x] Apresenta três visualizações de dados.\n"
-        "- [x] Utiliza duas bibliotecas de visualização: Plotly e Matplotlib.\n"
-        "- [x] Oferece mais de dois controles interativos na barra lateral.\n"
-        "- [x] Atualiza as visualizações conforme os filtros são alterados.\n"
-        "- [x] Informa quando a seleção de filtros não encontra registros.\n"
-        "- [x] Apresenta títulos, rótulos, unidades, fonte e textos interpretativos.\n"
-        "- [x] Permite execução local com `streamlit run app.py`."
+        "- [✓] Investiga pelo menos duas perguntas da Atividade 01.\n"
+        "- [✓] Apresenta quatro visualizações de dados; o gráfico 4 descreve a ocupação atual por sala.\n"
+        "- [✓] Utiliza duas bibliotecas de visualização: Plotly e Matplotlib.\n"
+        "- [✓] Oferece mais de dois controles interativos na barra lateral.\n"
+        "- [✓] Atualiza as visualizações conforme os filtros são alterados.\n"
+        "- [✓] Informa quando a seleção de filtros não encontra registros.\n"
+        "- [✓] Apresenta títulos, rótulos, unidades, fonte e textos interpretativos.\n"
+        "- [✓] Permite execução local com `streamlit run app.py`."
     )
 
 
