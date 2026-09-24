@@ -1,5 +1,17 @@
 {
     "chat.tools.terminal.autoApprove": {
-        "&": true
+        "&": true,
+        "/^python -m py_compile \\.\\\\entregas\\\\atividade02\\\\app\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -m py_compile \\.\\\\entregas\\\\atividade02\\\\app\\.py; python -c \"import importlib\\.util; modules = \\['streamlit', 'plotly', 'matplotlib', 'pandas'\\]; missing = \\[\\]; \\[missing\\.append\\(module\\) for module in modules if importlib\\.util\\.find_spec\\(module\\) is None\\]; print\\('Módulos ausentes:', ', '\\.join\\(missing\\) if missing else 'nenhum'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -c \"import importlib\\.util; from pathlib import Path; caminho = Path\\('entregas/atividade02/app\\.py'\\)\\.resolve\\(\\); especificacao = importlib\\.util\\.spec_from_file_location\\('app_dashboard', caminho\\); modulo = importlib\\.util\\.module_from_spec\\(especificacao\\); especificacao\\.loader\\.exec_module\\(modulo\\); dados = modulo\\.carregar_dados\\(str\\(caminho\\.parent / 'mapa_salas_tidy_02\\.csv'\\)\\); fisicos = modulo\\.criar_visao_fisica\\(dados\\); horarios = modulo\\.expandir_encontros_em_horas\\(fisicos\\); conflitos = modulo\\.encontrar_sobreposicoes_docentes\\(dados\\); assert len\\(dados\\) > 0; assert len\\(fisicos\\) <= len\\(dados\\); assert len\\(horarios\\) > 0; print\\(f'registros=\\{len\\(dados\\)\\}; encontros_fisicos=\\{len\\(fisicos\\)\\}; periodos_expandidos=\\{len\\(horarios\\)\\}; sobreposicoes=\\{len\\(conflitos\\)\\}'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
     }
 }

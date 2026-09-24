@@ -15,18 +15,17 @@ Uma pergunta central da atividade é avaliar, sob a perspectiva da ocupação f�
 | Arquivo | Descrição |
 | --- | --- |
 | `atividade01_proposta_analise_visual.ipynb` | Notebook principal com contextualização, exploração, estatísticas, gráficos e perguntas de análise. |
-| `mapa_salas_tidy.csv` | Base de dados normalizada utilizada no notebook. |
-| `transformar_mapa_salas.py` | Script que converte a planilha original em CSV Tidy. |
-| `plano_transformacao_mapa_salas.md` | Regras e desenho da transformação. |
-| `relatorio_transformacao_mapa_salas.md` | Registro da execução, validações e exceções encontradas. |
-| `dicionario_dados_mapa_salas.ipynb` | Dicionário de dados e cuidados para análise. |
-| `Chat1_formatçãoTidyData.md` | Registro das decisões que orientaram a transformação. |
+| `mapa_salas_tidy_01.csv` | Base de dados normalizada utilizada no notebook. |
+| `dadosBrutos/transformar_mapa_salas.py` | Script que converte a planilha original em CSV Tidy. |
+| `dadosBrutos/relatorio_transformacao_mapa_salas.md` | Registro da execução, validações e exceções encontradas. |
+| `dicionario_dados_mapa_salas_01.ipynb` | Dicionário de dados da base utilizada nesta atividade. |
+| `entregas/atividade01/README_01.md` | Documentação desta entrega. |
 
 ## Origem e recorte dos dados
 
 Os dados originais são registros administrativos de alocação de disciplinas, turmas e salas, obtidos no Portal do Servidor da UFRGS por acesso institucional. A versão tratada remove informações pessoais, incluindo nomes de docentes, e contém a programação regular de 23 espaços do prédio para o semestre 2026/2.
 
-O arquivo de origem esperado pelo script é `MapaSalas.xlsx`. Cada aba representa uma sala e contém:
+O arquivo de origem utilizado na transformação foi `dadosBrutos/MapaSalas.xlsx`. Cada aba representa uma sala e contém:
 
 - metadados da sala, como prédio, tipo e capacidade;
 - uma grade semanal com dias, horários e identificadores de turma;
@@ -61,31 +60,31 @@ O resultado atual possui 440 registros, 16 atributos, nenhum valor ausente e nen
 | `vagas_totais_compartilhadas` | Total original de vagas das turmas que compartilham o encontro. |
 | `turmas_compartilhando_sala` | Turmas que ocupam simultaneamente a mesma sala. |
 
-Consulte `dicionario_dados_mapa_salas.ipynb` para as definições completas e os cuidados metodológicos.
+Consulte `dicionario_dados_mapa_salas_01.ipynb`, na mesma pasta desta atividade, para as definições completas e os cuidados metodológicos da base utilizada.
 
 ## Como reproduzir
 
 ### Requisitos de ambiente
 
-Este projeto foi validado com Python 3.14.7 e as dependências listadas em `requirements.txt`.
+Este projeto foi validado com Python 3.14.7 e as dependências listadas em `entregas/atividade01/requirements_01.txt`.
 
 ### Transformar os dados originais
 
-Com o ambiente Python configurado e as dependências instaladas, coloque `MapaSalas.xlsx` na mesma pasta do script e execute:
+Com o ambiente Python configurado e as dependências instaladas, execute na raiz do projeto:
 
 ```powershell
-python -m pip install -r requirements.txt
-python transformar_mapa_salas.py
+python -m pip install -r entregas/atividade01/requirements_01.txt
+python dadosBrutos/transformar_mapa_salas.py
 ```
 
-O comando gera ou atualiza `mapa_salas_tidy.csv` em UTF-8 com BOM e `relatorio_transformacao_mapa_salas.md`.
+O comando gera ou atualiza a base Tidy em UTF-8 com BOM. Para esta entrega, o arquivo utilizado é `mapa_salas_tidy_01.csv`, localizado na mesma pasta do notebook e deste README. O relatório é salvo em `dadosBrutos/relatorio_transformacao_mapa_salas.md`.
 
 ### Executar a análise
 
-Instale as bibliotecas do projeto e execute o notebook em ordem:
+Instale as bibliotecas do projeto e execute o notebook em ordem, a partir da pasta `entregas/atividade01`:
 
 ```powershell
-python -m pip install -r requirements.txt
+python -m pip install -r requirements_01.txt
 jupyter notebook atividade01_proposta_analise_visual.ipynb
 ```
 
