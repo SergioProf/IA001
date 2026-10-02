@@ -1250,11 +1250,6 @@ def main() -> None:
         layout="wide",
     )
 
-    st.markdown(
-        "<style>[data-testid='stToolbar'] {display: none;}</style>",
-        unsafe_allow_html=True,
-    )
-
     st.title("Ocupação dos espaços de ensino")
     st.write(
         "Dashboard interativo da Atividade 03 sobre a programação regular de "
