@@ -528,6 +528,15 @@ def exibir_agenda_sala(dados: pd.DataFrame) -> None:
         key="sala_agenda",
     )
     encontros = dados[dados["sala"] == sala_selecionada].copy()
+    cursos_disponiveis = sorted(encontros["curso"].dropna().unique())
+    cursos_selecionados = st.multiselect(
+        "Filtrar por curso",
+        cursos_disponiveis,
+        format_func=lambda codigo: ROTULOS_CURSO.get(codigo, codigo),
+        key="cursos_agenda",
+    )
+    if cursos_selecionados:
+        encontros = encontros[encontros["curso"].isin(cursos_selecionados)]
 
     # Uma aula compartilhada pode aparecer uma vez por curso na base detalhada;
     # aqui ela deve aparecer uma única vez como ocupação física da sala.
@@ -1241,24 +1250,27 @@ animate();
 # -----------------------------------------------------------------------------
 
 
-def main() -> None:
-    # Monta a página do dashboard e coordena filtros e gráficos.
+def carregar_base_para_pagina() -> pd.DataFrame:
+    # Carrega a base e encerra a página com uma mensagem objetiva em caso de erro.
+    if not CAMINHO_DADOS.exists():
+        st.error(f"Arquivo de dados não encontrado: {CAMINHO_DADOS}")
+        st.stop()
 
-    st.set_page_config(
-        page_title="Mapa de salas - Atividade 03",
-        page_icon="📊",
-        layout="wide",
-    )
+    try:
+        dados = carregar_dados(str(CAMINHO_DADOS))
+    except (ValueError, OSError, pd.errors.ParserError) as erro:
+        st.error(f"Não foi possível carregar a base de dados: {erro}")
+        st.stop()
+    return dados
 
+
+def pagina_inicial() -> None:
     st.title("Ocupação dos espaços de ensino")
     st.write(
         "Dashboard interativo da Atividade 03 sobre a programação regular de "
         "salas da Faculdade de Arquitetura no semestre 2026/2."
     )
 
-    # Esta seção apresenta o roteiro analítico antes dos filtros e gráficos.
-    # Assim, o usuário entende qual pergunta cada componente do dashboard ajuda
-    # a investigar e não precisa inferir essa relação apenas pelos títulos.
     st.subheader("Perguntas investigadas")
     st.markdown(
         "**1. Como a distribuição das horas de ocupação ao longo da semana "
@@ -1281,24 +1293,8 @@ def main() -> None:
         "O gráfico **Utilização das salas e tipos de espaço** compara as "
         "horas-aula por sala, usando encontros físicos deduplicados."
     )
-    st.subheader("Perguntas não atendidas nesta entrega")
-    st.markdown(
-        "**4. É possível reorganizar a ocupação dos espaços de modo que "
-        "Arquitetura e Urbanismo se concentre nos turnos da manhã e da noite,"
-        " enquanto Design de Produto e Design Visual se concentrem nos turnos"
-        " da tarde e da noite, mantendo a carga horária semanal e a distribuição"
-        " dos encontros das disciplinas?**  \n"
-    )
-    
-    if not CAMINHO_DADOS.exists():
-        st.error(f"Arquivo de dados não encontrado: {CAMINHO_DADOS}")
-        st.stop()
 
-    try:
-        dados = carregar_dados(str(CAMINHO_DADOS))
-    except (ValueError, OSError, pd.errors.ParserError) as erro:
-        st.error(f"Não foi possível carregar a base de dados: {erro}")
-        st.stop()
+    dados = carregar_base_para_pagina()
 
     # Os filtros são criados a partir dos valores reais da base. A opção vazia
     # significa "todos" e evita inserir artificialmente uma categoria no CSV.
@@ -1364,8 +1360,21 @@ def main() -> None:
     st.subheader("3. Utilização das salas e tipos de espaço")
     exibir_grafico_salas(dados_fisicos)
 
+
+def pagina_agenda() -> None:
+    st.title("Agenda")
+    st.write(
+        "Agenda e análises complementares da programação regular de salas "
+        "do semestre 2026/2."
+    )
+    dados = carregar_base_para_pagina()
+
+    st.caption(
+        "Docentes são identificadores anonimizados "
+        "(por exemplo, Prof01 e Prof02). Fonte: mapa_salas_tidy_03.csv."
+    )
     st.subheader("4. Agenda interativa por sala")
-    exibir_agenda_sala(dados_filtrados)
+    exibir_agenda_sala(dados)
 
     st.subheader("Possíveis sobreposições de horários por docente")
     st.write(
@@ -1373,7 +1382,7 @@ def main() -> None:
         "docente e dia. Ela é um alerta para investigação, não uma confirmação "
         "de conflito real, pois a base não registra todas as restrições docentes."
     )
-    conflitos = encontrar_sobreposicoes_docentes(dados_filtrados)
+    conflitos = encontrar_sobreposicoes_docentes(dados)
     if conflitos.empty:
         st.success("Não foram encontradas possíveis sobreposições no recorte filtrado.")
     else:
@@ -1406,6 +1415,23 @@ def main() -> None:
     )
 
     exibir_visualizacao_3d(dados)
+
+
+def main() -> None:
+    st.set_page_config(
+        page_title="Mapa de salas - Atividade 03",
+        page_icon="📊",
+        layout="wide",
+    )
+
+    navegacao = st.navigation(
+        [
+            st.Page(pagina_inicial, title="Início", default=True),
+            st.Page(pagina_agenda, title="Agenda"),
+        ],
+        position="top",
+    )
+    navegacao.run()
 
 
 if __name__ == "__main__":
