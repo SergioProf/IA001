@@ -63,7 +63,21 @@ Execute os testes a partir da raiz do workspace:
 python -m unittest discover -s entregas/atividade03 -p "test_*.py"
 ```
 
-Esta fase não gera candidatos, não escolhe solver e não produz soluções A/B/C.
+As regras da fase 4 validam propostas, mas não reorganizam a grade nem produzem soluções A/B/C.
+
+## Candidatos e método de otimização — fase 5
+
+`candidatos_03.py` cria em memória os domínios determinísticos para cada encontro móvel. Os intervalos candidato são pares `hora_inicio`/`hora_fim` já observados na fonte e só são reutilizados para encontros de duração igual; nenhum início arbitrário é criado. Os dias candidatos são segunda a sexta. Intervalos que cruzam 12:30–13:30 são excluídos. Todas as 23 salas observadas são avaliadas por capacidade (110% no máximo) e tipo; encontros originalmente em laboratório só recebem candidatos em laboratórios.
+
+Encontros que incluem qualquer curso fora de ARQU/DPRO/DVIS permanecem fixos. Suas salas e horários bloqueiam candidatos que colidam com a sala ou com docentes; conflitos de etapa obrigatória também são bloqueados quando aplicável. Conflitos entre encontros móveis não são removidos dos domínios individualmente: devem ser expressos como restrições globais do solver, para que a busca possa mover ambos. `alocacoes_fixos` expõe as posições imutáveis e `resumir_dominios` informa a dimensão e domínios sem opções. Nenhum CSV de solução é gravado.
+
+A fonte contém 289 encontros físicos: 285 móveis e 4 que permanecem fixos por envolverem cursos externos. Há 23 salas e 27 intervalos distintos sem cruzamento do almoço, distribuídos em quatro durações (60, 120, 180 e 240 minutos). Na execução atual, os filtros produziram 155.133 alocações candidatas (média 544,33 por encontro), sem domínios vazios; o menor domínio tem 31 opções e o maior, 1.255. A construção do modelo CP-SAT resultou em 155.133 variáveis booleanas, 24.479 restrições e granularidade de 30 minutos; esses números medem a formulação, não o tempo de solução.
+
+**Solver escolhido:** OR-Tools CP-SAT, fixado em `ortools==9.15.6755` e instalado no ambiente virtual Python 3.14.7. A escolha se baseia na natureza discreta do problema e nos 285 encontros móveis com domínios finitos; CP-SAT oferece variáveis inteiras/booleanas e restrições globais de não sobreposição, apropriadas a sala, docente e etapa. A dependência é declarada em `requirements_03.txt`. A fase 5 não executa busca nem prova viabilidade global; solver sem solução, limite de tempo e solução ótima/provada deverão ser reportados separadamente na fase de otimização.
+
+`modelo_otimizacao_03.py` constrói e valida o modelo de viabilidade CP-SAT: exatamente uma alocação por encontro móvel e não sobreposição por sala, docente e etapa obrigatória. As ocupações externas fixas são retiradas dos domínios; a construção também rejeita colisões com elas. A resolução de viabilidade é testada em cenários pequenos, incluindo um conflito de sala; os objetivos lexicográficos das soluções A/B/C pertencem às fases seguintes. `resolver_viabilidade` recebe limite de tempo (padrão 30 segundos), usa um worker e retorna o status nativo CP-SAT, distinguindo `INFEASIBLE` de `UNKNOWN` (por exemplo, limite atingido sem solução comprovada) e `FEASIBLE`/`OPTIMAL`.
+
+Validar domínios e modelo com `python -m unittest discover -s entregas/atividade03 -p "test_candidatos_03.py" -v`. Inspecionar a dimensão dos domínios com `python entregas/atividade03/candidatos_03.py`. A construção do modelo não executa o problema real, não seleciona uma grade e não grava soluções.
 
 ## Ocupação nas plantas baixas
 
