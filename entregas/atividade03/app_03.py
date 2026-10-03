@@ -5,7 +5,7 @@
 # a execução reproduzível com `streamlit run app.py`.
 
 from pathlib import Path
-import json
+import html as html_lib
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -24,7 +24,7 @@ import streamlit.components.v1 as components
 # o usuário o inicia a partir da raiz do projeto.
 PASTA_APP = Path(__file__).resolve().parent
 CAMINHO_DADOS = PASTA_APP / "mapa_salas_tidy_03.csv"
-CAMINHO_OBJ = PASTA_APP / "teste.obj"
+CAMINHO_OBJ = PASTA_APP / "PlantasBaixas.obj"
 
 # Estas colunas identificam um encontro físico da disciplina. A coluna `curso`
 # fica fora da chave porque a mesma aula pode aparecer uma vez para cada curso
@@ -685,564 +685,432 @@ def exibir_indicadores(dados_detalhados: pd.DataFrame, dados_fisicos: pd.DataFra
     terceira_coluna.metric("Cursos no recorte", f"{quantidade_cursos}")
 
 
-def ler_obj_para_cena(caminho_obj: Path) -> dict:
-        vertices = []
-        objetos = []
-        objeto_atual = None
+@st.cache_data
+def ler_plantas_obj(caminho_obj: str) -> dict:
+    # Lê as curvas 2D do OBJ (plano XZ) e separa as salas do restante do desenho.
+    vertices = []
+    salas = {}
+    fundo_x, fundo_y = [], []
+    nome_atual = None
 
-        for linha in caminho_obj.read_text(encoding="utf-8").splitlines():
-                partes = linha.split()
-                if not partes:
-                        continue
+    with open(caminho_obj, encoding="utf-8") as arquivo:
+        for linha in arquivo:
+            if linha.startswith("v "):
+                _, x, _, z = linha.split()[:4]
+                vertices.append((float(x), float(z)))
+            elif linha.startswith("o "):
+                nome_atual = linha[2:].strip()
+            elif linha.startswith("curv ") and nome_atual:
+                indices = [int(i) for i in linha.split()[3:]]
+                pontos = [
+                    vertices[i - 1 if i > 0 else len(vertices) + i] for i in indices
+                ]
+                # Em vista de topo, o eixo vertical da tela corresponde a -Z.
+                xs = [round(p[0], 3) for p in pontos]
+                ys = [round(-p[1], 3) for p in pontos]
+                if nome_atual.startswith("Sala ") and nome_atual not in salas:
+                    salas[nome_atual] = (xs, ys)
+                else:
+                    fundo_x.extend(xs + [None])
+                    fundo_y.extend(ys + [None])
 
-                if partes[0] == "o":
-                        objeto_atual = {"nome": " ".join(partes[1:]), "faces": [], "curvas": []}
-                        objetos.append(objeto_atual)
-                elif partes[0] == "v":
-                        vertices.append([float(valor) for valor in partes[1:4]])
-                elif partes[0] == "f" and objeto_atual:
-                        indices = []
-                        for referencia in partes[1:]:
-                                indice = int(referencia.split("/")[0])
-                                indices.append(indice - 1 if indice > 0 else len(vertices) + indice)
-                        objeto_atual["faces"].append(indices)
-                elif partes[0] == "curv" and objeto_atual:
-                        objeto_atual["curvas"].append([int(indice) - 1 for indice in partes[3:]])
-
-        return {"vertices": vertices, "objetos": objetos}
+    return {"salas": salas, "fundo": (fundo_x, fundo_y)}
 
 
-def exibir_visualizacao_3d(dados: pd.DataFrame) -> None:
-        st.subheader("5. Ocupação semanal das salas em 3D")
-        st.caption(
-                "Gire com o mouse ou toque, use a roda para zoom e escolha um dia e horário. "
-                "As cores indicam Arquitetura (vermelho), Design de Produto (azul) e "
-                "Design Visual (verde)."
+COR_CURSO_PLANTA = {
+    "ARQU": "#e23d3d",
+    "DPRO": "#2673df",
+    "DVIS": "#20a467",
+    "OUTRO": "#9aa6aa",
+    "COMPARTILHADO": "#8e5bd0",
+}
+COR_SALA_LIVRE = "#dfe5e3"
+
+_TINTAS_CURSO = {
+    "ARQU": "#fce9e9",
+    "DPRO": "#e8f0fd",
+    "DVIS": "#e7f5ed",
+    "OUTRO": "#eef1f2",
+}
+_NOMES_CURTOS = {"ARQU": "Arquitetura", "DPRO": "Produto", "DVIS": "Visual"}
+
+_CSS_FICHA = """
+* { box-sizing: border-box; }
+body { margin: 0; color: #17262c; font: 14px/1.4 system-ui, sans-serif; }
+.room-info { padding: 16px 18px; border: 1px solid #cbd6d3; background: #fff; }
+.room-info h2 { margin: 0; font-size: 18px; }
+.room-meta { margin: 4px 0 14px; color: #5a6b70; font-size: 12px; }
+.agenda-wrap { overflow: auto; border: 1px solid #d8e0dd; }
+.agenda-grid { display: grid; grid-template-columns: 58px repeat(5, minmax(124px, 1fr)); grid-template-rows: 34px repeat(30, 25px); min-width: 760px; position: relative; background: #fff; }
+.agenda-day { grid-row: 1; z-index: 2; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #bfcac6; background: #f2f6f4; color: #52645f; font-size: 10px; font-weight: 750; }
+.agenda-tick { grid-column: 1; z-index: 2; padding: 0 5px; transform: translateY(-8px); background: white; color: #60716d; font-size: 10px; font-variant-numeric: tabular-nums; text-align: right; }
+.agenda-track { z-index: 0; grid-row: 2 / span 30; border-left: 1px solid #e2e8e6; background: repeating-linear-gradient(to bottom, transparent 0, transparent 24px, #e2e8e6 24px, #e2e8e6 25px); }
+.agenda-lunch { z-index: 1; grid-row: 12 / span 2; background: rgba(125, 139, 135, .14); border-block: 1px dashed #aebcb8; pointer-events: none; }
+.agenda-event { z-index: 2; min-width: 0; overflow: hidden; margin: 2px 3px; padding: 4px 5px; border: 1px solid rgba(34, 48, 52, .22); border-left: 4px solid var(--event-color); border-radius: 3px; background: var(--event-tint); color: #17262c; box-shadow: 0 1px 3px rgba(23, 38, 44, .12); font-size: 10px; line-height: 1.22; }
+.agenda-event strong, .agenda-event span { display: block; overflow: hidden; text-overflow: ellipsis; }
+.agenda-event .event-name, .agenda-event .event-details { display: none; }
+.agenda-event.is-long .event-name, .agenda-event.is-long .event-details { display: block; }
+.event-courses { display: flex !important; flex-wrap: wrap; gap: 2px; margin-top: 2px; }
+.event-course { display: inline-block !important; padding: 1px 3px; border-radius: 2px; color: white; font-size: 8px; white-space: nowrap; }
+"""
+
+
+def _categoria_curso(curso: str) -> str:
+    return curso if curso in ("ARQU", "DPRO", "DVIS") else "OUTRO"
+
+
+def exibir_ficha_sala(dados: pd.DataFrame, sala: str) -> None:
+    # Ficha da sala clicada: tipo, capacidade e agenda semanal por turma.
+    registros = dados[dados["sala"] == sala]
+    esc = html_lib.escape
+    if registros.empty:
+        st.info(f"Não há registros de utilização da {sala} no CSV.")
+        return
+
+    encontros = {}
+    for r in registros.itertuples():
+        chave = (
+            r.codigo_disciplina, r.turma, r.dia_semana, r.hora_inicio,
+            r.hora_fim, r.turmas_compartilhando_sala,
+        )
+        e = encontros.setdefault(chave, {"base": r, "cursos": {}, "docentes": []})
+        e["cursos"].setdefault(r.curso, r)
+        if r.docente not in e["docentes"]:
+            e["docentes"].append(r.docente)
+
+    capacidades = " / ".join(str(c) for c in registros["capacidade_turma"].unique())
+    blocos = []
+    for indice, dia in enumerate(ORDEM_DIAS):
+        coluna = indice + 2
+        blocos.append(
+            f'<div class="agenda-day" style="grid-column:{coluna}">{esc(dia)}</div>'
+            f'<div class="agenda-track" style="grid-column:{coluna}"></div>'
+            f'<div class="agenda-lunch" style="grid-column:{coluna}" '
+            'title="Intervalo de almoço"></div>'
+        )
+    for minuto in range(450, 1351, 60):
+        blocos.append(
+            f'<div class="agenda-tick" style="grid-row:{2 + (minuto - 450) // 30}">'
+            f"{minutos_para_horario(minuto)}</div>"
         )
 
-        if not CAMINHO_OBJ.exists():
-                st.warning(f"Modelo 3D não encontrado: {CAMINHO_OBJ.name}")
-                return
-
-        try:
-                cena = ler_obj_para_cena(CAMINHO_OBJ)
-        except (OSError, ValueError) as erro:
-                st.error(f"Não foi possível ler o modelo 3D: {erro}")
-                return
-
-        nomes_obj = {objeto["nome"] for objeto in cena["objetos"]}
-        salas_obj = {
-                nome.replace("_", " ")
-                for nome in nomes_obj
-                if nome.replace("_", " ") in {"Sala 301A", "Sala 501", "Sala 504"}
-                and any(objeto["nome"] == nome and objeto["faces"] for objeto in cena["objetos"])
-        }
-        if not salas_obj:
-                st.error("O OBJ não contém objetos nomeados para as salas 301A, 501 e 504.")
-                return
-
-        colunas_agenda = [
-                "sala",
-            "tipo_sala",
-            "capacidade_turma",
-                "dia_semana",
-                "hora_inicio",
-                "hora_fim",
-                "codigo_disciplina",
-                "nome_disciplina",
-                "turma",
-                "curso",
-            "docente",
-            "numero_periodos",
-            "vagas_oferecidas",
-            "vagas_totais_compartilhadas",
-            "turmas_compartilhando_sala",
-            "etapa",
-            "creditos",
-        ]
-        agenda = (
-                dados[dados["sala"].isin(salas_obj)][colunas_agenda]
-                .drop_duplicates()
-                .to_dict(orient="records")
+    for e in sorted(
+        encontros.values(),
+        key=lambda e: (
+            ORDEM_DIAS.index(e["base"].dia_semana)
+            if e["base"].dia_semana in ORDEM_DIAS else 99,
+            e["base"].hora_inicio,
+            e["base"].codigo_disciplina,
+        ),
+    ):
+        b = e["base"]
+        if b.dia_semana not in ORDEM_DIAS:
+            continue
+        inicio = max(450, horario_para_minutos(b.hora_inicio))
+        fim = min(1350, horario_para_minutos(b.hora_fim))
+        if fim <= inicio:
+            continue
+        slot_inicial = (inicio - 450) // 30
+        duracao = max(1, -(-(fim - inicio) // 30))
+        cursos = list(e["cursos"])
+        primeira = _categoria_curso(cursos[0])
+        nomes_cursos = ", ".join(ROTULOS_CURSO.get(c, c) for c in cursos)
+        dica = "\n".join(
+            [
+                f"{b.codigo_disciplina} · {b.nome_disciplina}",
+                f"Turma {b.turma} · {b.dia_semana} · {b.hora_inicio}–{b.hora_fim}",
+                f"Curso(s): {nomes_cursos}",
+                f"Docente(s): {', '.join(map(str, e['docentes']))}",
+                f"{b.numero_periodos} períodos · etapa {b.etapa} · {b.creditos} créditos",
+                f"Vagas: {b.vagas_oferecidas} de {b.vagas_totais_compartilhadas} "
+                f"({b.turmas_compartilhando_sala})",
+            ]
         )
-        conteudo = {**cena, "agenda": agenda, "dias": ORDEM_DIAS}
-        dados_json = json.dumps(conteudo, ensure_ascii=False).replace("<", "\\u003c")
+        tags = "".join(
+            f'<span class="event-course" style="background:'
+            f'{COR_CURSO_PLANTA[_categoria_curso(c)]}">'
+            f"{esc(_NOMES_CURTOS.get(_categoria_curso(c), c))}</span>"
+            for c in cursos
+        )
+        classe = "agenda-event is-long" if duracao >= 4 else "agenda-event"
+        blocos.append(
+            f'<div class="{classe}" title="{esc(dica)}" style="grid-column:'
+            f"{ORDEM_DIAS.index(b.dia_semana) + 2};grid-row:{2 + slot_inicial} / "
+            f"span {duracao};--event-color:{COR_CURSO_PLANTA[primeira]};"
+            f'--event-tint:{_TINTAS_CURSO[primeira]}">'
+            f"<strong>{esc(str(b.codigo_disciplina))} · Turma {esc(str(b.turma))}</strong>"
+            f'<span class="event-courses">{tags}</span>'
+            f'<span class="event-name">{esc(str(b.nome_disciplina))}</span>'
+            f"<span>{b.hora_inicio}–{b.hora_fim}</span>"
+            f'<span class="event-details">{esc("/".join(map(str, e["docentes"])))} · '
+            f"{b.numero_periodos} períodos · {b.creditos} cr</span></div>"
+        )
 
-        html = r'''<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-    * { box-sizing: border-box; }
-    body { margin: 0; color: #17262c; font: 14px/1.4 system-ui, sans-serif; }
-    .viewer { border: 1px solid #cbd6d3; background: #f2f6f4; }
-    .controls { display: grid; grid-template-columns: minmax(150px, 220px) 1fr auto; align-items: center; gap: 20px; padding: 14px 18px; background: #fff; border-bottom: 1px solid #d8e0dd; }
-    label { display: grid; gap: 5px; color: #596a70; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-    select, input[type=range] { width: 100%; }
-    select { min-height: 36px; padding: 0 9px; border: 1px solid #aebcb8; background: white; color: #17262c; font: inherit; }
-    .time-box { display: grid; grid-template-columns: 1fr 62px; align-items: center; gap: 12px; }
-    input[type=range] { accent-color: #167b68; }
-    output { color: #167b68; font-size: 17px; font-weight: 750; font-variant-numeric: tabular-nums; }
-    button { min-height: 36px; border: 1px solid #aebcb8; background: white; color: #17262c; padding: 0 12px; cursor: pointer; font: inherit; }
-    button:hover { border-color: #167b68; }
-    .scene-wrap { height: 540px; position: relative; overflow: hidden; background: radial-gradient(ellipse at 50% 40%, #fff 0%, #e8f0ed 65%, #dce7e2 100%); }
-    canvas { display: block; width: 100%; height: 100%; }
-    .room-label { position: absolute; z-index: 2; transform: translate(-50%, -100%); padding: 4px 8px; border: 1px solid #aebcb8; background: rgba(255,255,255,.88); color: #17262c; font-size: 11px; font-weight: 750; white-space: nowrap; cursor: pointer; }
-    canvas { cursor: grab; }
-    canvas:active { cursor: grabbing; }
-    .status-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid #d8e0dd; background: white; }
-    .status { min-width: 0; padding: 12px 16px; border-right: 1px solid #e2e8e6; }
-    .status:last-child { border-right: 0; }
-    .status h3 { margin: 0 0 5px; font-size: 13px; }
-    .status p { margin: 0; color: #5a6b70; font-size: 12px; overflow-wrap: anywhere; }
-    .swatch { display: inline-block; width: 9px; height: 9px; margin: 0 5px 0 0; border-radius: 50%; vertical-align: 0; }
-    .room-info { position: absolute; z-index: 4; left: 12px; right: 12px; bottom: 12px; max-height: 82%; overflow: auto; padding: 16px 18px; border: 1px solid #cbd6d3; background: rgba(255,255,255,.97); box-shadow: 0 8px 24px rgba(23,38,44,.18); }
-    .room-info-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-    .room-info h2 { margin: 0; font-size: 18px; }
-    .room-meta { margin: 4px 0 14px; color: #5a6b70; font-size: 12px; }
-    .room-info button { flex: 0 0 auto; }
-    .agenda-wrap { overflow: auto; border: 1px solid #d8e0dd; }
-    .agenda-grid { display: grid; grid-template-columns: 58px repeat(5, minmax(124px, 1fr)); grid-template-rows: 34px repeat(30, 25px); min-width: 760px; position: relative; background: #fff; }
-    .agenda-day { grid-row: 1; z-index: 2; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #bfcac6; background: #f2f6f4; color: #52645f; font-size: 10px; font-weight: 750; }
-    .agenda-tick { grid-column: 1; z-index: 2; padding: 0 5px; transform: translateY(-8px); background: white; color: #60716d; font-size: 10px; font-variant-numeric: tabular-nums; text-align: right; }
-    .agenda-track { z-index: 0; grid-row: 2 / span 30; border-left: 1px solid #e2e8e6; background: repeating-linear-gradient(to bottom, transparent 0, transparent 24px, #e2e8e6 24px, #e2e8e6 25px); }
-    .agenda-lunch { z-index: 1; grid-row: 12 / span 2; background: rgba(125, 139, 135, .14); border-block: 1px dashed #aebcb8; pointer-events: none; }
-    .agenda-event { z-index: 2; min-width: 0; overflow: hidden; margin: 2px 3px; padding: 4px 5px; border: 1px solid rgba(34, 48, 52, .22); border-left: 4px solid var(--event-color); border-radius: 3px; background: var(--event-tint); color: #17262c; box-shadow: 0 1px 3px rgba(23, 38, 44, .12); font-size: 10px; line-height: 1.22; }
-    .agenda-event strong, .agenda-event span { display: block; overflow: hidden; text-overflow: ellipsis; }
-    .agenda-event strong { font-size: 10px; }
-    .agenda-event .event-name, .agenda-event .event-details { display: none; }
-    .agenda-event.is-long .event-name, .agenda-event.is-long .event-details { display: block; }
-    .event-courses { display: flex !important; flex-wrap: wrap; gap: 2px; margin-top: 2px; }
-    .event-course { display: inline-block !important; padding: 1px 3px; border-radius: 2px; color: white; font-size: 8px; white-space: nowrap; }
-    .empty-selection { position: absolute; z-index: 3; left: 12px; bottom: 12px; max-width: calc(100% - 24px); padding: 10px 12px; border: 1px solid #cbd6d3; background: rgba(255,255,255,.92); color: #5a6b70; font-size: 12px; pointer-events: none; }
-    .error { padding: 24px; color: #9e342b; }
-    @media (max-width: 650px) {
-        .controls { grid-template-columns: 1fr auto; gap: 12px; padding: 12px; }
-        .time-control { grid-column: 1 / -1; grid-row: 2; }
-        .scene-wrap { height: 390px; }
-        .status-row { grid-template-columns: 1fr; }
-        .status { border-right: 0; border-bottom: 1px solid #e2e8e6; padding: 9px 12px; }
-        .room-info { padding: 12px; }
-        .room-info { left: 8px; right: 8px; bottom: 8px; max-height: 72%; }
-        .empty-selection { left: 8px; bottom: 8px; max-width: calc(100% - 16px); }
-        .agenda-grid { grid-template-columns: 48px repeat(5, minmax(116px, 1fr)); min-width: 628px; }
+    documento = (
+        f"<style>{_CSS_FICHA}</style><section class='room-info'>"
+        f"<h2>{esc(sala)} · {esc(str(registros.iloc[0]['tipo_sala']))}</h2>"
+        f"<p class='room-meta'>Capacidade da turma: {esc(capacidades)} lugares · "
+        f"{len(encontros)} encontros na semana</p>"
+        f"<div class='agenda-wrap'><div class='agenda-grid'>{''.join(blocos)}"
+        "</div></div></section>"
+    )
+    components.html(documento, height=960, scrolling=True)
+
+
+def _rgba(hex_cor: str, alpha: float) -> str:
+    r, g, b = (int(hex_cor[i : i + 2], 16) for i in (1, 3, 5))
+    return f"rgba({r},{g},{b},{alpha})"
+
+
+def exibir_animacao_plantas(dados: pd.DataFrame) -> None:
+    st.subheader("5. Ocupação das salas nas plantas baixas")
+    st.caption(
+        "Escolha o dia e use o controle deslizante ou o botão Play para animar a "
+        "ocupação das salas ao longo do dia. Biblioteca: Plotly."
+    )
+
+    if not CAMINHO_OBJ.exists():
+        st.warning(f"Plantas baixas não encontradas: {CAMINHO_OBJ.name}")
+        return
+
+    try:
+        plantas = ler_plantas_obj(str(CAMINHO_OBJ))
+    except (OSError, ValueError) as erro:
+        st.error(f"Não foi possível ler as plantas baixas: {erro}")
+        return
+
+    salas = plantas["salas"]
+    if not salas:
+        st.error("O OBJ não contém polígonos nomeados como 'Sala xxx'.")
+        return
+
+    dia = st.selectbox("Dia da semana", ORDEM_DIAS, key="dia_plantas")
+    agenda = dados[dados["dia_semana"] == dia]
+    agenda = agenda[agenda["sala"].isin(salas)]
+    eventos_por_sala = {sala: grupo for sala, grupo in agenda.groupby("sala")}
+
+    def estado_sala(sala: str, minuto: int) -> tuple[str, str]:
+        grupo = eventos_por_sala.get(sala)
+        ativos = None
+        if grupo is not None:
+            ativos = grupo[
+                (grupo["inicio_minutos"] <= minuto) & (minuto < grupo["fim_minutos"])
+            ]
+        if ativos is None or ativos.empty:
+            return _rgba(COR_SALA_LIVRE, 0.6), f"<b>{sala}</b><br>Livre"
+        cursos = sorted(ativos["curso"].unique())
+        categorias = {c if c in COR_CURSO_PLANTA else "OUTRO" for c in cursos}
+        categoria = categorias.pop() if len(categorias) == 1 else "COMPARTILHADO"
+        encontros = ativos.drop_duplicates(
+            subset=["codigo_disciplina", "turma", "hora_inicio"]
+        )
+        detalhe = "<br>".join(
+            f"{e.codigo_disciplina} · {e.nome_disciplina} ({e.turma}) "
+            f"{e.hora_inicio}-{e.hora_fim}"
+            for e in encontros.itertuples()
+        )
+        cursos_txt = ", ".join(ROTULOS_CURSO.get(c, c) for c in cursos)
+        return (
+            _rgba(COR_CURSO_PLANTA[categoria], 0.7),
+            f"<b>{sala}</b><br>{cursos_txt}<br>{detalhe}",
+        )
+
+    nomes = sorted(salas)
+    minutos = list(range(450, 1351, 60))
+
+    figura = go.Figure()
+    fundo_x, fundo_y = plantas["fundo"]
+    figura.add_trace(
+        go.Scattergl(
+            x=fundo_x,
+            y=fundo_y,
+            mode="lines",
+            line={"color": "#8a9a96", "width": 0.6},
+            hoverinfo="skip",
+            showlegend=False,
+        )
+    )
+
+    for sala in nomes:
+        xs, ys = salas[sala]
+        cor, texto = estado_sala(sala, minutos[0])
+        figura.add_trace(
+            go.Scatter(
+                x=xs,
+                y=ys,
+                mode="lines",
+                fill="toself",
+                fillcolor=cor,
+                line={"color": "#17262c", "width": 1.2},
+                hoveron="fills",
+                text=texto,
+                hoverinfo="text",
+                showlegend=False,
+            )
+        )
+
+    # Scattergl desenha acima dos traços SVG; os rótulos também são gl para ficarem sobre o mobiliário.
+    figura.add_trace(
+        go.Scattergl(
+            x=[sum(salas[s][0]) / len(salas[s][0]) for s in nomes],
+            y=[sum(salas[s][1]) / len(salas[s][1]) for s in nomes],
+            mode="text",
+            text=[s.replace("Sala ", "") for s in nomes],
+            textposition="middle center",
+            textfont={"size": 16, "color": "#000000", "family": "Arial Black, Arial"},
+            hoverinfo="skip",
+            showlegend=False,
+        )
+    )
+
+    # Posições em x/y das plantas no OBJ; os nomes ficam abaixo de cada desenho.
+    figura.add_trace(
+        go.Scatter(
+            x=[-13, 16, 43, 73],
+            y=[30.5] * 4,
+            mode="text",
+            text=["Térreo", "3º Andar", "4º Andar", "5º Andar"],
+            textfont={"size": 20, "color": "#17262c"},
+            hoverinfo="skip",
+            showlegend=False,
+        )
+    )
+
+    # Marcadores invisíveis no centro das salas recebem o clique e repetem o hover.
+    centros_x = [sum(salas[s][0]) / len(salas[s][0]) for s in nomes]
+    centros_y = [sum(salas[s][1]) / len(salas[s][1]) for s in nomes]
+    figura.add_trace(
+        go.Scatter(
+            x=centros_x,
+            y=centros_y,
+            mode="markers",
+            marker={"size": 28, "opacity": 0},
+            text=[estado_sala(s, minutos[0])[1] for s in nomes],
+            hoverinfo="text",
+            showlegend=False,
+        )
+    )
+    indice_cliques = len(figura.data) - 1
+
+    legenda = {
+        "Arquitetura": "ARQU",
+        "Design de Produto": "DPRO",
+        "Design Visual": "DVIS",
+        "Cursos compartilhando": "COMPARTILHADO",
+        "Livre": None,
     }
-</style>
-</head>
-<body>
-<div class="viewer">
-    <div class="controls">
-        <label>Dia da semana<select id="day"></select></label>
-        <label class="time-control">Horário<div class="time-box"><input id="time" type="range" min="450" max="1350" step="30" value="570"><output id="clock">09:30</output></div></label>
-        <button id="reset" type="button" aria-label="Centralizar a câmera">Centralizar</button>
-    </div>
-    <div class="scene-wrap" id="scene-wrap">
-        <div class="error" id="error" hidden></div>
-        <div class="empty-selection" id="selection-hint">Selecione um bloco para consultar os dados da sala e a agenda semanal de cada turma.</div>
-        <section class="room-info" id="room-info" hidden></section>
-    </div>
-    <div class="status-row" id="statuses"></div>
-</div>
-<script id="scene-data" type="application/json">__SCENE_DATA__</script>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"}}</script>
-<script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/OrbitControls.js';
+    for rotulo, chave in legenda.items():
+        figura.add_trace(
+            go.Scatter(
+                x=[None],
+                y=[None],
+                mode="markers",
+                marker={
+                    "symbol": "square",
+                    "size": 12,
+                    "color": COR_CURSO_PLANTA[chave] if chave else COR_SALA_LIVRE,
+                    "line": {"color": "#17262c", "width": 1},
+                },
+                name=rotulo,
+            )
+        )
 
-const data = JSON.parse(document.getElementById('scene-data').textContent);
-const colors = { ARQU: '#e23d3d', DPRO: '#2673df', DVIS: '#20a467', OTHER: '#9aa6aa' };
-const courseNames = { ARQU: 'Arquitetura', DPRO: 'Design de Produto', DVIS: 'Design Visual' };
-const wrap = document.getElementById('scene-wrap');
-const errorBox = document.getElementById('error');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 2000);
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-wrap.prepend(renderer.domElement);
-scene.add(new THREE.HemisphereLight(0xffffff, 0x899a95, 2.1));
-const keyLight = new THREE.DirectionalLight(0xffffff, 2.3);
-keyLight.position.set(-15, 28, 22);
-scene.add(keyLight);
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.07;
-controls.target.set(8, 2, -4);
+    indices_salas = list(range(1, len(nomes) + 1))
+    figura.frames = [
+        go.Frame(
+            name=minutos_para_horario(minuto),
+            data=[
+                go.Scatter(fillcolor=c, text=t)
+                for c, t in (estado_sala(s, minuto) for s in nomes)
+            ]
+            + [go.Scatter(text=[estado_sala(s, minuto)[1] for s in nomes])],
+            traces=indices_salas + [indice_cliques],
+        )
+        for minuto in minutos
+    ]
 
-const roomMeshes = new Map();
-const roomEdges = new Map();
-const labels = new Map();
-let selectedRoom = null;
-const roomNames = ['Sala 301A', 'Sala 501', 'Sala 504'];
-for (const object of data.objetos) {
-    if (object.faces.length) {
-        const globalIndices = [...new Set(object.faces.flat())];
-        const localIndices = new Map(globalIndices.map((index, position) => [index, position]));
-        const positions = globalIndices.flatMap(index => data.vertices[index]);
-        const indices = [];
-        const groups = [];
-        let cursor = 0;
-        for (let faceIndex = 0; faceIndex < object.faces.length; faceIndex++) {
-            const face = object.faces[faceIndex];
-            const start = cursor;
-            for (let i = 1; i < face.length - 1; i++) {
-                indices.push(localIndices.get(face[0]), localIndices.get(face[i]), localIndices.get(face[i + 1]));
-                cursor += 3;
+    parametros = {"mode": "immediate", "transition": {"duration": 0}}
+    figura.update_layout(
+        title=f"Ocupação das salas - {dia}",
+        height=720,
+        xaxis={"visible": False},
+        yaxis={"visible": False, "scaleanchor": "x", "scaleratio": 1},
+        plot_bgcolor="white",
+        legend={"orientation": "h", "y": 1.02, "x": 0},
+        margin={"l": 10, "r": 10, "t": 70, "b": 10},
+        updatemenus=[
+            {
+                "type": "buttons",
+                "direction": "left",
+                "x": 0,
+                "y": -0.02,
+                "yanchor": "top",
+                "buttons": [
+                    {
+                        "label": "Play",
+                        "method": "animate",
+                        "args": [
+                            None,
+                            {
+                                **parametros,
+                                "frame": {"duration": 700, "redraw": True},
+                                "fromcurrent": True,
+                            },
+                        ],
+                    },
+                    {
+                        "label": "Pause",
+                        "method": "animate",
+                        "args": [[None], {**parametros, "frame": {"duration": 0}}],
+                    },
+                ],
             }
-            groups.push({ start, count: cursor - start, faceIndex });
-        }
-        const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        geometry.setIndex(indices);
-        for (const group of groups) geometry.addGroup(group.start, group.count, 0);
-        geometry.computeVertexNormals();
-        geometry.computeBoundingBox();
-        geometry.computeBoundingSphere();
-        const surfaceMaterials = [
-            new THREE.MeshStandardMaterial({ color: colors.ARQU, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false, roughness: 0.32 }),
-            new THREE.MeshStandardMaterial({ color: colors.DPRO, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false, roughness: 0.32 }),
-            new THREE.MeshStandardMaterial({ color: colors.DVIS, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false, roughness: 0.32 }),
-            new THREE.MeshStandardMaterial({ color: colors.OTHER, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false, roughness: 0.32 }),
-            new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.055, side: THREE.DoubleSide, depthWrite: false, roughness: 0.32, metalness: 0.12 }),
-        ];
-        const mesh = new THREE.Mesh(geometry, surfaceMaterials);
-        mesh.userData.groups = groups;
-        mesh.userData.objectName = object.nome;
-        mesh.userData.surfaceMaterials = surfaceMaterials;
-        scene.add(mesh);
-        const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry, 1), new THREE.LineBasicMaterial({ color: 0x71827e, transparent: true, opacity: 0.66 }));
-        scene.add(edges);
-        const room = object.nome.replaceAll('_', ' ');
-        if (roomNames.includes(room)) {
-            mesh.userData.room = room;
-            roomMeshes.set(room, mesh);
-            const tag = document.createElement('div');
-            tag.className = 'room-label';
-            tag.textContent = room;
-            tag.title = `Selecionar ${room}`;
-            tag.setAttribute('role', 'button');
-            tag.setAttribute('tabindex', '0');
-            tag.addEventListener('click', () => selectRoom(room));
-            tag.addEventListener('keydown', event => {
-                if (event.key === 'Enter' || event.key === ' ') selectRoom(room);
-            });
-            wrap.appendChild(tag);
-            labels.set(room, tag);
-            roomEdges.set(room, edges);
-        }
-    }
-    for (const curve of object.curvas) {
-        const points = curve.map(index => new THREE.Vector3(...data.vertices[index]));
-        if (points.length > 1) {
-            const geometry = new THREE.BufferGeometry().setFromPoints(points);
-            scene.add(new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0x435954, transparent: true, opacity: 0.8 })));
-        }
-    }
-}
-
-if (!roomMeshes.size) {
-    errorBox.hidden = false;
-    errorBox.textContent = 'O OBJ não contém sólidos nomeados Sala_301A, Sala_501 ou Sala_504.';
-    throw new Error(errorBox.textContent);
-}
-
-const bounds = new THREE.Box3().setFromObject(scene);
-const center = bounds.getCenter(new THREE.Vector3());
-const size = bounds.getSize(new THREE.Vector3());
-const span = Math.max(size.x, size.y, size.z);
-controls.target.copy(center);
-camera.position.copy(center).add(new THREE.Vector3(span * 1.2, span * 0.85, span * 1.4));
-camera.near = Math.max(span / 1000, 0.01);
-camera.far = span * 20;
-camera.updateProjectionMatrix();
-const grid = new THREE.GridHelper(Math.max(size.x, size.z) * 1.2, 24, 0xb4c3bf, 0xd4dfdc);
-grid.position.set(center.x, bounds.min.y - 0.08, center.z);
-scene.add(grid);
-
-const dayControl = document.getElementById('day');
-for (const day of data.dias) {
-    const option = document.createElement('option');
-    option.value = day;
-    option.textContent = day.replace('-FEIRA', '');
-    dayControl.appendChild(option);
-}
-const timeControl = document.getElementById('time');
-const clock = document.getElementById('clock');
-const statuses = document.getElementById('statuses');
-const selectionHint = document.getElementById('selection-hint');
-const roomInfo = document.getElementById('room-info');
-const roomOrder = Object.fromEntries(data.dias.map((day, index) => [day, index]));
-const formatTime = value => `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`;
-const toMinutes = value => { const [hours, minutes] = value.split(':').map(Number); return hours * 60 + minutes; };
-const category = course => Object.hasOwn(colors, course) ? course : 'OTHER';
-
-function updateOccupation() {
-    const day = dayControl.value;
-    const time = Number(timeControl.value);
-    clock.value = formatTime(time);
-    clock.textContent = formatTime(time);
-    statuses.replaceChildren();
-    for (const room of roomNames) {
-        const events = data.agenda.filter(event => event.sala === room && event.dia_semana === day && toMinutes(event.hora_inicio) <= time && time < toMinutes(event.hora_fim));
-        const activeCourses = [...new Set(events.map(event => category(event.curso)))];
-        const mesh = roomMeshes.get(room);
-        if (mesh) {
-            const materials = mesh.userData.surfaceMaterials;
-            for (const material of materials) material.opacity = 0;
-            if (activeCourses.length) {
-                for (const course of activeCourses) {
-                    const materialIndex = { ARQU: 0, DPRO: 1, DVIS: 2, OTHER: 3 }[course];
-                    materials[materialIndex].opacity = 0.64;
-                }
-            } else {
-                materials[4].opacity = 0.055;
+        ],
+        sliders=[
+            {
+                "active": 0,
+                "x": 0.12,
+                "len": 0.88,
+                "y": -0.02,
+                "yanchor": "top",
+                "currentvalue": {"prefix": "Horário: "},
+                "steps": [
+                    {
+                        "label": minutos_para_horario(m),
+                        "method": "animate",
+                        "args": [
+                            [minutos_para_horario(m)],
+                            {**parametros, "frame": {"duration": 0, "redraw": True}},
+                        ],
+                    }
+                    for m in minutos
+                ],
             }
-            const activeMaterials = activeCourses.length
-                ? activeCourses.map(course => ({ ARQU: 0, DPRO: 1, DVIS: 2, OTHER: 3 })[course])
-                : [4];
-            mesh.geometry.clearGroups();
-            for (const group of mesh.userData.groups) mesh.geometry.addGroup(group.start, group.count, activeMaterials[group.faceIndex % activeMaterials.length]);
-            const edges = roomEdges.get(room);
-            if (edges) edges.material.color.set(
-                selectedRoom === room ? 0x17262c : activeCourses.length === 1 ? colors[activeCourses[0]] : 0x71827e
-            );
-        }
-        const status = document.createElement('div');
-        status.className = 'status';
-        const title = document.createElement('h3');
-        title.textContent = room;
-        const detail = document.createElement('p');
-        if (!events.length) {
-            detail.textContent = 'Livre neste horário';
-        } else {
-            detail.innerHTML = [...new Map(events.map(event => [`${event.codigo_disciplina}/${event.turma}/${event.curso}`, event])).values()].map(event => {
-                const key = category(event.curso);
-                const name = courseNames[key] || event.curso;
-                const swatch = colors[key] || colors.OTHER;
-                return `<span class="swatch" style="background:${swatch}"></span>${name}: ${event.codigo_disciplina} · ${event.nome_disciplina}`;
-            }).join('<br>');
-        }
-        status.append(title, detail);
-        statuses.appendChild(status);
-    }
-}
+        ],
+    )
 
-function selectRoom(room) {
-    selectedRoom = room;
-    selectionHint.hidden = true;
-    roomInfo.hidden = false;
-    roomInfo.replaceChildren();
-    const records = data.agenda.filter(event => event.sala === room);
-    const first = records[0];
-    const meetings = new Map();
-    for (const event of records) {
-        const key = [event.codigo_disciplina, event.turma, event.dia_semana, event.hora_inicio, event.hora_fim, event.turmas_compartilhando_sala].join('|');
-        if (!meetings.has(key)) meetings.set(key, { ...event, courses: new Map(), teachers: new Set() });
-        meetings.get(key).courses.set(event.curso, event);
-        meetings.get(key).teachers.add(event.docente);
-    }
-    const weeklyEvents = [...meetings.values()].map(event => ({
-        ...event,
-        courses: [...event.courses.values()],
-        teachers: [...event.teachers],
-    })).sort((a, b) =>
-        roomOrder[a.dia_semana] - roomOrder[b.dia_semana]
-        || a.hora_inicio.localeCompare(b.hora_inicio)
-        || a.codigo_disciplina.localeCompare(b.codigo_disciplina)
-    );
+    evento = st.plotly_chart(
+        figura,
+        use_container_width=True,
+        key="grafico_plantas",
+        on_select="rerun",
+        selection_mode="points",
+    )
+    st.caption(
+        "Cores indicam o curso que ocupa a sala no horário; roxo indica mais de um "
+        "curso no mesmo encontro. Passe o cursor sobre uma sala para ver as "
+        "disciplinas e clique nela para abrir a agenda semanal. Salas sem "
+        "registro no CSV aparecem como livres."
+    )
 
-    const header = document.createElement('div');
-    header.className = 'room-info-head';
-    const title = document.createElement('h2');
-    title.textContent = `${room} · ${first?.tipo_sala || 'Tipo de sala indisponível'}`;
-    const close = document.createElement('button');
-    close.type = 'button';
-    close.textContent = 'Fechar';
-    close.setAttribute('aria-label', 'Fechar informações da sala');
-    close.addEventListener('click', () => {
-        selectedRoom = null;
-        roomInfo.hidden = true;
-        selectionHint.hidden = false;
-        updateOccupation();
-    });
-    header.append(title, close);
-    const metadata = document.createElement('p');
-    metadata.className = 'room-meta';
-    const capacityValues = [...new Set(records.map(event => event.capacidade_turma))];
-    metadata.textContent = `Capacidade da turma: ${capacityValues.join(' / ') || 'não informada'} lugares · ${weeklyEvents.length} encontros na semana`;
-    roomInfo.append(header, metadata);
-
-    if (!weeklyEvents.length) {
-        const empty = document.createElement('p');
-        empty.textContent = 'Não há registros de utilização desta sala no CSV.';
-        roomInfo.appendChild(empty);
-        return;
-    }
-
-    const agendaWrap = document.createElement('div');
-    agendaWrap.className = 'agenda-wrap';
-    const agendaGrid = document.createElement('div');
-    agendaGrid.className = 'agenda-grid';
-
-    data.dias.forEach((day, dayIndex) => {
-        const heading = document.createElement('div');
-        heading.className = 'agenda-day';
-        heading.style.gridColumn = String(dayIndex + 2);
-        heading.textContent = day;
-        agendaGrid.appendChild(heading);
-
-        const track = document.createElement('div');
-        track.className = 'agenda-track';
-        track.style.gridColumn = String(dayIndex + 2);
-        agendaGrid.appendChild(track);
-
-        const lunch = document.createElement('div');
-        lunch.className = 'agenda-lunch';
-        lunch.style.gridColumn = String(dayIndex + 2);
-        lunch.title = 'Intervalo de almoço';
-        agendaGrid.appendChild(lunch);
-    });
-
-    for (let minute = 450; minute <= 1350; minute += 60) {
-        const tick = document.createElement('div');
-        tick.className = 'agenda-tick';
-        tick.style.gridRow = String(2 + (minute - 450) / 30);
-        tick.textContent = formatTime(minute);
-        agendaGrid.appendChild(tick);
-    }
-
-    const courseShortNames = { ARQU: 'Arquitetura', DPRO: 'Produto', DVIS: 'Visual' };
-    const courseTints = { ARQU: '#fce9e9', DPRO: '#e8f0fd', DVIS: '#e7f5ed', OTHER: '#eef1f2' };
-    for (const event of weeklyEvents) {
-        const start = Math.max(450, toMinutes(event.hora_inicio));
-        const end = Math.min(1350, toMinutes(event.hora_fim));
-        if (end <= start) continue;
-
-        const startSlot = Math.floor((start - 450) / 30);
-        const durationSlots = Math.max(1, Math.ceil((end - start) / 30));
-        const dayIndex = data.dias.indexOf(event.dia_semana);
-        if (dayIndex < 0) continue;
-
-        const eventBox = document.createElement('div');
-        eventBox.className = 'agenda-event';
-        eventBox.style.gridColumn = String(dayIndex + 2);
-        eventBox.style.gridRow = `${2 + startSlot} / span ${durationSlots}`;
-        const firstCourse = category(event.courses[0]?.curso);
-        const eventColor = colors[firstCourse] || colors.OTHER;
-        eventBox.style.setProperty('--event-color', eventColor);
-        eventBox.style.setProperty('--event-tint', courseTints[firstCourse] || courseTints.OTHER);
-        if (durationSlots >= 4) eventBox.classList.add('is-long');
-
-        const courseNamesForEvent = event.courses.map(course => courseNames[category(course.curso)] || course.curso);
-        const detailText = [
-            `${event.codigo_disciplina} · ${event.nome_disciplina}`,
-            `Turma ${event.turma} · ${event.dia_semana} · ${event.hora_inicio}–${event.hora_fim}`,
-            `Curso(s): ${courseNamesForEvent.join(', ')}`,
-            `Docente(s): ${event.teachers.join(', ')}`,
-            `${event.numero_periodos} períodos · etapa ${event.etapa} · ${event.creditos} créditos`,
-            `Vagas: ${event.vagas_oferecidas} de ${event.vagas_totais_compartilhadas} (${event.turmas_compartilhando_sala})`,
-        ];
-        eventBox.title = detailText.join('\n');
-
-        const eventTitle = document.createElement('strong');
-        eventTitle.textContent = `${event.codigo_disciplina} · Turma ${event.turma}`;
-        const courseList = document.createElement('span');
-        courseList.className = 'event-courses';
-        for (const course of event.courses) {
-            const courseTag = document.createElement('span');
-            const courseCategory = category(course.curso);
-            courseTag.className = 'event-course';
-            courseTag.style.backgroundColor = colors[courseCategory] || colors.OTHER;
-            courseTag.textContent = courseShortNames[courseCategory] || course.curso;
-            courseList.appendChild(courseTag);
-        }
-        const eventName = document.createElement('span');
-        eventName.className = 'event-name';
-        eventName.textContent = event.nome_disciplina;
-        const eventTime = document.createElement('span');
-        eventTime.textContent = `${event.hora_inicio}–${event.hora_fim}`;
-        const eventDetails = document.createElement('span');
-        eventDetails.className = 'event-details';
-        eventDetails.textContent = `${event.teachers.join('/')} · ${event.numero_periodos} períodos · ${event.creditos} cr`;
-        eventBox.append(eventTitle, courseList, eventName, eventTime, eventDetails);
-        agendaGrid.appendChild(eventBox);
-    }
-
-    agendaWrap.appendChild(agendaGrid);
-    roomInfo.appendChild(agendaWrap);
-    updateOccupation();
-}
-
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
-renderer.domElement.addEventListener('click', event => {
-    const bounds = renderer.domElement.getBoundingClientRect();
-    pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
-    pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
-    raycaster.setFromCamera(pointer, camera);
-    const intersections = raycaster.intersectObjects([...roomMeshes.values()], false);
-    if (intersections.length) selectRoom(intersections[0].object.userData.room);
-});
-
-function resize() {
-    const width = wrap.clientWidth;
-    const height = wrap.clientHeight;
-    const aspect = width / height;
-    const direction = camera.position.clone().sub(controls.target).normalize();
-    const verticalFov = THREE.MathUtils.degToRad(camera.fov);
-    const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * aspect);
-    const fitFov = Math.min(verticalFov, horizontalFov);
-    const sphere = bounds.getBoundingSphere(new THREE.Sphere());
-    const distance = (sphere.radius / Math.sin(fitFov / 2)) * 1.14;
-    camera.position.copy(center).addScaledVector(direction, distance);
-    controls.target.copy(center);
-    renderer.setSize(width, height, false);
-    camera.aspect = aspect;
-    camera.updateProjectionMatrix();
-}
-const resizeObserver = new ResizeObserver(resize);
-resizeObserver.observe(wrap);
-dayControl.addEventListener('change', updateOccupation);
-timeControl.addEventListener('input', updateOccupation);
-document.getElementById('reset').addEventListener('click', () => {
-    controls.target.copy(center);
-    camera.position.copy(center).add(new THREE.Vector3(span * 1.2, span * 0.85, span * 1.4));
-    controls.update();
-});
-updateOccupation();
-resize();
-function animate() {
-    controls.update();
-    renderer.render(scene, camera);
-    for (const [room, tag] of labels) {
-        const mesh = roomMeshes.get(room);
-        const point = mesh.geometry.boundingBox.getCenter(new THREE.Vector3());
-        point.y = mesh.geometry.boundingBox.max.y + 0.8;
-        mesh.localToWorld(point);
-        point.project(camera);
-        if (wrap.clientWidth < 500) {
-            const mobilePosition = { 'Sala 301A': 0.18, 'Sala 501': 0.5, 'Sala 504': 0.82 }[room];
-            tag.style.left = `${wrap.clientWidth * mobilePosition}px`;
-            tag.style.top = '11%';
-        } else {
-            tag.style.left = `${(point.x * 0.5 + 0.5) * wrap.clientWidth}px`;
-            tag.style.top = `${(-point.y * 0.5 + 0.5) * wrap.clientHeight}px`;
-        }
-        tag.hidden = point.z < -1 || point.z > 1;
-    }
-    requestAnimationFrame(animate);
-}
-animate();
-</script>
-</body>
-</html>'''
-        components.html(
-                html.replace("__SCENE_DATA__", dados_json),
-                height=740,
-                scrolling=False,
-        )
+    pontos = [
+        p
+        for p in evento.selection.points
+        if p.get("curve_number") == indice_cliques
+    ]
+    if pontos:
+        sala_clicada = nomes[pontos[0]["point_index"]]
+        exibir_ficha_sala(dados, sala_clicada)
 
 
 # -----------------------------------------------------------------------------
@@ -1376,45 +1244,7 @@ def pagina_agenda() -> None:
     st.subheader("4. Agenda interativa por sala")
     exibir_agenda_sala(dados)
 
-    st.subheader("Possíveis sobreposições de horários por docente")
-    st.write(
-        "A tabela apresenta sobreposições na programação registrada para o mesmo "
-        "docente e dia. Ela é um alerta para investigação, não uma confirmação "
-        "de conflito real, pois a base não registra todas as restrições docentes."
-    )
-    conflitos = encontrar_sobreposicoes_docentes(dados)
-    if conflitos.empty:
-        st.success("Não foram encontradas possíveis sobreposições no recorte filtrado.")
-    else:
-        st.dataframe(conflitos, use_container_width=True, hide_index=True)
-
-    st.subheader("Observações metodológicas")
-    st.markdown(
-        "- A visão por curso mantém linhas repetidas quando um encontro atende "
-        "mais de um curso.\n"
-        "- As visualizações físicas deduplicam o mesmo encontro para não contar "
-        "uma sala várias vezes.\n"
-        "- Horários sem registro não garantem disponibilidade operacional.\n"
-        "- A análise descreve a ocupação regular de 2026/2 e não resolve, sozinha, "
-        "a montagem de uma nova grade."
-    )
-
-    # O checklist final torna explícita a relação entre a implementação e os
-    # requisitos da atividade. Ele também funciona como uma conferência rápida
-    # para o grupo antes de entregar o dashboard.
-    st.subheader("Checklist de atendimento da atividade")
-    st.markdown(
-        "- [✓] Investiga pelo menos duas perguntas da Atividade 01.\n"
-        "- [✓] Apresenta quatro visualizações de dados; o gráfico 4 descreve a ocupação atual por sala.\n"
-        "- [✓] Utiliza duas bibliotecas de visualização: Plotly e Matplotlib.\n"
-        "- [✓] Oferece mais de dois controles interativos na barra lateral.\n"
-        "- [✓] Atualiza as visualizações conforme os filtros são alterados.\n"
-        "- [✓] Informa quando a seleção de filtros não encontra registros.\n"
-        "- [✓] Apresenta títulos, rótulos, unidades, fonte e textos interpretativos.\n"
-        "- [✓] Permite execução local com `streamlit run app.py`."
-    )
-
-    exibir_visualizacao_3d(dados)
+    exibir_animacao_plantas(dados)
 
 
 def main() -> None:

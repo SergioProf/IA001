@@ -1,0 +1,11 @@
+p = 'entregas/atividade03/app_03.py'
+L = open(p, encoding='utf-8').read().split('\n')
+assert L[687].startswith('def ler_obj_para_cena') and L[1247].startswith('# ----'), (L[687], L[1247])
+n = open('novo_bloco.tmp', encoding='utf-8').read().rstrip('\n').split('\n')
+s = '\n'.join(L[:687] + n + ['', ''] + L[1247:])
+s = (s.replace('PASTA_APP / "teste.obj"', 'PASTA_APP / "PlantasBaixas.obj"')
+      .replace('exibir_visualizacao_3d(dados)', 'exibir_animacao_plantas(dados)')
+      .replace('import json\n', '')
+      .replace('import streamlit.components.v1 as components\n', ''))
+open(p, 'w', encoding='utf-8').write(s)
+print('ok')

@@ -1,0 +1,248 @@
+@st.cache_data
+def ler_plantas_obj(caminho_obj: str) -> dict:
+    # Lê as curvas 2D do OBJ (plano XZ) e separa as salas do restante do desenho.
+    vertices = []
+    salas = {}
+    fundo_x, fundo_y = [], []
+    nome_atual = None
+
+    with open(caminho_obj, encoding="utf-8") as arquivo:
+        for linha in arquivo:
+            if linha.startswith("v "):
+                _, x, _, z = linha.split()[:4]
+                vertices.append((float(x), float(z)))
+            elif linha.startswith("o "):
+                nome_atual = linha[2:].strip()
+            elif linha.startswith("curv ") and nome_atual:
+                indices = [int(i) for i in linha.split()[3:]]
+                pontos = [
+                    vertices[i - 1 if i > 0 else len(vertices) + i] for i in indices
+                ]
+                # Em vista de topo, o eixo vertical da tela corresponde a -Z.
+                xs = [round(p[0], 3) for p in pontos]
+                ys = [round(-p[1], 3) for p in pontos]
+                if nome_atual.startswith("Sala ") and nome_atual not in salas:
+                    salas[nome_atual] = (xs, ys)
+                else:
+                    fundo_x.extend(xs + [None])
+                    fundo_y.extend(ys + [None])
+
+    return {"salas": salas, "fundo": (fundo_x, fundo_y)}
+
+
+COR_CURSO_PLANTA = {
+    "ARQU": "#e23d3d",
+    "DPRO": "#2673df",
+    "DVIS": "#20a467",
+    "OUTRO": "#9aa6aa",
+    "COMPARTILHADO": "#8e5bd0",
+}
+COR_SALA_LIVRE = "#dfe5e3"
+
+
+def _rgba(hex_cor: str, alpha: float) -> str:
+    r, g, b = (int(hex_cor[i : i + 2], 16) for i in (1, 3, 5))
+    return f"rgba({r},{g},{b},{alpha})"
+
+
+def exibir_animacao_plantas(dados: pd.DataFrame) -> None:
+    st.subheader("5. Ocupação das salas nas plantas baixas")
+    st.caption(
+        "Escolha o dia e use o controle deslizante ou o botão Play para animar a "
+        "ocupação das salas ao longo do dia. Biblioteca: Plotly."
+    )
+
+    if not CAMINHO_OBJ.exists():
+        st.warning(f"Plantas baixas não encontradas: {CAMINHO_OBJ.name}")
+        return
+
+    try:
+        plantas = ler_plantas_obj(str(CAMINHO_OBJ))
+    except (OSError, ValueError) as erro:
+        st.error(f"Não foi possível ler as plantas baixas: {erro}")
+        return
+
+    salas = plantas["salas"]
+    if not salas:
+        st.error("O OBJ não contém polígonos nomeados como 'Sala xxx'.")
+        return
+
+    dia = st.selectbox("Dia da semana", ORDEM_DIAS, key="dia_plantas")
+    agenda = dados[dados["dia_semana"] == dia]
+    agenda = agenda[agenda["sala"].isin(salas)]
+    eventos_por_sala = {sala: grupo for sala, grupo in agenda.groupby("sala")}
+
+    def estado_sala(sala: str, minuto: int) -> tuple[str, str]:
+        grupo = eventos_por_sala.get(sala)
+        ativos = None
+        if grupo is not None:
+            ativos = grupo[
+                (grupo["inicio_minutos"] <= minuto) & (minuto < grupo["fim_minutos"])
+            ]
+        if ativos is None or ativos.empty:
+            return _rgba(COR_SALA_LIVRE, 0.6), f"<b>{sala}</b><br>Livre"
+        cursos = sorted(ativos["curso"].unique())
+        categorias = {c if c in COR_CURSO_PLANTA else "OUTRO" for c in cursos}
+        categoria = categorias.pop() if len(categorias) == 1 else "COMPARTILHADO"
+        encontros = ativos.drop_duplicates(
+            subset=["codigo_disciplina", "turma", "hora_inicio"]
+        )
+        detalhe = "<br>".join(
+            f"{e.codigo_disciplina} · {e.nome_disciplina} ({e.turma}) "
+            f"{e.hora_inicio}-{e.hora_fim}"
+            for e in encontros.itertuples()
+        )
+        cursos_txt = ", ".join(ROTULOS_CURSO.get(c, c) for c in cursos)
+        return (
+            _rgba(COR_CURSO_PLANTA[categoria], 0.7),
+            f"<b>{sala}</b><br>{cursos_txt}<br>{detalhe}",
+        )
+
+    nomes = sorted(salas)
+    minutos = list(range(450, 1351, 30))
+
+    figura = go.Figure()
+    fundo_x, fundo_y = plantas["fundo"]
+    figura.add_trace(
+        go.Scattergl(
+            x=fundo_x,
+            y=fundo_y,
+            mode="lines",
+            line={"color": "#8a9a96", "width": 0.6},
+            hoverinfo="skip",
+            showlegend=False,
+        )
+    )
+
+    for sala in nomes:
+        xs, ys = salas[sala]
+        cor, texto = estado_sala(sala, minutos[0])
+        figura.add_trace(
+            go.Scatter(
+                x=xs,
+                y=ys,
+                mode="lines",
+                fill="toself",
+                fillcolor=cor,
+                line={"color": "#17262c", "width": 1.2},
+                hoveron="fills",
+                text=texto,
+                hoverinfo="text",
+                showlegend=False,
+            )
+        )
+
+    figura.add_trace(
+        go.Scatter(
+            x=[sum(salas[s][0]) / len(salas[s][0]) for s in nomes],
+            y=[sum(salas[s][1]) / len(salas[s][1]) for s in nomes],
+            mode="text",
+            text=[s.replace("Sala ", "") for s in nomes],
+            textfont={"size": 10, "color": "#17262c"},
+            hoverinfo="skip",
+            showlegend=False,
+        )
+    )
+
+    legenda = {
+        "Arquitetura": "ARQU",
+        "Design de Produto": "DPRO",
+        "Design Visual": "DVIS",
+        "Cursos compartilhando": "COMPARTILHADO",
+        "Livre": None,
+    }
+    for rotulo, chave in legenda.items():
+        figura.add_trace(
+            go.Scatter(
+                x=[None],
+                y=[None],
+                mode="markers",
+                marker={
+                    "symbol": "square",
+                    "size": 12,
+                    "color": COR_CURSO_PLANTA[chave] if chave else COR_SALA_LIVRE,
+                    "line": {"color": "#17262c", "width": 1},
+                },
+                name=rotulo,
+            )
+        )
+
+    indices_salas = list(range(1, len(nomes) + 1))
+    figura.frames = [
+        go.Frame(
+            name=minutos_para_horario(minuto),
+            data=[
+                go.Scatter(fillcolor=c, text=t)
+                for c, t in (estado_sala(s, minuto) for s in nomes)
+            ],
+            traces=indices_salas,
+        )
+        for minuto in minutos
+    ]
+
+    parametros = {"mode": "immediate", "transition": {"duration": 0}}
+    figura.update_layout(
+        title=f"Ocupação das salas - {dia}",
+        height=720,
+        xaxis={"visible": False},
+        yaxis={"visible": False, "scaleanchor": "x", "scaleratio": 1},
+        plot_bgcolor="white",
+        legend={"orientation": "h", "y": 1.02, "x": 0},
+        margin={"l": 10, "r": 10, "t": 70, "b": 10},
+        updatemenus=[
+            {
+                "type": "buttons",
+                "direction": "left",
+                "x": 0,
+                "y": -0.02,
+                "yanchor": "top",
+                "buttons": [
+                    {
+                        "label": "Play",
+                        "method": "animate",
+                        "args": [
+                            None,
+                            {
+                                **parametros,
+                                "frame": {"duration": 700, "redraw": True},
+                                "fromcurrent": True,
+                            },
+                        ],
+                    },
+                    {
+                        "label": "Pause",
+                        "method": "animate",
+                        "args": [[None], {**parametros, "frame": {"duration": 0}}],
+                    },
+                ],
+            }
+        ],
+        sliders=[
+            {
+                "active": 0,
+                "x": 0.12,
+                "len": 0.88,
+                "y": -0.02,
+                "yanchor": "top",
+                "currentvalue": {"prefix": "Horário: "},
+                "steps": [
+                    {
+                        "label": minutos_para_horario(m),
+                        "method": "animate",
+                        "args": [
+                            [minutos_para_horario(m)],
+                            {**parametros, "frame": {"duration": 0, "redraw": True}},
+                        ],
+                    }
+                    for m in minutos
+                ],
+            }
+        ],
+    )
+
+    st.plotly_chart(figura, use_container_width=True)
+    st.caption(
+        "Cores indicam o curso que ocupa a sala no horário; roxo indica mais de um "
+        "curso no mesmo encontro. Passe o cursor sobre uma sala para ver as "
+        "disciplinas. Salas sem registro no CSV aparecem como livres."
+    )

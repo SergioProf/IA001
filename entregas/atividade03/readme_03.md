@@ -49,8 +49,8 @@ Essas alterações explicam a diferença entre a saída original reportada (454 
 - Os docentes aparecem anonimizados, por exemplo, como `Prof01`; esses identificadores não devem ser interpretados como nomes reais.
 - A base descreve a programação regular do semestre `2026/2`. Ela não representa necessariamente usos eventuais, disponibilidade de espaços fora da grade ou alterações posteriores que não tenham sido incorporadas ao CSV. Registre no histórico da próxima atividade qualquer atualização feita na base.
 
-## Visualização 3D das salas
+## Ocupação nas plantas baixas
 
-O painel `app_03.py` usa `teste.obj` como geometria de demonstração e relaciona os sólidos aos dados pelo nome dos objetos: `o Sala_301A`, `o Sala_501` e `o Sala_504`. Os objetos `Linha_Predio_*` são curvas auxiliares e permanecem visíveis como linhas de referência do prédio. Para acrescentar salas, nomeie cada sólido no OBJ seguindo o padrão `Sala_<identificador>` e inclua os registros correspondentes no CSV.
+O painel `app_03.py` lê `PlantasBaixas.obj` (curvas 2D no plano XZ) e relaciona os polígonos aos dados pelo nome do objeto: `o Sala 301A`, `o Sala 501` etc. As demais curvas são desenhadas como fundo da planta.
 
-A cena permite girar e aproximar o modelo, selecionar dia e horário e visualizar a ocupação com Arquitetura em vermelho, Design de Produto em azul e Design Visual em verde. Ao clicar em um bloco de sala, a ficha mostra tipo e capacidade do espaço e a agenda semanal por curso/turma, com disciplinas, dias, horários, docentes, períodos, etapa, créditos e vagas. A ficha tem rolagem própria para manter a cena utilizável. A cena utiliza os módulos Three.js servidos por CDN, portanto é necessária conexão à internet para carregar o visualizador.
+Um gráfico Plotly anima a ocupação das salas ao longo do dia selecionado (controle deslizante e botão Play, passos de 30 minutos). Arquitetura aparece em vermelho, Design de Produto em azul, Design Visual em verde e encontros com mais de um curso em roxo. Passe o cursor sobre uma sala para ver as disciplinas em andamento.
