@@ -19,7 +19,7 @@ from candidatos_03 import (
     alocacoes_fixos,
 )
 from modelo_ocupacao_03 import ModeloOcupacao
-from restricoes_03 import CURSOS_ALVO, DIAS_VALIDOS
+from restricoes_03 import CURSOS_ALVO, DIAS_VALIDOS, metricas_preferencia
 
 
 @dataclass(frozen=True)
@@ -208,3 +208,164 @@ def resolver_viabilidade(modelagem: ModeloCPsat, limite_segundos: float = 30.0) 
             )
             solucao[encontro_id] = selecionado
     return status, solucao
+
+
+def resolver_solucao_a(
+    ocupacao: ModeloOcupacao,
+    modelagem: ModeloCPsat,
+    limite_segundos: float = 300.0,
+) -> tuple[int, dict[str, Candidato], dict[str, Any]]:
+    """Maximiza lexicograficamente a preservação da grade para a Solução A."""
+
+    encontros = {encontro.id: encontro for encontro in ocupacao.encontros_fisicos}
+    linhas = _linhas_por_encontro(ocupacao)
+    quantidade = len(modelagem.variaveis)
+    base = quantidade + 1
+    pesos_nivel = {nivel: base ** (5 - nivel) for nivel in range(1, 6)}
+
+    prioridades = metricas_preferencia(ocupacao, {})["ordem_prioridade_turmas"]
+    ranking_turmas = {
+        item["turma_academica_id"]: len(prioridades) - indice
+        for indice, item in enumerate(prioridades)
+    }
+    prioridade_evento = {
+        encontro_id: sum({
+            ranking_turmas.get(linha["turma_academica_id"], 0)
+            for linha in ocupacao.linhas_fonte
+            if linha["evento_fisico_id"] == encontro_id
+        })
+        for encontro_id in modelagem.variaveis
+    }
+
+    tipos_sala: dict[tuple[str, str], set[str]] = defaultdict(set)
+    for registros in linhas.values():
+        for registro in registros:
+            tipos_sala[(registro["predio"], registro["sala"])].add(registro["tipo_sala"])
+
+    padroes: dict[str, list[str]] = defaultdict(list)
+    for encontro in ocupacao.encontros_fisicos:
+        padroes[encontro.padrao_semanal_id].append(encontro.id)
+    padrao_preservado: dict[str, Any] = {}
+    for padrao_id, encontro_ids in padroes.items():
+        moveis = [encontro_id for encontro_id in encontro_ids if encontro_id in modelagem.variaveis]
+        if not moveis:
+            continue
+        esperado: dict[str, int] = defaultdict(int)
+        for encontro_id in encontro_ids:
+            dia = encontros[encontro_id].atributos_fisicos["dia_semana"].strip().upper()
+            esperado[dia] += 1
+
+        iguais_por_dia = []
+        for dia in sorted(DIAS_VALIDOS):
+            fixos_no_dia = sum(
+                1 for encontro_id in encontro_ids
+                if encontro_id not in modelagem.variaveis
+                and encontros[encontro_id].atributos_fisicos["dia_semana"].strip().upper() == dia
+            )
+            escolhas_no_dia = [
+                variavel
+                for encontro_id in moveis
+                for candidato, variavel in modelagem.variaveis[encontro_id]
+                if candidato.dia_semana == dia
+            ]
+            igual = modelagem.modelo.new_bool_var(f"padrao_dia_{padrao_id}_{dia}")
+            contagem = fixos_no_dia + sum(escolhas_no_dia)
+            modelo_igual = esperado[dia]
+            modelagem.modelo.add(contagem == modelo_igual).only_enforce_if(igual)
+            modelagem.modelo.add(contagem != modelo_igual).only_enforce_if(igual.Not())
+            iguais_por_dia.append(igual)
+
+        preservado = modelagem.modelo.new_bool_var(f"padrao_preservado_{padrao_id}")
+        modelagem.modelo.add_bool_and(iguais_por_dia).only_enforce_if(preservado)
+        modelagem.modelo.add_bool_or([igual.Not() for igual in iguais_por_dia]).only_enforce_if(preservado.Not())
+        padrao_preservado[padrao_id] = preservado
+
+    niveis_primarios = {nivel: [] for nivel in range(1, 6)}
+    desempates = []
+    soma_pesos_prioridade = 0
+    for encontro_id, escolhas in modelagem.variaveis.items():
+        original = encontros[encontro_id].atributos_fisicos
+        original_dia = original["dia_semana"].strip().upper()
+        dia_alterado = modelagem.modelo.new_bool_var(f"dia_alterado_{encontro_id}")
+        for candidato, variavel in escolhas:
+            candidato_dia = candidato.dia_semana.strip().upper()
+            mesma_data_hora = all(
+                candidato.alocacao()[campo] == original[campo]
+                for campo in ("dia_semana", "hora_inicio", "hora_fim")
+            )
+            mesma_sala = (candidato.predio, candidato.sala) == (original["predio"], original["sala"])
+            mesma_posicao = mesma_data_hora and mesma_sala
+            if mesma_posicao:
+                niveis_primarios[1].append(variavel)
+            elif mesma_data_hora:
+                niveis_primarios[2].append(variavel)
+            elif candidato_dia == original_dia:
+                niveis_primarios[3].append(variavel)
+            if mesma_posicao:
+                desempates.append(prioridade_evento[encontro_id] * variavel)
+
+            sala_original = (original["predio"], original["sala"])
+            tipo_original = {tipo.casefold() for tipo in tipos_sala[sala_original]}
+            tipos_destino = tipos_sala[(candidato.predio, candidato.sala)]
+            tipo_preservado = bool(tipo_original & {tipo.casefold() for tipo in tipos_destino})
+            laboratorio_desnecessario = (
+                "laborat" in " ".join(tipos_destino).casefold()
+                and "laborat" not in " ".join(tipo_original).casefold()
+            )
+            inicio_tardio = _minutos(candidato.hora_inicio) >= 20 * 60
+            desempates.extend((
+                int(mesma_sala) * variavel,
+                int(tipo_preservado) * variavel,
+                -int(laboratorio_desnecessario) * variavel,
+                -int(inicio_tardio) * variavel,
+            ))
+
+        soma_pesos_prioridade += prioridade_evento[encontro_id]
+        soma_dias_alterados = sum(
+            variavel for candidato, variavel in escolhas
+            if candidato.dia_semana.strip().upper() != original_dia
+        )
+        modelagem.modelo.add(soma_dias_alterados == 1).only_enforce_if(dia_alterado)
+        modelagem.modelo.add(soma_dias_alterados == 0).only_enforce_if(dia_alterado.Not())
+        nivel_quatro = modelagem.modelo.new_bool_var(f"nivel_4_{encontro_id}")
+        preservado = padrao_preservado[encontros[encontro_id].padrao_semanal_id]
+        modelagem.modelo.add_bool_and([dia_alterado, preservado]).only_enforce_if(nivel_quatro)
+        modelagem.modelo.add_bool_or([dia_alterado.Not(), preservado.Not()]).only_enforce_if(nivel_quatro.Not())
+        niveis_primarios[4].append(nivel_quatro)
+        niveis_primarios[5].append(dia_alterado - nivel_quatro)
+
+    limite_desempate = soma_pesos_prioridade + 5 * quantidade
+    escala_primaria = 2 * limite_desempate + 1
+    termos_objetivo = [
+        variavel * pesos_nivel[nivel] * escala_primaria
+        for nivel, variaveis in niveis_primarios.items()
+        for variavel in variaveis
+    ]
+    termos_objetivo.extend(desempates)
+    modelagem.modelo.maximize(sum(termos_objetivo))
+    validacao = modelagem.modelo.validate()
+    if validacao:
+        raise ValueError(f"Modelo CP-SAT inválido para a Solução A: {validacao}")
+
+    solver = cp_model.CpSolver()
+    solver.parameters.max_time_in_seconds = limite_segundos
+    solver.parameters.num_search_workers = 1
+    solver.parameters.random_seed = 0
+    status = solver.solve(modelagem.modelo)
+    solucao = {}
+    if status in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        for encontro_id, escolhas in modelagem.variaveis.items():
+            solucao[encontro_id] = next(
+                candidato for candidato, variavel in escolhas
+                if solver.boolean_value(variavel)
+            )
+    detalhes = {
+        "status": solver.status_name(status),
+        "valor_objetivo": solver.objective_value if solucao else None,
+        "melhor_limite": solver.best_objective_bound if solucao else None,
+        "tempo_segundos": solver.wall_time,
+        "limite_segundos": limite_segundos,
+        "quantidade_variaveis": len(modelagem.modelo.proto.variables),
+        "quantidade_restricoes": len(modelagem.modelo.proto.constraints),
+    }
+    return status, solucao, detalhes

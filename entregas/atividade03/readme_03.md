@@ -75,9 +75,23 @@ A fonte contém 289 encontros físicos: 285 móveis e 4 que permanecem fixos por
 
 **Solver escolhido:** OR-Tools CP-SAT, fixado em `ortools==9.15.6755` e instalado no ambiente virtual Python 3.14.7. A escolha se baseia na natureza discreta do problema e nos 285 encontros móveis com domínios finitos; CP-SAT oferece variáveis inteiras/booleanas e restrições globais de não sobreposição, apropriadas a sala, docente e etapa. A dependência é declarada em `requirements_03.txt`. A fase 5 não executa busca nem prova viabilidade global; solver sem solução, limite de tempo e solução ótima/provada deverão ser reportados separadamente na fase de otimização.
 
-`modelo_otimizacao_03.py` constrói e valida o modelo de viabilidade CP-SAT: exatamente uma alocação por encontro móvel e não sobreposição por sala, docente e etapa obrigatória. As ocupações externas fixas são retiradas dos domínios; a construção também rejeita colisões com elas. A resolução de viabilidade é testada em cenários pequenos, incluindo um conflito de sala; os objetivos lexicográficos das soluções A/B/C pertencem às fases seguintes. `resolver_viabilidade` recebe limite de tempo (padrão 30 segundos), usa um worker e retorna o status nativo CP-SAT, distinguindo `INFEASIBLE` de `UNKNOWN` (por exemplo, limite atingido sem solução comprovada) e `FEASIBLE`/`OPTIMAL`.
+`modelo_otimizacao_03.py` constrói e valida o modelo CP-SAT: exatamente uma alocação por encontro móvel e não sobreposição por sala, docente e etapa obrigatória. As ocupações externas fixas são retiradas dos domínios; a construção também rejeita colisões com elas. `resolver_viabilidade` permanece disponível para testes mínimos e distingue `INFEASIBLE`, `UNKNOWN`, `FEASIBLE` e `OPTIMAL`.
 
 Validar domínios e modelo com `python -m unittest discover -s entregas/atividade03 -p "test_candidatos_03.py" -v`. Inspecionar a dimensão dos domínios com `python entregas/atividade03/candidatos_03.py`. A construção do modelo não executa o problema real, não seleciona uma grade e não grava soluções.
+
+## Solução A — preservação, fase 6
+
+`solucao_a_03.py` executa a otimização global da Solução A. O objetivo é lexicográfico: maximiza, nesta ordem, encontros que mantêm sala/dia/horário; dia/horário com mudança de sala; dia; mudança de dia mantendo o padrão semanal; e, por fim, mudanças mais amplas. A prioridade de turmas e as preferências por sala/tipo de espaço e horários não tardios só desempatarem resultados com o mesmo nível de preservação. Encontros externos continuam fixos.
+
+Execute com o ambiente do projeto:
+
+```powershell
+python entregas/atividade03/solucao_a_03.py --limite-segundos 300
+```
+
+O comando lê `mapa_salas_tidy_03.csv` sem sobrescrevê-lo. Se encontrar solução sem violações invioláveis novas, grava `solucao_A.csv` (20 colunas de origem mais colunas de auditoria), `solucao_A.json` (alocações, mudanças, exceções, diagnósticos e métricas) e `solucao_A.md` (resumo). Use `--entrada` e `--saida-dir` para caminhos alternativos. O limite de tempo é configurável.
+
+`OPTIMAL` significa que o CP-SAT provou o ótimo do objetivo; `FEASIBLE` significa que encontrou uma alocação válida, mas não provou o ótimo; `INFEASIBLE` indica inviabilidade provada; `UNKNOWN` indica que não houve prova nem solução dentro do limite. Nos dois últimos casos, o comando não exporta uma proposta. Exceções de turno incluem os minutos fora do alvo e uma justificativa; o CP-SAT não atribui uma causa impeditiva individual para cada exceção. A validação usa `validar_grade` após reconstruir a proposta a partir das alocações e bloqueia a exportação quando encontra violações invioláveis novas.
 
 ## Ocupação nas plantas baixas
 
