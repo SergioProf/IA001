@@ -52,7 +52,8 @@ COLUNAS_OBRIGATORIAS = {
     "predio",
     "sala",
     "tipo_sala",
-    "capacidade_turma",
+    "capacidade_sala",
+    "vagas_turma",
     "codigo_disciplina",
     "turma",
     "nome_disciplina",
@@ -105,7 +106,8 @@ def carregar_dados(caminho_dados: str) -> pd.DataFrame:
     # Essas colunas são quantitativas. A conversão torna os agrupamentos e as
     # comparações confiáveis mesmo que o CSV tenha sido editado manualmente.
     colunas_numericas = [
-        "capacidade_turma",
+        "capacidade_sala",
+        "vagas_turma",
         "numero_periodos",
         "vagas_oferecidas",
         "vagas_totais_compartilhadas",
@@ -778,7 +780,7 @@ def exibir_ficha_sala(dados: pd.DataFrame, sala: str) -> None:
         if r.docente not in e["docentes"]:
             e["docentes"].append(r.docente)
 
-    capacidades = " / ".join(str(c) for c in registros["capacidade_turma"].unique())
+    capacidades = " / ".join(str(c) for c in registros["capacidade_sala"].unique())
     blocos = []
     for indice, dia in enumerate(ORDEM_DIAS):
         coluna = indice + 2
@@ -822,7 +824,7 @@ def exibir_ficha_sala(dados: pd.DataFrame, sala: str) -> None:
                 f"Curso(s): {nomes_cursos}",
                 f"Docente(s): {', '.join(map(str, e['docentes']))}",
                 f"{b.numero_periodos} períodos · etapa {b.etapa} · {b.creditos} créditos",
-                f"Vagas: {b.vagas_oferecidas} de {b.vagas_totais_compartilhadas} "
+                f"Vagas da turma: {b.vagas_oferecidas} de {b.vagas_totais_compartilhadas} "
                 f"({b.turmas_compartilhando_sala})",
             ]
         )
@@ -838,7 +840,8 @@ def exibir_ficha_sala(dados: pd.DataFrame, sala: str) -> None:
             f"{ORDEM_DIAS.index(b.dia_semana) + 2};grid-row:{2 + slot_inicial} / "
             f"span {duracao};--event-color:{COR_CURSO_PLANTA[primeira]};"
             f'--event-tint:{_TINTAS_CURSO[primeira]}">'
-            f"<strong>{esc(str(b.codigo_disciplina))} · Turma {esc(str(b.turma))}</strong>"
+            f"<strong>{esc(str(b.codigo_disciplina))} · Turma {esc(str(b.turma))} · "
+            f"{esc(str(int(b.vagas_oferecidas)))} vagas</strong>"
             f'<span class="event-courses">{tags}</span>'
             f'<span class="event-name">{esc(str(b.nome_disciplina))}</span>'
             f"<span>{b.hora_inicio}–{b.hora_fim}</span>"
@@ -849,7 +852,7 @@ def exibir_ficha_sala(dados: pd.DataFrame, sala: str) -> None:
     documento = (
         f"<style>{_CSS_FICHA}</style><section class='room-info'>"
         f"<h2>{esc(sala)} · {esc(str(registros.iloc[0]['tipo_sala']))}</h2>"
-        f"<p class='room-meta'>Capacidade da turma: {esc(capacidades)} lugares · "
+        f"<p class='room-meta'>Capacidade da sala: {esc(capacidades)} lugares · "
         f"{len(encontros)} encontros na semana</p>"
         f"<div class='agenda-wrap'><div class='agenda-grid'>{''.join(blocos)}"
         "</div></div></section>"
