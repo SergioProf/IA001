@@ -25,6 +25,10 @@ import streamlit.components.v1 as components
 PASTA_APP = Path(__file__).resolve().parent
 CAMINHO_DADOS = PASTA_APP / "mapa_salas_tidy_03.csv"
 CAMINHO_OBJ = PASTA_APP / "PlantasBaixas.obj"
+CAMINHO_SOLUCOES = {
+    codigo: PASTA_APP / f"solucao_{codigo}.csv"
+    for codigo in ("A", "B", "C")
+}
 
 # Estas colunas identificam um encontro físico da disciplina. A coluna `curso`
 # fica fora da chave porque a mesma aula pode aparecer uma vez para cada curso
@@ -515,7 +519,7 @@ def exibir_grafico_salas(dados_fisicos: pd.DataFrame) -> None:
     )
 
 
-def exibir_agenda_sala(dados: pd.DataFrame) -> None:
+def exibir_agenda_sala(dados: pd.DataFrame, contexto: str = "original") -> None:
     # Gráfico 4: agenda semanal interativa de uma sala selecionada.
 
     # O seletor permite trocar de sala sem alterar a base original.
@@ -527,7 +531,7 @@ def exibir_agenda_sala(dados: pd.DataFrame) -> None:
     sala_selecionada = st.selectbox(
         "Selecione a sala",
         salas,
-        key="sala_agenda",
+        key=f"sala_agenda_{contexto}",
     )
     encontros = dados[dados["sala"] == sala_selecionada].copy()
     cursos_disponiveis = sorted(encontros["curso"].dropna().unique())
@@ -535,7 +539,7 @@ def exibir_agenda_sala(dados: pd.DataFrame) -> None:
         "Filtrar por curso",
         cursos_disponiveis,
         format_func=lambda codigo: ROTULOS_CURSO.get(codigo, codigo),
-        key="cursos_agenda",
+        key=f"cursos_agenda_{contexto}",
     )
     if cursos_selecionados:
         encontros = encontros[encontros["curso"].isin(cursos_selecionados)]
@@ -1250,6 +1254,63 @@ def pagina_agenda() -> None:
     exibir_animacao_plantas(dados)
 
 
+def carregar_proposta_para_pagina(codigo: str) -> pd.DataFrame | None:
+    caminho = CAMINHO_SOLUCOES[codigo]
+    if not caminho.exists():
+        st.info(
+            f"A proposta {codigo} ainda não foi gerada. "
+            f"Arquivo esperado: {caminho.name}."
+        )
+        return None
+
+    try:
+        return carregar_dados(str(caminho))
+    except (ValueError, OSError, pd.errors.ParserError) as erro:
+        st.error(f"Não foi possível carregar {caminho.name}: {erro}")
+        return None
+
+
+def pagina_proposta(codigo: str, titulo: str, descricao: str) -> None:
+    st.title(titulo)
+    st.write(descricao)
+
+    dados = carregar_proposta_para_pagina(codigo)
+    if dados is None:
+        return
+
+    st.caption(
+        f"Fonte: {CAMINHO_SOLUCOES[codigo].name}. "
+        "A agenda exibe somente os dados desta proposta."
+    )
+    st.subheader("Agenda interativa por sala")
+    exibir_agenda_sala(dados, contexto=f"proposta_{codigo}")
+
+
+def pagina_proposta_a() -> None:
+    pagina_proposta(
+        "A",
+        "Proposta A — Preservação",
+        "Agenda da solução que prioriza manter a grade atual e reduzir alterações.",
+    )
+
+
+def pagina_proposta_b() -> None:
+    pagina_proposta(
+        "B",
+        "Proposta B — Equilíbrio",
+        "Agenda da solução que prioriza a distribuição semanal das disciplinas e "
+        "da carga docente.",
+    )
+
+
+def pagina_proposta_c() -> None:
+    pagina_proposta(
+        "C",
+        "Proposta C — Turnos-alvo",
+        "Agenda da solução que maximiza a carga horária nos turnos-alvo.",
+    )
+
+
 def main() -> None:
     st.set_page_config(
         page_title="Mapa de salas - Atividade 03",
@@ -1261,6 +1322,9 @@ def main() -> None:
         [
             st.Page(pagina_inicial, title="Início", default=True),
             st.Page(pagina_agenda, title="Agenda"),
+            st.Page(pagina_proposta_a, title="Proposta A"),
+            st.Page(pagina_proposta_b, title="Proposta B"),
+            st.Page(pagina_proposta_c, title="Proposta C"),
         ],
         position="top",
     )
