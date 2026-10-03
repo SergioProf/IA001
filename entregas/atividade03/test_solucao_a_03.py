@@ -1,7 +1,9 @@
 import csv
+import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from candidatos_03 import Candidato
 from modelo_ocupacao_03 import normalizar_registros
@@ -26,6 +28,91 @@ def _candidato(encontro, *, sala=None, dia=None, inicio=None, fim=None):
 
 
 class TestSolucaoA(unittest.TestCase):
+    def test_excecao_de_turno_fora_do_alvo_e_rastreada_sem_bloquear(self):
+        ocupacao = normalizar_registros(CABECALHO, [
+            linha("ARQ001", inicio="14:00", fim="15:00"),
+        ])
+
+        resultado = calcular_solucao_a(ocupacao, limite_segundos=5)
+
+        encontro_id = ocupacao.encontros_fisicos[0].id
+        excecao = resultado["excecoes_detalhadas"][0]
+        diagnostico = next(
+            item for item in resultado["diagnosticos"]
+            if item["regra"] == "H010" and encontro_id in item["encontros"]
+        )
+        self.assertEqual(resultado["status_codigo"], cp_model.OPTIMAL)
+        self.assertEqual(excecao["encontro_id"], encontro_id)
+        self.assertEqual(excecao["minutos_fora_do_alvo"], 60)
+        self.assertIn("mantida", excecao["justificativa"])
+        self.assertEqual(diagnostico["severidade"], "excecao")
+        self.assertFalse(resultado["violacoes_bloqueantes"])
+        self.assertFalse(resultado["alteracoes"])
+        self.assertEqual(resultado["metricas"]["contagem_niveis_preservacao"][1], 1)
+
+    def test_feasible_exporta_candidata_provisoria_com_nome_distinto(self):
+        registro = linha("ARQ001")
+        ocupacao = normalizar_registros(CABECALHO, [registro])
+
+        def resolver_com_feasible(_ocupacao, modelagem, limite_segundos):
+            solucao = {}
+            for encontro_id, escolhas in modelagem.variaveis.items():
+                encontro = next(item for item in ocupacao.encontros_fisicos if item.id == encontro_id)
+                posicao_original = {campo: encontro.atributos_fisicos[campo] for campo in (
+                    "predio", "sala", "dia_semana", "hora_inicio", "hora_fim"
+                )}
+                solucao[encontro_id] = next(
+                    candidato for candidato, _ in escolhas
+                    if candidato.alocacao() == posicao_original
+                )
+            return cp_model.FEASIBLE, solucao, {
+                "status": "FEASIBLE",
+                "valor_objetivo": 1.0,
+                "melhor_limite": 2.0,
+                "tempo_segundos": 0.1,
+                "limite_segundos": limite_segundos,
+                "quantidade_variaveis": 1,
+                "quantidade_restricoes": 1,
+            }
+
+        with patch("solucao_a_03.resolver_solucao_a", side_effect=resolver_com_feasible):
+            resultado = calcular_solucao_a(ocupacao, limite_segundos=5)
+
+        with tempfile.TemporaryDirectory() as diretorio:
+            pasta = Path(diretorio)
+            fonte = pasta / "entrada.csv"
+            with fonte.open("w", encoding="utf-8", newline="") as arquivo:
+                escritor = csv.DictWriter(arquivo, fieldnames=CABECALHO)
+                escritor.writeheader()
+                escritor.writerow(registro)
+            caminhos = exportar_solucao_a(ocupacao, resultado, fonte, pasta / "saida")
+
+            self.assertEqual(caminhos["csv"].name, "candidato_A.csv")
+            self.assertEqual(caminhos["json"].name, "candidato_A.json")
+            with caminhos["csv"].open("r", encoding="utf-8-sig", newline="") as arquivo:
+                exportado = next(csv.DictReader(arquivo))
+            metadata = json.loads(caminhos["json"].read_text(encoding="utf-8"))
+
+        self.assertEqual(exportado["status_solver"], "FEASIBLE")
+        self.assertEqual(metadata["situacao"], "candidata_provisoria")
+        self.assertIn("não prova", metadata["observacao_status"])
+
+    def test_infeasible_e_unknown_nao_geram_arquivos(self):
+        ocupacao = normalizar_registros(CABECALHO, [linha("ARQ001")])
+        with tempfile.TemporaryDirectory() as diretorio:
+            pasta = Path(diretorio)
+            fonte = pasta / "entrada.csv"
+            for status in (cp_model.INFEASIBLE, cp_model.UNKNOWN):
+                with self.subTest(status=status):
+                    with patch("solucao_a_03.resolver_solucao_a", return_value=(
+                        status, {}, {"status": cp_model.CpSolver().status_name(status)}
+                    )):
+                        resultado = calcular_solucao_a(ocupacao, limite_segundos=5)
+                    saida = pasta / f"saida_{status}"
+                    with self.assertRaisesRegex(ValueError, "Sem alocação exportável"):
+                        exportar_solucao_a(ocupacao, resultado, fonte, saida)
+                    self.assertFalse(saida.exists())
+
     def test_objetivo_prioriza_niveis_1_a_3_sobre_niveis_inferiores(self):
         for niveis_disponiveis, esperado in (
             ((1, 2, 3, 4, 5), 1),
@@ -145,12 +232,15 @@ class TestSolucaoA(unittest.TestCase):
 
         self.assertEqual(resultado["status_codigo"], cp_model.OPTIMAL)
         self.assertFalse(resultado["violacoes_bloqueantes"])
+        self.assertEqual(len(resultado["alteracoes"]), 1)
         encontro_movido = next(
             encontro for encontro in ocupacao.encontros_fisicos
             if encontro.atributos_fisicos["codigo_disciplina"] == "ARQ001"
         )
         proposta = resultado["alocacoes"][encontro_movido.id]
         self.assertNotEqual(proposta["dia_semana"], "SEGUNDA-FEIRA")
+        self.assertEqual(resultado["alteracoes"][0]["encontro_id"], encontro_movido.id)
+        self.assertEqual(resultado["metricas"]["contagem_niveis_preservacao"][5], 1)
 
         with tempfile.TemporaryDirectory() as diretorio:
             pasta = Path(diretorio)
@@ -215,15 +305,20 @@ class TestSolucaoA(unittest.TestCase):
                 escritor.writerow(registro)
             caminhos = exportar_solucao_a(ocupacao, resultado, fonte, pasta / "saida")
 
+            self.assertEqual(caminhos["csv"].name, "solucao_A.csv")
+            self.assertEqual(caminhos["json"].name, "solucao_A.json")
             with caminhos["csv"].open("r", encoding="utf-8-sig", newline="") as arquivo:
                 leitor = csv.DictReader(arquivo)
                 exportado = next(leitor)
                 self.assertEqual(leitor.fieldnames[:len(CABECALHO)], CABECALHO)
+            metadata = json.loads(caminhos["json"].read_text(encoding="utf-8"))
             for coluna in CABECALHO:
                 self.assertEqual(exportado[coluna], registro[coluna])
             self.assertEqual(exportado["alterado"], "nao")
             self.assertEqual(exportado["solucao"], "A")
+            self.assertEqual(exportado["status_solver"], "OPTIMAL")
             self.assertEqual(exportado["turno_alvo"], "Manhã/Noite")
+            self.assertEqual(metadata["situacao"], "final")
             self.assertTrue(caminhos["json"].is_file())
             self.assertTrue(caminhos["markdown"].is_file())
 

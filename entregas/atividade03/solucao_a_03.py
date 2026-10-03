@@ -35,6 +35,7 @@ CAMPOS_EXPORTADOS = (
     "motivo_alteracao",
     "excecao_turno",
     "tipo_mudanca",
+    "status_solver",
 )
 TURNOS_ALVO_TEXTO = {"ARQU": "Manhã/Noite", "DPRO": "Tarde/Noite", "DVIS": "Tarde/Noite"}
 
@@ -182,7 +183,7 @@ def exportar_solucao_a(
     arquivo_fonte: Path,
     pasta_saida: Path,
 ) -> dict[str, Path]:
-    """Exporta A somente quando há solução e nenhuma violação dura nova."""
+    """Exporta A ou uma candidata provisória sem violação dura nova."""
 
     if resultado["status_codigo"] not in (cp_model.FEASIBLE, cp_model.OPTIMAL):
         raise ValueError(f"Sem alocação exportável: {resultado['solver']['status']}.")
@@ -190,9 +191,12 @@ def exportar_solucao_a(
         raise ValueError("Solução A contém violações invioláveis; arquivos não foram exportados.")
 
     pasta_saida.mkdir(parents=True, exist_ok=True)
-    caminho_csv = pasta_saida / "solucao_A.csv"
-    caminho_json = pasta_saida / "solucao_A.json"
-    caminho_md = pasta_saida / "solucao_A.md"
+    otimo_provado = resultado["status_codigo"] == cp_model.OPTIMAL
+    prefixo = "solucao_A" if otimo_provado else "candidato_A"
+    situacao = "final" if otimo_provado else "candidata_provisoria"
+    caminho_csv = pasta_saida / f"{prefixo}.csv"
+    caminho_json = pasta_saida / f"{prefixo}.json"
+    caminho_md = pasta_saida / f"{prefixo}.md"
     encontros = {encontro.id: encontro for encontro in ocupacao.encontros_fisicos}
     niveis = classificar_preservacao(ocupacao, resultado["alocacoes"])
     linhas_saida = []
@@ -212,6 +216,7 @@ def exportar_solucao_a(
         valores.update({
             "encontro_id": encontro_id,
             "solucao": "A",
+            "status_solver": resultado["solver"]["status"],
             "alterado": "sim" if mudou else "nao",
             "turno_original": "/".join(_horas_turno(inicio_original, fim_original)) or "Fora dos turnos",
             "turno_alvo": alvo,
@@ -232,6 +237,13 @@ def exportar_solucao_a(
 
     metadata = {
         "solucao": "A",
+        "situacao": situacao,
+        "observacao_status": (
+            "Ótimo lexicográfico provado pelo CP-SAT."
+            if otimo_provado else
+            "FEASIBLE: solução viável encontrada, mas não prova o ótimo lexicográfico; candidata provisória."
+        ),
+        "arquivo_json": caminho_json.name,
         "arquivo_fonte": arquivo_fonte.name,
         "sha256_fonte": hashlib.sha256(arquivo_fonte.read_bytes()).hexdigest(),
         "linhas_fonte": len(ocupacao.linhas_fonte),
@@ -255,8 +267,13 @@ def _relatorio_markdown(metadata: dict[str, Any]) -> str:
     metricas = metadata["metricas"]
     contagens = metricas["contagem_niveis_preservacao"]
     linhas = [
-        "# Solução A — preservação",
+        (
+            "# Solução A — preservação"
+            if metadata["situacao"] == "final"
+            else "# Candidata provisória A — preservação"
+        ),
         "",
+        f"- Situação: `{metadata['situacao']}`. {metadata['observacao_status']}",
         f"- Status CP-SAT: `{metadata['solver']['status']}`.",
         f"- Fonte: `{metadata['arquivo_fonte']}` (SHA-256 `{metadata['sha256_fonte']}`).",
         f"- Linhas/encontros físicos: {metadata['linhas_fonte']} / {metadata['encontros_fisicos']}.",
@@ -275,7 +292,7 @@ def _relatorio_markdown(metadata: dict[str, Any]) -> str:
         f"Exceções de turno registradas: {len(metadata['excecoes_turno'])}.",
         f"Violações invioláveis novas: {len(metadata['violacoes_bloqueantes'])}.",
         "",
-        "A lista detalhada de alterações, exceções, diagnósticos e metadados do solver está em `solucao_A.json`. O CSV-fonte não foi sobrescrito.",
+        f"A lista detalhada de alterações, exceções, diagnósticos e metadados do solver está em `{metadata['arquivo_json']}`. O CSV-fonte não foi sobrescrito.",
         "",
     ]
     return "\n".join(linhas)

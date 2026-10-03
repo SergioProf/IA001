@@ -1,49 +1,44 @@
-# Base de dados do mapa de salas
+# Base de dados do mapa de salas — Atividade 03
 
 ## Origem e transformação
 
-O arquivo de trabalho `mapa_salas_tidy.csv` foi preparado a partir da programação de salas do semestre `2026/2`. A transformação original lê as abas da planilha `MapaSalas.xlsx`, organiza a grade semanal em formato tabular e associa cada encontro às informações acadêmicas e de espaço descritas na própria planilha.
+O arquivo canônico desta atividade é `entregas/atividade03/mapa_salas_tidy_03.csv`, referente à programação de salas do semestre `2026/2`. As análises, auditorias e propostas da Atividade 03 devem usar esse arquivo, não o CSV da raiz nem a saída histórica do script de transformação.
 
-O código da transformação está em `dadosBrutos/transformar_mapa_salas.py`. Sua saída original é `dadosBrutos/mapa_salas_tidy.csv`, acompanhada pelo relatório `dadosBrutos/relatorio_transformacao_mapa_salas.md`. O relatório registra 23 abas processadas, 454 registros e 17 colunas para essa versão da saída.
+O script `dadosBrutos/transformar_mapa_salas.py` processa a planilha `dadosBrutos/MapaSalas.xlsx`; sua saída histórica é descrita em `dadosBrutos/relatorio_transformacao_mapa_salas.md` como 454 registros e 17 colunas. Essa fotografia histórica não é equivalente à base canônica 03: o CSV histórico não está disponível para comparação linha a linha e o script não gera todas as colunas presentes na base atual.
 
 ## Como os registros foram ampliados
 
-A planilha organiza parte das informações em uma grade visual. Para permitir filtros, agrupamentos e gráficos, os encontros foram convertidos para registros tabulares:
+A documentação da transformação histórica descreve a conversão da grade visual em registros tabulares. A base 03 contém linhas desmembradas por turma e por curso; assim, linhas repetidas podem representar a mesma ocupação física, e a contagem de linhas não deve ser tratada como contagem de encontros.
 
-- Cada registro descreve uma turma, disciplina, dia e faixa horária, junto com os dados do espaço.
-- Chaves com turmas compartilhadas, como `A/B`, são desmembradas em linhas por turma.
-- Disciplinas associadas a mais de um curso são desmembradas em linhas por curso. Portanto, um mesmo encontro pode aparecer mais de uma vez na base quando atende cursos diferentes.
-- Períodos consecutivos da mesma turma, sala e dia são consolidados em um encontro com início, fim e `numero_periodos`.
-- Docente, curso e vagas são associados às turmas a partir da tabela descritiva da planilha.
-- As vagas de uma chave compartilhada são repartidas entre as turmas; eventual resto é atribuído à primeira turma. `vagas_oferecidas` representa a parcela da turma, enquanto `vagas_totais_compartilhadas` registra o total compartilhado e pode se repetir nas linhas do encontro.
+O modelo canônico documentado em `modelo_ocupacao_03.py` associa linhas à turma acadêmica, membro compartilhado, encontro físico e atribuições docentes, mantendo as linhas-fonte. Em `turmas_compartilhando_sala`, os tokens separados por `/` identificam os membros do grupo. Não some cópias de linhas por curso ou docente ao calcular ocupação física.
 
 ## Conteúdo da base atual
 
-O arquivo principal `mapa_salas_tidy.csv` contém atualmente 452 registros e 19 colunas. Além dos 17 campos da saída original, a versão de trabalho inclui `etapa` e `creditos`.
+O arquivo `entregas/atividade03/mapa_salas_tidy_03.csv` contém 452 registros e 20 colunas. Cabeçalho: `semestre`, `predio`, `sala`, `capacidade_sala`, `tipo_sala`, `vagas_turma`, `codigo_disciplina`, `turma`, `nome_disciplina`, `docente`, `curso`, `dia_semana`, `hora_inicio`, `hora_fim`, `numero_periodos`, `vagas_oferecidas`, `vagas_totais_compartilhadas`, `turmas_compartilhando_sala`, `etapa` e `creditos`.
 
 | Grupo | Colunas |
 | --- | --- |
-| Período e espaço | `semestre`, `predio`, `sala`, `tipo_sala`, `capacidade_turma` |
+| Período e espaço | `semestre`, `predio`, `sala`, `capacidade_sala`, `tipo_sala` |
 | Disciplina e oferta | `codigo_disciplina`, `turma`, `nome_disciplina`, `docente`, `curso`, `etapa`, `creditos` |
 | Agenda | `dia_semana`, `hora_inicio`, `hora_fim`, `numero_periodos` |
-| Vagas e compartilhamento | `vagas_oferecidas`, `vagas_totais_compartilhadas`, `turmas_compartilhando_sala` |
+| Vagas e compartilhamento | `vagas_turma`, `vagas_oferecidas`, `vagas_totais_compartilhadas`, `turmas_compartilhando_sala` |
 
-`etapa` e `creditos` estão presentes na base atual, mas não são produzidos por `dadosBrutos/transformar_mapa_salas.py` nem descritos no relatório da transformação. A fonte original desses dois campos e o procedimento usado para associá-los às turmas ainda precisam ser registrados. Antes de reutilizar ou atualizar a base, convém documentar a fonte oficial, a chave de correspondência e o significado dos valores, inclusive o valor `0` em `etapa`.
+As sete colunas numéricas do CSV são `capacidade_sala`, `vagas_turma`, `numero_periodos`, `vagas_oferecidas`, `vagas_totais_compartilhadas`, `etapa` e `creditos`; as outras 13 são texto. `etapa` e `creditos` não são produzidos pelo script histórico, e sua fonte e chave de associação não foram confirmadas. A relação semântica entre `capacidade_sala` e `vagas_turma` também não está confirmada; não trate esses campos como equivalentes. O significado de `etapa = 0` está documentado para as regras desta atividade como eletiva, mas a linhagem do valor na base continua pendente.
 
 ## Ajustes posteriores à transformação
 
-A base principal recebeu ajustes manuais em relação à saída original do script:
+O README anterior reportava os seguintes ajustes. O CSV 03 permite confirmar o estado atual dos registros, mas, sem a saída histórica tidy para comparação, não comprova autoria nem a diferença exata em relação àquela saída:
 
-- Na disciplina `ARQ01013`, foi incluído o encontro de terça-feira, das 18:30 às 22:30, para as turmas C e D. Com isso, ambas têm a mesma grade semanal e somam 10 períodos.
-- Na disciplina `ARQ01046`, foram removidos os quatro encontros vespertinos das turmas A, B, C e D. Cada turma permanece com o encontro matinal de 3 períodos.
-- Na disciplina `ARQ01090` e na disciplina `ARQ01091`, os créditos foram ajustados de 2 para 1 em todas as turmas registradas.
+- `ARQ01013`: o CSV atual registra o encontro de terça-feira, 18:30–22:30, para C/D; o total relatado para A/C/D é de 10 períodos por turma.
+- `ARQ01046`: o CSV atual contém uma ocorrência de 3 períodos para cada turma, com A/B na sexta-feira e C/D na quarta-feira.
+- `ARQ01090` e `ARQ01091`: os créditos registrados no CSV atual são 1.
 
-Essas alterações explicam a diferença entre a saída original reportada (454 registros e 17 colunas) e a base de trabalho atual (452 registros e 19 colunas). Elas não estão incorporadas ao script de transformação. A saída do script em `dadosBrutos/` não deve ser tratada como cópia atualizada da base principal sem reaplicar e documentar esses complementos.
+Essas observações não devem ser interpretadas como linhagem confirmada. A diferença documentada entre a saída histórica (454 registros e 17 colunas) e a fonte 03 (452 registros e 20 colunas) não pode ser reconciliada linha a linha com os arquivos disponíveis. Não sobrescreva nem regenere `mapa_salas_tidy_03.csv` a partir do script histórico.
 
 ## Cuidados para análises futuras
 
 - Defina a unidade de análise antes de agregar. Para carga por curso, mantenha os registros separados por `curso`; para ocupação física, não conte novamente as linhas repetidas apenas por desagregação de cursos.
-- Não some `vagas_totais_compartilhadas` em todas as linhas de um mesmo encontro, pois o total pode estar repetido. Use `vagas_oferecidas` para a parcela atribuída a cada turma.
+- Não some `vagas_totais_compartilhadas` em todas as linhas de um mesmo encontro, pois o total pode estar repetido. Para capacidade física, deduplique linhas repetidas por curso/docente e some `vagas_oferecidas` dos membros físicos únicos, conforme a regra de auditoria desta atividade; divergências entre os campos devem ser reportadas, não presumidas.
 - Use `numero_periodos` para somar a duração semanal. Os horários indicam os limites do encontro, e o horário final é o limite de encerramento.
 - Preserve a distinção entre `turma` e `turmas_compartilhando_sala`: a primeira identifica o registro da turma; a segunda descreve a chave de turmas que compartilham o encontro.
 - Os docentes aparecem anonimizados, por exemplo, como `Prof01`; esses identificadores não devem ser interpretados como nomes reais.
@@ -81,7 +76,7 @@ Validar domínios e modelo com `python -m unittest discover -s entregas/atividad
 
 ## Solução A — preservação, fase 6
 
-`solucao_a_03.py` executa a otimização global da Solução A. O objetivo é lexicográfico: maximiza, nesta ordem, encontros que mantêm sala/dia/horário; dia/horário com mudança de sala; dia; mudança de dia mantendo o padrão semanal; e, por fim, mudanças mais amplas. A prioridade de turmas e as preferências por sala/tipo de espaço e horários não tardios só desempatarem resultados com o mesmo nível de preservação. Encontros externos continuam fixos.
+`solucao_a_03.py` executa a otimização global da Solução A. O objetivo é lexicográfico: maximiza, nesta ordem, encontros que mantêm sala/dia/horário; dia/horário com mudança de sala; dia; mudança de dia mantendo o padrão semanal; e, por fim, mudanças mais amplas. A prioridade de turmas e as preferências por sala/tipo de espaço e horários não tardios só desempatarão soluções com o mesmo perfil de preservação. Encontros externos continuam fixos.
 
 Execute com o ambiente do projeto:
 
@@ -89,9 +84,9 @@ Execute com o ambiente do projeto:
 python entregas/atividade03/solucao_a_03.py --limite-segundos 300
 ```
 
-O comando lê `mapa_salas_tidy_03.csv` sem sobrescrevê-lo. Se encontrar solução sem violações invioláveis novas, grava `solucao_A.csv` (20 colunas de origem mais colunas de auditoria), `solucao_A.json` (alocações, mudanças, exceções, diagnósticos e métricas) e `solucao_A.md` (resumo). Use `--entrada` e `--saida-dir` para caminhos alternativos. O limite de tempo é configurável.
+O comando lê `mapa_salas_tidy_03.csv` sem sobrescrevê-lo. Com `OPTIMAL` e sem violações invioláveis novas, grava `solucao_A.csv` (20 colunas de origem mais colunas de auditoria), `solucao_A.json` (alocações, mudanças, exceções, diagnósticos e métricas) e `solucao_A.md` (resumo). Com `FEASIBLE`, grava `candidato_A.csv`, `candidato_A.json` e `candidato_A.md`; são artefatos provisórios, não o aceite da fase. Ambos os CSVs registram o status do solver. Use `--entrada` e `--saida-dir` para caminhos alternativos. O limite de tempo é configurável.
 
-`OPTIMAL` significa que o CP-SAT provou o ótimo do objetivo; `FEASIBLE` significa que encontrou uma alocação válida, mas não provou o ótimo; `INFEASIBLE` indica inviabilidade provada; `UNKNOWN` indica que não houve prova nem solução dentro do limite. Nos dois últimos casos, o comando não exporta uma proposta. Exceções de turno incluem os minutos fora do alvo e uma justificativa; o CP-SAT não atribui uma causa impeditiva individual para cada exceção. A validação usa `validar_grade` após reconstruir a proposta a partir das alocações e bloqueia a exportação quando encontra violações invioláveis novas.
+`OPTIMAL` significa que o CP-SAT provou o ótimo do objetivo; `FEASIBLE` significa que encontrou uma alocação válida, mas não provou o ótimo; `INFEASIBLE` indica inviabilidade provada; `UNKNOWN` indica que não houve prova nem solução dentro do limite. `INFEASIBLE` e `UNKNOWN` não geram arquivos. Exceções de turno incluem os minutos fora do alvo e uma justificativa; o CP-SAT não atribui uma causa impeditiva individual para cada exceção. A validação usa `validar_grade` após reconstruir a proposta a partir das alocações e bloqueia a exportação quando encontra violações invioláveis novas.
 
 ## Ocupação nas plantas baixas
 
