@@ -49,6 +49,22 @@ Essas alterações explicam a diferença entre a saída original reportada (454 
 - Os docentes aparecem anonimizados, por exemplo, como `Prof01`; esses identificadores não devem ser interpretados como nomes reais.
 - A base descreve a programação regular do semestre `2026/2`. Ela não representa necessariamente usos eventuais, disponibilidade de espaços fora da grade ou alterações posteriores que não tenham sido incorporadas ao CSV. Registre no histórico da próxima atividade qualquer atualização feita na base.
 
+## Regras executáveis — fase 4
+
+`restricoes_03.py` valida propostas sem editar o CSV-fonte. Cada alocação é identificada pelo ID determinístico do encontro físico e pode alterar somente `predio`, `sala`, `dia_semana`, `hora_inicio` e `hora_fim`; membros, docentes, frequência e duração permanecem ligados ao modelo original. `validar_grade(modelo)` valida a posição atual; para uma proposta, informe todas as alocações em `validar_grade(modelo, alocacoes, excecoes_turno)`.
+
+As regras `H001`–`H010` são invioláveis: identidade/duração, dias úteis, almoço, conflitos de sala/docente/etapa, cursos externos imóveis, capacidade de 110%, laboratório e justificativa de turno. Uma violação já presente na fonte é marcada `baseline`; uma exceção de turno documentada retorna severidade `excecao`. Ambas não são violações novas bloqueantes; `diagnosticos_bloqueantes` separa as violações duras novas. O turno segue as janelas publicadas na auditoria: manhã antes de 12:30, tarde de 13:30 a 18:30 e noite a partir de 18:30. A interseção dos intervalos usa limites semiabertos.
+
+As preferências `P01`–`P05` ficam separadas das restrições duras. `classificar_preservacao` retorna níveis 1–5; `metricas_preferencia` calcula preservação, troca de espaço, laboratório sem dependência, início noturno tardio, intervalos livres e dispersão semanal de docentes/etapas, além da prioridade por alunos, obrigatoriedade, encontros e CH. O limite de início noturno tardio é configurável (padrão `20:00`); não é uma restrição dura.
+
+Execute os testes a partir da raiz do workspace:
+
+```powershell
+python -m unittest discover -s entregas/atividade03 -p "test_*.py"
+```
+
+Esta fase não gera candidatos, não escolhe solver e não produz soluções A/B/C.
+
 ## Ocupação nas plantas baixas
 
 O painel `app_03.py` lê `PlantasBaixas.obj` (curvas 2D no plano XZ) e relaciona os polígonos aos dados pelo nome do objeto: `o Sala 301A`, `o Sala 501` etc. As demais curvas são desenhadas como fundo da planta.
