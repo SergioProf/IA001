@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Implementar a reorganização global das disciplinas ARQU, DPRO e DVIS em fases verificáveis, preservando a estrutura acadêmica e o CSV-fonte. A solução deve produzir três propostas independentes (A: preservação; B: equilíbrio; C: maximização de CH nos turnos-alvo), acompanhadas de validação independente, exceções rastreáveis e comparação reproduzível. Nenhuma alteração da grade ocorre durante auditoria e modelagem.
+Implementar a reorganização global das disciplinas ARQU, DPRO e DVIS em fases verificáveis, preservando a estrutura acadêmica e o CSV-fonte. A solução deve produzir três propostas independentes (A: preservação; B: equilíbrio; C: maximização de CH nos turnos-alvo), acompanhadas de validação independente, exceções rastreáveis e comparação reproduzível. Nenhuma alteração da grade ocorre durante auditoria e modelagem. É um detalhamento do `roadmap01.md`, especificado em fases.
 
 ## Fases
 

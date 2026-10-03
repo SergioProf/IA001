@@ -117,3 +117,35 @@ O SHA-256 atual do CSV continua `6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb97
 O padrão semanal agrupa pelo código da disciplina e pelo grupo declarado, não afirma equivalência de vagas nem define uma regra de capacidade. Reservas externas, regras de conflito e classificação de turnos continuam fora do escopo desta fase; serão tratadas nas fases de baseline e restrições. A normalização não reorganiza nem altera a grade.
 
 **Arquivos adicionados:** `modelo_ocupacao_03.py` e `test_modelo_ocupacao_03.py`. **Arquivo atualizado:** este relatório de auditoria.
+
+## Fase 3 — Auditoria semântica e baseline ANTES
+
+**Implementação:** `auditoria_baseline_03.py`; **resultado reproduzível:** `baseline_03.md`; **teste:** `test_auditoria_baseline_03.py`. Gerar novamente com `python entregas/atividade03/auditoria_baseline_03.py`. O relatório inclui o SHA-256 da fonte, atualmente igual ao hash registrado nas fases anteriores.
+
+### Regras publicadas
+
+- A unidade física é o encontro canônico; cursos, docentes e membros repetidos nas linhas não multiplicam sala nem conflito.
+- Turnos: manhã antes de 12:30; tarde de 13:30 a 18:30; noite a partir de 18:30. O almoço (12:30–13:30) fica fora dos turnos. CH por turno é a interseção em horas do intervalo de relógio com cada janela, dividindo encontros que atravessam limites. O percentual-alvo usa como denominador `numero_periodos` por encontro e curso.
+- Ocupação física usa `vagas_oferecidas` somadas uma vez por membro único (`turma`). O total é confrontado com `vagas_totais_compartilhadas`; `vagas_turma` é comparada separadamente, sem presumir equivalência. O limite baseline é 110% da capacidade da sala.
+- Conflito de etapa usa cursos-alvo e etapa diferente de 0; a etapa 0 continua considerada em conflitos de sala/docente. Diagnósticos incluem cursos externos registrados.
+- Cargas por etapa/docente somam `numero_periodos` por encontro físico. Padrões semanais são contados pela quantidade de encontros canônicos associados.
+
+### Resultado observado
+
+| Métrica | Resultado |
+| --- | ---: |
+| Linhas / cursos / etapas-curso / disciplinas-curso | 452 / 5 / 32 / 158 |
+| Grupos acadêmicos / salas / horários distintos / docentes | 278 / 23 / 92 / 127 |
+| Padrões semanais / encontros físicos / duplicatas exatas | 184 / 289 / 0 |
+| Frequência: 1, 2 e 3 encontros por padrão | 99, 65 e 20 padrões |
+| Encontros acima de 110% da capacidade | 46 |
+| Conflitos baseline: sala / docente / etapa | 0 / 0 / 2 |
+| Encontros cruzando o almoço | 1 |
+
+No CSV real, a soma de `vagas_oferecidas` por membros únicos reconcilia com `vagas_totais_compartilhadas` em todos os encontros. Em 277 encontros há diferença entre essa soma e `vagas_turma`; por isso esse campo permanece reportado como divergente, sem ser usado como substituto ou somado aos demais. A maior ocupação calculada é 308,33%; os 46 encontros acima do limite são detalhados no baseline por disciplina, grupo, curso, dia, horário e sala.
+
+O conflito de etapa detectado envolve dois pares na quarta-feira, das 07:30 às 08:30. Não foram encontrados conflitos de sala ou docente no baseline. A ocorrência `ARQ02005`, grupo A, na segunda-feira, 09:30–13:30, cruza o almoço e permanece como exceção preexistente; uma hora de relógio desse evento não é atribuída a turno.
+
+As horas-alvo calculadas são: ARQU 447 h (81,27% de 550 períodos), DPRO 131 h (71,58% de 183) e DVIS 137 h (78,74% de 174). Essas métricas medem o baseline, não uma proposta reorganizada. As cargas completas por etapa/dia, docente/dia e os diagnósticos individualizados estão em `baseline_03.md` e no resultado de `auditar_baseline`.
+
+**Validação:** `python -m unittest discover -s entregas/atividade03 -v` — 8 testes passaram. A auditoria não altera o CSV-fonte.
