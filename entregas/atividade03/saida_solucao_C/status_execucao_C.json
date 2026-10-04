@@ -1,0 +1,7 @@
+{
+  "entrada": "mapa_salas_tidy_03.csv",
+  "status_solver": "OPTIMAL",
+  "solucao_encontrada": true,
+  "limite_segundos": 300.0,
+  "violacoes_bloqueantes": []
+}

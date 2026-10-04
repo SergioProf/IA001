@@ -1324,6 +1324,10 @@ def pagina_agenda() -> None:
 def caminho_proposta(codigo: str) -> Path:
     # Prefere a solução final; sem ela, usa a candidata provisória do solver.
     final = CAMINHO_SOLUCOES[codigo]
+    if not final.exists():
+        final_saida = PASTA_APP / f"saida_solucao_{codigo}" / f"solucao_{codigo}.csv"
+        if final_saida.exists():
+            return final_saida
     candidata = PASTA_APP / f"saida_solucao_{codigo}" / f"candidato_{codigo}.csv"
     return final if final.exists() or not candidata.exists() else candidata
 
@@ -1360,6 +1364,8 @@ def pagina_proposta(codigo: str, titulo: str, descricao: str) -> None:
         exibir_status_proposta_a()
     elif codigo == "B":
         exibir_equilibrio_proposta_b()
+    elif codigo == "C":
+        exibir_turnos_proposta_c()
     st.subheader("Agenda interativa por sala")
     exibir_agenda_sala(dados, contexto=f"proposta_{codigo}")
     exibir_animacao_plantas(dados, contexto=f"proposta_{codigo}")
@@ -1401,6 +1407,98 @@ def exibir_status_proposta_a() -> None:
     primeira.metric("Encontros alterados", metadados.get("quantidade_encontros_alterados", "—"))
     segunda.metric("Violações duras novas", len(bloqueantes))
     terceira.metric("Status do solver", status)
+
+
+def exibir_turnos_proposta_c() -> None:
+    caminho = caminho_proposta("C").with_suffix(".json")
+    try:
+        metadados = json.loads(caminho.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        st.warning("Metadados da Solução C não encontrados.")
+        return
+
+    solver = metadados.get("status_solver", {})
+    status = solver.get("status", "UNKNOWN")
+    bloqueantes = metadados.get("violacoes_bloqueantes", [])
+    metricas = metadados.get("metricas", {})
+    excecoes = metadados.get("excecoes_turno", [])
+    if bloqueantes:
+        st.error("A proposta contém violações duras novas e não deve ser considerada aceitável.")
+    elif status == "OPTIMAL":
+        st.success(
+            "Estado: **Aceitável e otimizada**. O solver comprovou o ótimo: "
+            "mínimo de minutos fora do turno-alvo, depois início da noite e menos alterações."
+        )
+    else:
+        st.warning(f"Estado do solver: {status}. A otimalidade não foi comprovada.")
+
+    primeira, segunda, terceira, quarta = st.columns(4)
+    primeira.metric("Encontros alterados", metricas.get("encontros_alterados", "—"))
+    segunda.metric("Exceções de turno", len(excecoes))
+    terceira.metric("Violações duras novas", len(bloqueantes))
+    quarta.metric("Status do solver", status)
+
+    antes = metricas.get("carga_turno_alvo_original", {})
+    depois = metricas.get("carga_turno_alvo_proposta", {})
+    if antes and depois:
+        cursos = list(antes)
+        nomes = [ROTULOS_CURSO.get(curso, curso) for curso in cursos]
+        figura = go.Figure()
+        for rotulo, fonte, cor in (
+            ("Grade original", antes, "#718096"),
+            ("Proposta C", depois, "#287C72"),
+        ):
+            valores = [fonte[curso]["percentual_no_alvo"] for curso in cursos]
+            figura.add_trace(go.Bar(
+                name=rotulo,
+                x=nomes,
+                y=valores,
+                marker_color=cor,
+                text=[f"{valor:.1f}%" for valor in valores],
+                textposition="outside",
+                hovertemplate="%{x}<br>CH no turno-alvo: %{y:.2f}%<extra>" + rotulo + "</extra>",
+            ))
+        figura.update_layout(
+            barmode="group",
+            height=360,
+            margin={"t": 30, "b": 20},
+            yaxis_title="CH no turno-alvo (%)",
+            yaxis_range=[0, 110],
+            legend_title_text="",
+        )
+        st.subheader("Carga horária no turno-alvo")
+        st.plotly_chart(figura, use_container_width=True)
+        st.dataframe(
+            pd.DataFrame([
+                {
+                    "Curso": ROTULOS_CURSO.get(curso, curso),
+                    "CH no alvo original (h)": antes[curso]["ch_no_alvo_horas"],
+                    "CH no alvo proposta (h)": depois[curso]["ch_no_alvo_horas"],
+                    "CH total (h)": depois[curso]["ch_total_horas"],
+                }
+                for curso in cursos
+            ]),
+            hide_index=True,
+            use_container_width=True,
+        )
+
+    if excecoes:
+        st.subheader("Exceções de turno")
+        st.dataframe(
+            pd.DataFrame([
+                {
+                    "Disciplina": item["codigo_disciplina"],
+                    "Cursos": ", ".join(item["cursos"]),
+                    "Turno-alvo": " | ".join(item["turno_alvo"]),
+                    "Turno obtido": item["turno_obtido"],
+                    "Minutos fora": item["minutos_fora_do_alvo"],
+                    "Motivo": item["motivo"],
+                }
+                for item in excecoes
+            ]),
+            hide_index=True,
+            use_container_width=True,
+        )
 
 
 def carregar_metricas_proposta_b() -> dict | None:

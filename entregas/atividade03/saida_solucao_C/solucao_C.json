@@ -1,0 +1,1405 @@
+{
+  "solucao": "C",
+  "situacao": "final",
+  "arquivo_fonte": "mapa_salas_tidy_03.csv",
+  "sha256_fonte": "5980965c9e96effa0d44f879551425e2f67f44b2c6b81cb7cc3e4fcd6a10c086",
+  "status_solver": {
+    "status": "OPTIMAL",
+    "valor_objetivo": 68.0,
+    "melhor_limite": 68.0,
+    "tempo_segundos": 66.48888740000001,
+    "limite_segundos": 300.0,
+    "quantidade_variaveis": 315779,
+    "quantidade_restricoes": 1757049
+  },
+  "criterio": "Minimizar minutos fora do turno-alvo; em empate, preferir início da noite (penaliza início após 18:30); depois, minimizar encontros alterados.",
+  "metricas": {
+    "carga_turno_alvo_original": {
+      "ARQU": {
+        "ch_total_horas": 777.0,
+        "ch_no_alvo_horas": 627.0,
+        "percentual_no_alvo": 80.69
+      },
+      "DPRO": {
+        "ch_total_horas": 219.0,
+        "ch_no_alvo_horas": 157.0,
+        "percentual_no_alvo": 71.69
+      },
+      "DVIS": {
+        "ch_total_horas": 210.0,
+        "ch_no_alvo_horas": 163.0,
+        "percentual_no_alvo": 77.62
+      }
+    },
+    "carga_turno_alvo_proposta": {
+      "ARQU": {
+        "ch_total_horas": 777.0,
+        "ch_no_alvo_horas": 772.0,
+        "percentual_no_alvo": 99.36
+      },
+      "DPRO": {
+        "ch_total_horas": 219.0,
+        "ch_no_alvo_horas": 217.0,
+        "percentual_no_alvo": 99.09
+      },
+      "DVIS": {
+        "ch_total_horas": 210.0,
+        "ch_no_alvo_horas": 208.0,
+        "percentual_no_alvo": 99.05
+      }
+    },
+    "encontros_alterados": 68,
+    "etapas_toleradas_baseline": []
+  },
+  "alteracoes": [
+    {
+      "encontro_id": "EV-021bebb126472257",
+      "codigo_disciplina": "ARQ02201",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 313",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 405",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-0449477aec1ca0a2",
+      "codigo_disciplina": "ARQ01075",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "21:30"
+      },
+      "tipo_mudanca": "dia+horario"
+    },
+    {
+      "encontro_id": "EV-0ae557b20d28883b",
+      "codigo_disciplina": "ARQ03073",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-0cf6371e978c979c",
+      "codigo_disciplina": "ARQ02020",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 313",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 404",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "08:30",
+        "hora_fim": "10:30"
+      },
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-1030cdb9a6e88d96",
+      "codigo_disciplina": "ARQ01044",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 304",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 314",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "21:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-1043e9daf09f5d56",
+      "codigo_disciplina": "ARQ01003",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-133389ab84a7d614",
+      "codigo_disciplina": "ENG02016",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 304",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "22:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-17ae881fe637ac80",
+      "codigo_disciplina": "ARQ01001",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "11:30"
+      },
+      "tipo_mudanca": "dia+horario"
+    },
+    {
+      "encontro_id": "EV-22c8f9835eb20f3e",
+      "codigo_disciplina": "ARQ01084",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 403",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 304",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "22:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-23a8b8d5c65791e1",
+      "codigo_disciplina": "ARQ01003",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 413",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-25d4940088fd73ea",
+      "codigo_disciplina": "AGR06014",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 405",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-293bd616dcd629ae",
+      "codigo_disciplina": "ARQ03083",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-297b8a1a31688ccd",
+      "codigo_disciplina": "IPH01014",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 314",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 304",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "22:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-2b0da82f918bfb6e",
+      "codigo_disciplina": "ARQ03090",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 401",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-3147d3f1619e79fe",
+      "codigo_disciplina": "ARQ01095",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 313",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-3640e1e402a958fb",
+      "codigo_disciplina": "ARQ03067",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "20:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-382d00e98a0a504c",
+      "codigo_disciplina": "ARQ01087",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 503",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-38c2fff0b5b6ae23",
+      "codigo_disciplina": "ARQ01013",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "19:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "21:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-3c4ff458aa61690e",
+      "codigo_disciplina": "IPH01005",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-417818449d9aeafb",
+      "codigo_disciplina": "ENG02042",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "08:30",
+        "hora_fim": "12:30"
+      },
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-433ab36486d2764f",
+      "codigo_disciplina": "ARQ03083",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-48954290e8d4e262",
+      "codigo_disciplina": "ARQ03073",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-498dbd9c6e977728",
+      "codigo_disciplina": "ARQ03086",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 502",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "18:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-4ac7f018128ef7e0",
+      "codigo_disciplina": "ARQ03090",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 401",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-4e6d544db3b90e03",
+      "codigo_disciplina": "ARQ03086",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 502",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "18:30"
+      },
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-5692f3158c566783",
+      "codigo_disciplina": "ARQ01013",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 403",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "19:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-610000f3f4debcf1",
+      "codigo_disciplina": "ARQ03151",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 502",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "17:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-651606854a844f7b",
+      "codigo_disciplina": "ARQ03071",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "17:30",
+        "hora_fim": "19:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-6e3e601fbf03a899",
+      "codigo_disciplina": "ARQ01087",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-6fdd9b047de74760",
+      "codigo_disciplina": "ARQ03071",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "20:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-7160fc9821cfef94",
+      "codigo_disciplina": "ARQ03078",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "tipo_mudanca": "dia+horario"
+    },
+    {
+      "encontro_id": "EV-79fbdfa2de31d1a6",
+      "codigo_disciplina": "ARQ02025",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 413",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-810ab87abe6cac00",
+      "codigo_disciplina": "ENG03019",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "21:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-8a8cbdff16827ad2",
+      "codigo_disciplina": "ENG01171",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 413",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-8be6cb958d238c02",
+      "codigo_disciplina": "ADM01030",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 415",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-8cd8f07b600f9f9b",
+      "codigo_disciplina": "ARQ02027",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "08:30",
+        "hora_fim": "12:30"
+      },
+      "tipo_mudanca": "dia+horario"
+    },
+    {
+      "encontro_id": "EV-95ed337a73f6dec7",
+      "codigo_disciplina": "DIR04401",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 401",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-99e5386dc4ccbe1b",
+      "codigo_disciplina": "IPH02050",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 314",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 503",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "20:30"
+      },
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-9a0db8f85665d3ed",
+      "codigo_disciplina": "BIO02224",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-9b5198461809810a",
+      "codigo_disciplina": "ARQ01076",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-9e68aa31b824ab50",
+      "codigo_disciplina": "ADM01030",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 415",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-a2cf9038d61d1ac3",
+      "codigo_disciplina": "ENG03015",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "08:30",
+        "hora_fim": "10:30"
+      },
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-a516e20b0b7ddcff",
+      "codigo_disciplina": "ARQ01098",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "21:30"
+      },
+      "tipo_mudanca": "dia+horario"
+    },
+    {
+      "encontro_id": "EV-a5b5c8f11f553992",
+      "codigo_disciplina": "ARQ02007",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 413",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "22:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-a794dda0ac19cd35",
+      "codigo_disciplina": "ARQ02201",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 313",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-ab1e1970fbee3ac6",
+      "codigo_disciplina": "DIR04401",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 401",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-afba449db6c05669",
+      "codigo_disciplina": "ARQ01076",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-b13f2886444dbc4f",
+      "codigo_disciplina": "ARQ03004",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "tipo_mudanca": "dia+horario"
+    },
+    {
+      "encontro_id": "EV-bc2a17d270a11dc7",
+      "codigo_disciplina": "ARQ03064",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 503",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-be761c4eb3c75d10",
+      "codigo_disciplina": "ARQ03071",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "11:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "tipo_mudanca": "dia+horario"
+    },
+    {
+      "encontro_id": "EV-bed3f1d842e319b6",
+      "codigo_disciplina": "IPH01005",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-c762f88f70b1d4a8",
+      "codigo_disciplina": "ARQ03113",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 404",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "18:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-c799ee6ce44c101e",
+      "codigo_disciplina": "ARQ03071",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "11:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "17:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-c87941b03ed122b3",
+      "codigo_disciplina": "ARQ01098",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-c93db3eb7229cefe",
+      "codigo_disciplina": "ARQ03111",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 313",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "08:30",
+        "hora_fim": "10:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "17:30",
+        "hora_fim": "19:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-ce3eda40307f0a18",
+      "codigo_disciplina": "ENG03019",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 314",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "18:30"
+      },
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-d264fd8c96a86aa3",
+      "codigo_disciplina": "ARQ03099",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "17:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-d3369f1d525bd5b7",
+      "codigo_disciplina": "ENG03040",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 409",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-d494b2e95a1f368a",
+      "codigo_disciplina": "ARQ01075",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "21:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-d892ccf5275994b7",
+      "codigo_disciplina": "ARQ01001",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 401",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-d894a77d65ed1ed5",
+      "codigo_disciplina": "ARQ01075",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "21:30"
+      },
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-e664008277d8f681",
+      "codigo_disciplina": "ARQ03004",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 502",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "08:30",
+        "hora_fim": "10:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-e66dd2990c32bc82",
+      "codigo_disciplina": "ARQ01030",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "21:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-e6e2e1cd49d946b8",
+      "codigo_disciplina": "ARQ03078",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "21:30"
+      },
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-eb29d599791807c5",
+      "codigo_disciplina": "ARQ03099",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-efbadc0c9ac4075a",
+      "codigo_disciplina": "ENG03040",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "17:30",
+        "hora_fim": "19:30"
+      },
+      "tipo_mudanca": "dia+horario"
+    },
+    {
+      "encontro_id": "EV-f4dfaa5fffe740ca",
+      "codigo_disciplina": "ARQ01030",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "21:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-ffdec6771729059d",
+      "codigo_disciplina": "ARQ03067",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "16:30"
+      },
+      "tipo_mudanca": "sala+dia+horario"
+    }
+  ],
+  "excecoes_turno": [
+    {
+      "encontro_id": "EV-1b9bb21c43eaa816",
+      "cursos": [
+        "ARQU"
+      ],
+      "codigo_disciplina": "ARQ02005",
+      "turno_alvo": [
+        "Manhã/Noite"
+      ],
+      "turno_obtido": "Manhã",
+      "alocacao": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 413",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "13:30"
+      },
+      "minutos_fora_do_alvo": 60,
+      "motivo": "Encontro fixado por conflito já existente no baseline."
+    }
+  ],
+  "diagnosticos": [
+    {
+      "regra": "H003",
+      "severidade": "baseline",
+      "mensagem": "Encontro EV-1b9bb21c43eaa816: 09:30–13:30 sobrepõe o almoço 12:30–13:30.",
+      "encontros": [
+        "EV-1b9bb21c43eaa816"
+      ]
+    },
+    {
+      "regra": "H010",
+      "severidade": "excecao",
+      "mensagem": "Encontro EV-1b9bb21c43eaa816: relaxamento de turno registrado (60 min fora do alvo): Encontro fixado por conflito já existente no baseline.",
+      "encontros": [
+        "EV-1b9bb21c43eaa816"
+      ]
+    },
+    {
+      "regra": "H008",
+      "severidade": "baseline",
+      "mensagem": "Encontro EV-22377ba592ff5286: 37 vagas excedem 120% da capacidade 30 da sala.",
+      "encontros": [
+        "EV-22377ba592ff5286"
+      ]
+    },
+    {
+      "regra": "H008",
+      "severidade": "baseline",
+      "mensagem": "Encontro EV-836b4818dbe5c0ba: 37 vagas excedem 120% da capacidade 30 da sala.",
+      "encontros": [
+        "EV-836b4818dbe5c0ba"
+      ]
+    }
+  ],
+  "violacoes_bloqueantes": []
+}
