@@ -1,0 +1,4800 @@
+{
+  "solucao": "A",
+  "situacao": "final",
+  "observacao_status": "Ótimo lexicográfico provado pelo CP-SAT. Modo fallback: encontros que já violavam regras invioláveis na grade atual permanecem fixos, nenhum curso piora no uso fora do turno-alvo e a otimalidade vale para esse modelo.",
+  "arquivo_json": "solucao_A.json",
+  "arquivo_fonte": "mapa_salas_tidy_03.csv",
+  "sha256_fonte": "5980965c9e96effa0d44f879551425e2f67f44b2c6b81cb7cc3e4fcd6a10c086",
+  "linhas_fonte": 452,
+  "encontros_fisicos": 289,
+  "encontros_moveis": 282,
+  "solver": {
+    "modo": "fallback",
+    "encontros_fixados_baseline": 3,
+    "status_etapa_1": "OPTIMAL",
+    "limite_segundos": 3000.0,
+    "quantidade_variaveis": 315779,
+    "quantidade_restricoes": 1757052,
+    "status": "OPTIMAL",
+    "status_etapa_2": "OPTIMAL",
+    "valor_objetivo": 1.643570602507955e+17,
+    "melhor_limite": 1.643570602507955e+17,
+    "tempo_segundos": 510.1108776,
+    "fora_do_alvo_percentual_atual": {
+      "ARQU": 18.55,
+      "DPRO": 28.42,
+      "DVIS": 21.26
+    },
+    "fora_do_alvo_percentual_proposto": {
+      "ARQU": 0.0,
+      "DPRO": 0.0,
+      "DVIS": 0.0
+    },
+    "fixacao": "cobertura_dos_conflitos"
+  },
+  "criterio": "Maximização lexicográfica dos níveis de preservação 1 a 5; prioridades de turma e preferências de espaço são desempates.",
+  "metricas": {
+    "preservacao_por_encontro": {
+      "EV-012c030554394718": 1,
+      "EV-01c60ed8ce6204ef": 1,
+      "EV-021bebb126472257": 3,
+      "EV-0449477aec1ca0a2": 3,
+      "EV-06e09e763b4e465a": 1,
+      "EV-07d07ac7ee470f92": 1,
+      "EV-07f22a32771ab205": 1,
+      "EV-0ae557b20d28883b": 3,
+      "EV-0bff37f493a8def6": 1,
+      "EV-0c43eac822e49bcc": 1,
+      "EV-0cf6371e978c979c": 3,
+      "EV-0d8e8ae8b4728c27": 1,
+      "EV-0dc8360acc1cca47": 1,
+      "EV-0df7f99f74153c58": 1,
+      "EV-0e3c6202acf0daef": 1,
+      "EV-1030cdb9a6e88d96": 3,
+      "EV-1043e9daf09f5d56": 3,
+      "EV-108442588b688a9c": 1,
+      "EV-10d0d2e56377312a": 1,
+      "EV-11bb4409d9029e28": 1,
+      "EV-11ea73b67b3b1bd5": 1,
+      "EV-126d22efd0c8026b": 1,
+      "EV-133389ab84a7d614": 3,
+      "EV-13448541363f99a3": 1,
+      "EV-136c2622d21bd812": 1,
+      "EV-13b3327e185d87b4": 1,
+      "EV-16dee92f4a29495a": 1,
+      "EV-17ae881fe637ac80": 3,
+      "EV-19022c475a0008a1": 1,
+      "EV-19b3aa72e73d996e": 1,
+      "EV-1b3d850a9da976a9": 1,
+      "EV-1b9bb21c43eaa816": 1,
+      "EV-1e588af610057a37": 1,
+      "EV-1ef58236cd30203b": 1,
+      "EV-204a77360c1f6486": 1,
+      "EV-215addad1e6b6427": 1,
+      "EV-22377ba592ff5286": 1,
+      "EV-22c6a432b9a9bb18": 1,
+      "EV-22c8f9835eb20f3e": 3,
+      "EV-23a8b8d5c65791e1": 3,
+      "EV-240dc9f311caf6a0": 1,
+      "EV-24cb984c2c1dc965": 1,
+      "EV-25d4940088fd73ea": 3,
+      "EV-270a0f4ab381a71d": 1,
+      "EV-275552664244e1ea": 1,
+      "EV-283177d05ce877fd": 1,
+      "EV-293bd616dcd629ae": 3,
+      "EV-297b8a1a31688ccd": 3,
+      "EV-2ac9000dc20b8164": 1,
+      "EV-2b0da82f918bfb6e": 5,
+      "EV-2b0e319976339ca0": 1,
+      "EV-2c9786e4a6a08968": 1,
+      "EV-2d5d66817fd600e9": 1,
+      "EV-2e4cf490635ec137": 3,
+      "EV-2e70c37e302c3e85": 1,
+      "EV-2efabe6a93b3d620": 1,
+      "EV-305a4cf3acc72385": 1,
+      "EV-3147d3f1619e79fe": 3,
+      "EV-31bd967180becc7a": 1,
+      "EV-3429bff61fdc745b": 1,
+      "EV-35f999a7f73283ed": 1,
+      "EV-361c308d9c193af7": 1,
+      "EV-3640e1e402a958fb": 3,
+      "EV-365980fadd8011f4": 1,
+      "EV-37f3ae256ffa7c90": 1,
+      "EV-382d00e98a0a504c": 3,
+      "EV-38c2fff0b5b6ae23": 3,
+      "EV-38d1888947ba5c8c": 1,
+      "EV-39b506fa42dafc26": 1,
+      "EV-3a250c9367c70ff7": 1,
+      "EV-3ab498853e4d0cb0": 1,
+      "EV-3aedd68c7df1b8b3": 1,
+      "EV-3b0a1502ba8f4505": 1,
+      "EV-3b3624112c7808bb": 1,
+      "EV-3bd6dbfef3fc519e": 1,
+      "EV-3c07ee717b7d73e4": 1,
+      "EV-3c4ff458aa61690e": 1,
+      "EV-3ed4d94be4952ae8": 1,
+      "EV-3ee098190ccd6c04": 1,
+      "EV-3fe52a7e544f4183": 1,
+      "EV-40445b3691aa2601": 1,
+      "EV-4163e324466e8d30": 1,
+      "EV-4173e5746aaff868": 1,
+      "EV-417818449d9aeafb": 3,
+      "EV-41fb432abe7d5c2e": 1,
+      "EV-433ab36486d2764f": 3,
+      "EV-44eb880e0551502b": 1,
+      "EV-460142d34c59287f": 1,
+      "EV-475ccfa9cb52a1dc": 1,
+      "EV-48954290e8d4e262": 3,
+      "EV-498dbd9c6e977728": 3,
+      "EV-4a2b85b018082647": 1,
+      "EV-4ac7f018128ef7e0": 3,
+      "EV-4d2669be6404eaf1": 1,
+      "EV-4d9844691dea14f3": 1,
+      "EV-4e6d544db3b90e03": 3,
+      "EV-4f5275eb28c19e2c": 1,
+      "EV-4fa73dfa1a2727e8": 1,
+      "EV-4fcd9acf89b12d42": 1,
+      "EV-504e1fb8fc34094e": 1,
+      "EV-50a781086939a0ff": 3,
+      "EV-536d8d1688a3b400": 1,
+      "EV-54bf507ec9ef8a11": 1,
+      "EV-54fe9acd95929c42": 1,
+      "EV-5523eb384afae1cc": 1,
+      "EV-5692f3158c566783": 3,
+      "EV-59a4bfdb40ac646a": 1,
+      "EV-5b7dc458bc02220e": 1,
+      "EV-5cf388e4942848f3": 1,
+      "EV-5d6386d387e7f199": 1,
+      "EV-602f2f121e87a822": 1,
+      "EV-60f50b38f7a339a4": 1,
+      "EV-610000f3f4debcf1": 3,
+      "EV-6233b0861fc3abfc": 1,
+      "EV-64d607db745d98b1": 1,
+      "EV-651606854a844f7b": 3,
+      "EV-6afc4591ee934227": 1,
+      "EV-6b279518bd43c339": 1,
+      "EV-6cd11af03f827831": 1,
+      "EV-6d01eca377647ce7": 1,
+      "EV-6d69ccea22179bc1": 1,
+      "EV-6e3e601fbf03a899": 3,
+      "EV-6ead94ba1bbbfc4b": 1,
+      "EV-6fc976504553a0dc": 1,
+      "EV-6fdd9b047de74760": 3,
+      "EV-6ff2f43fab70c473": 1,
+      "EV-7160fc9821cfef94": 1,
+      "EV-71d99781f4bea6e6": 1,
+      "EV-7297f6c5d68ebd65": 1,
+      "EV-730566545466985e": 1,
+      "EV-757f68b344c9abed": 1,
+      "EV-786f98a05a31cdf1": 1,
+      "EV-7963cb195b8a8789": 1,
+      "EV-79fbdfa2de31d1a6": 3,
+      "EV-7aab6391690bd371": 1,
+      "EV-7bfc2ac839d1db21": 1,
+      "EV-7d430f46b122ea96": 1,
+      "EV-7dac7f1ffecdc2bb": 1,
+      "EV-7fa343c8c9f70207": 1,
+      "EV-7fe204603d1fd40a": 1,
+      "EV-803ae5fb50195851": 1,
+      "EV-80c005c98e79809e": 1,
+      "EV-810ab87abe6cac00": 3,
+      "EV-82f32d38bfe5e5c7": 1,
+      "EV-83548703f081d7f1": 1,
+      "EV-836b4818dbe5c0ba": 1,
+      "EV-8371321b16bca952": 1,
+      "EV-83f1930c0be259eb": 1,
+      "EV-843b5417071667a8": 1,
+      "EV-878c1db5237a3f7f": 1,
+      "EV-883002dbb8621b55": 1,
+      "EV-884f67d790f45a98": 1,
+      "EV-88bc362ec54481d9": 1,
+      "EV-89b897810a973637": 1,
+      "EV-8a71f19e52169df3": 1,
+      "EV-8a82d85d493676e8": 1,
+      "EV-8a8cbdff16827ad2": 3,
+      "EV-8be6cb958d238c02": 1,
+      "EV-8cd8f07b600f9f9b": 3,
+      "EV-8d2dc4d683bb4a3c": 1,
+      "EV-8d8c437962614d5f": 1,
+      "EV-8de72e64f02965ce": 1,
+      "EV-8f4fb85021039dfb": 1,
+      "EV-8f5583db46b8cd80": 1,
+      "EV-8f8fd8f31d240e90": 1,
+      "EV-9038dcffdd88155a": 1,
+      "EV-904717fbc8a0286c": 1,
+      "EV-90b9d2530ed0ee51": 1,
+      "EV-91e156b03da23fc8": 1,
+      "EV-95ed337a73f6dec7": 1,
+      "EV-96ca5081d49e28b7": 1,
+      "EV-980b240b11a6466d": 1,
+      "EV-99631bd878901695": 1,
+      "EV-99e5386dc4ccbe1b": 3,
+      "EV-9a0db8f85665d3ed": 3,
+      "EV-9b0d2ff877782c6d": 1,
+      "EV-9b5198461809810a": 5,
+      "EV-9b5b48135331756d": 1,
+      "EV-9b77b0dadb98f033": 1,
+      "EV-9bb2261157db5862": 1,
+      "EV-9bc4b373fac4dd46": 1,
+      "EV-9e68aa31b824ab50": 1,
+      "EV-9f12575043cd081d": 1,
+      "EV-9fdaaa3b27ff1e45": 1,
+      "EV-a000c4344e9cb263": 1,
+      "EV-a0566be5653dfb5f": 1,
+      "EV-a0f3541b176cff08": 1,
+      "EV-a1910ab8d1e63677": 3,
+      "EV-a2cf9038d61d1ac3": 3,
+      "EV-a3412bc8256627b1": 1,
+      "EV-a41fdfe73238fdc2": 1,
+      "EV-a4ea5fff648729db": 1,
+      "EV-a516e20b0b7ddcff": 3,
+      "EV-a5b5c8f11f553992": 3,
+      "EV-a5c3b8791cc35741": 1,
+      "EV-a6a5fada14ef243c": 1,
+      "EV-a794dda0ac19cd35": 3,
+      "EV-a81507b173691394": 1,
+      "EV-a81f3552712bf131": 1,
+      "EV-aac447998a34901a": 1,
+      "EV-ab1e1970fbee3ac6": 1,
+      "EV-ab6cfbb9b7d1a82d": 1,
+      "EV-abd3d3cab2ad96ba": 1,
+      "EV-ac951cedaf88c529": 1,
+      "EV-ad400c60c579416f": 1,
+      "EV-adf4e6218be6c1cc": 1,
+      "EV-ae1860280cca984e": 1,
+      "EV-ae324b9320ad779c": 1,
+      "EV-af458b1d1445cf38": 1,
+      "EV-af63f1c9cd4c1080": 1,
+      "EV-afba449db6c05669": 3,
+      "EV-b0f77ec7c71c740a": 1,
+      "EV-b13f2886444dbc4f": 3,
+      "EV-b16052baed891741": 1,
+      "EV-b1b416e8704f7959": 1,
+      "EV-b214be5c2ac78dfe": 1,
+      "EV-b24136486aea0584": 1,
+      "EV-b2a451f9412794e4": 1,
+      "EV-b3d316081a5cb2ef": 1,
+      "EV-b407c843b8a50b1e": 1,
+      "EV-b423766b22f85e61": 1,
+      "EV-b4424df95e3c05f7": 1,
+      "EV-b617a8510b1b30fd": 1,
+      "EV-ba0909922ea0229c": 1,
+      "EV-bb62fb447550bc62": 1,
+      "EV-bb6dbc07dace1582": 1,
+      "EV-bbbe32e4a943d737": 1,
+      "EV-bc2a17d270a11dc7": 3,
+      "EV-bc8d4a3ce3f54f8f": 1,
+      "EV-bd84e642181785e6": 1,
+      "EV-bdd3037126cbbd05": 1,
+      "EV-bdf30cf11a74cce5": 1,
+      "EV-be6af8960afea7c9": 1,
+      "EV-be761c4eb3c75d10": 3,
+      "EV-bed3f1d842e319b6": 1,
+      "EV-bfc01f1486274fd3": 1,
+      "EV-c2ff25437902c998": 1,
+      "EV-c331a1edfc7dbe31": 1,
+      "EV-c3545f1b684ee6bf": 1,
+      "EV-c53673df8b7b1771": 1,
+      "EV-c71ee83b9e45bd7e": 1,
+      "EV-c762f88f70b1d4a8": 3,
+      "EV-c799ee6ce44c101e": 3,
+      "EV-c85d32d36649fa87": 1,
+      "EV-c87941b03ed122b3": 3,
+      "EV-c8ecf8ef4a57a5cd": 1,
+      "EV-c93db3eb7229cefe": 3,
+      "EV-cc1c1b5b4e68ae0b": 1,
+      "EV-ce3eda40307f0a18": 3,
+      "EV-d0ae84b71c8e02dd": 1,
+      "EV-d264fd8c96a86aa3": 3,
+      "EV-d3369f1d525bd5b7": 3,
+      "EV-d494b2e95a1f368a": 3,
+      "EV-d5ebdd60f746e3e1": 1,
+      "EV-d892ccf5275994b7": 3,
+      "EV-d894a77d65ed1ed5": 3,
+      "EV-d974cc08b6645d74": 1,
+      "EV-dbc4b3454ad09078": 1,
+      "EV-dd1cf834100877ea": 1,
+      "EV-ddb811e252a75f45": 1,
+      "EV-e0955a52904f1672": 1,
+      "EV-e0e163807e98abcf": 1,
+      "EV-e264d08fce3c0753": 1,
+      "EV-e345062a33afb4aa": 1,
+      "EV-e5a6b4d9cc25489a": 1,
+      "EV-e664008277d8f681": 3,
+      "EV-e66dd2990c32bc82": 3,
+      "EV-e6e2e1cd49d946b8": 1,
+      "EV-e7d238562b663cc7": 1,
+      "EV-eb29d599791807c5": 3,
+      "EV-eb3caf07ac77261a": 1,
+      "EV-ed17f0c7b0c59372": 1,
+      "EV-ed811cb2144f5f2b": 1,
+      "EV-eeedf150f7ce0bc6": 1,
+      "EV-efbadc0c9ac4075a": 3,
+      "EV-f0101705b6a8f51c": 1,
+      "EV-f090d31919da0f70": 1,
+      "EV-f3cf630034b8240b": 1,
+      "EV-f4dfaa5fffe740ca": 3,
+      "EV-f5262af882669ebd": 1,
+      "EV-f5c87436e69051b3": 1,
+      "EV-f5d4076d68e11e19": 1,
+      "EV-fa87fba543650abe": 1,
+      "EV-fa8a13ea8f7a004e": 1,
+      "EV-fba7c731100bfce9": 1,
+      "EV-fbb02f06f6828713": 1,
+      "EV-fbd2d5484f3bb50b": 1,
+      "EV-fc4c84fe69d3c0e6": 1,
+      "EV-ffdec6771729059d": 3
+    },
+    "contagem_niveis_preservacao": {
+      "1": 226,
+      "2": 0,
+      "3": 61,
+      "4": 0,
+      "5": 2
+    },
+    "salas_originais_preservadas": 259,
+    "tipos_espaco_alterados": 0,
+    "laboratorios_sem_dependencia": 0,
+    "inicios_noturnos_tardios": 13,
+    "limite_inicio_noite": "20:00",
+    "intervalos_livres_docente_minutos": {
+      "Prof105": 0,
+      "Prof72": 180,
+      "Prof133": 0,
+      "Prof39": 420,
+      "Prof113": 0,
+      "Prof74": 0,
+      "Prof19": 0,
+      "Prof115": 0,
+      "Prof49": 0,
+      "Prof124": 0,
+      "Prof121": 0,
+      "Prof69": 0,
+      "Prof63": 0,
+      "Prof41": 420,
+      "Prof40": 360,
+      "Prof42": 0,
+      "Prof65": 0,
+      "Prof117": 120,
+      "Prof62": 420,
+      "Prof24": 0,
+      "Prof119": 0,
+      "Prof58": 0,
+      "Prof02": 0,
+      "Prof71": 0,
+      "Prof91": 0,
+      "Prof52": 0,
+      "Prof83": 0,
+      "Prof09": 0,
+      "Prof03": 0,
+      "Prof57": 0,
+      "Prof84": 0,
+      "Prof126": 0,
+      "Prof20": 840,
+      "Prof56": 360,
+      "Prof32": 0,
+      "Prof31": 540,
+      "Prof05": 360,
+      "Prof129": 0,
+      "Prof82": 0,
+      "Prof114": 0,
+      "Prof60": 0,
+      "Prof130": 0,
+      "Prof77": 180,
+      "Prof15": 0,
+      "Prof36": 540,
+      "Prof132": 600,
+      "Prof80": 120,
+      "Prof04": 0,
+      "Prof22": 0,
+      "Prof10": 180,
+      "Prof11": 0,
+      "Prof123": 0,
+      "Prof110": 0,
+      "Prof30": 360,
+      "Prof43": 540,
+      "Prof87": 180,
+      "Prof64": 0,
+      "Prof86": 0,
+      "Prof131": 60,
+      "Prof120": 0,
+      "Prof14": 0,
+      "Prof102": 0,
+      "Prof66": 0,
+      "Prof70": 0,
+      "Prof21": 360,
+      "Prof33": 0,
+      "Prof13": 0,
+      "Prof109": 0,
+      "Prof118": 0,
+      "Prof51": 0,
+      "Prof44": 0,
+      "Prof35": 0,
+      "Prof16": 0,
+      "Prof92": 0,
+      "Prof101": 0,
+      "Prof127": 0,
+      "Prof34": 360,
+      "Prof46": 0,
+      "Prof45": 0,
+      "Prof01": 1260,
+      "Prof88": 0,
+      "Prof28": 0,
+      "Prof17": 0,
+      "Prof25": 0,
+      "Prof55": 0,
+      "Prof18": 360,
+      "Prof100": 0,
+      "Prof89": 0,
+      "Prof128": 0,
+      "Prof93": 0,
+      "Prof29": 0,
+      "Prof53": 0,
+      "Prof78": 0,
+      "Prof107": 0,
+      "Prof23": 0,
+      "Prof108": 0,
+      "Prof38": 420,
+      "Prof104": 540,
+      "Prof12": 0,
+      "Prof116": 0,
+      "Prof85": 0,
+      "Prof67": 0,
+      "Prof106": 0,
+      "Prof37": 420,
+      "Prof27": 0,
+      "Prof76": 0,
+      "Prof112": 0,
+      "Prof125": 0,
+      "Prof81": 0,
+      "Prof90": 0,
+      "Prof54": 0,
+      "Prof08": 420,
+      "Prof122": 0,
+      "Prof06": 120,
+      "Prof48": 360,
+      "Prof61": 360,
+      "Prof79": 0,
+      "Prof103": 0,
+      "Prof68": 0,
+      "Prof73": 0,
+      "Prof75": 0,
+      "Prof07": 0,
+      "Prof59": 0,
+      "Prof111": 0,
+      "Prof50": 0,
+      "Prof26": 780,
+      "Prof47": 540
+    },
+    "dispersao_carga_docente_periodos": {
+      "Prof105": 4,
+      "Prof72": 6,
+      "Prof133": 4,
+      "Prof39": 6,
+      "Prof113": 3,
+      "Prof74": 4,
+      "Prof19": 3,
+      "Prof115": 2,
+      "Prof49": 2,
+      "Prof124": 2,
+      "Prof121": 4,
+      "Prof69": 2,
+      "Prof63": 3,
+      "Prof41": 6,
+      "Prof40": 7,
+      "Prof42": 3,
+      "Prof65": 2,
+      "Prof117": 4,
+      "Prof62": 6,
+      "Prof24": 4,
+      "Prof119": 2,
+      "Prof58": 2,
+      "Prof02": 6,
+      "Prof71": 4,
+      "Prof91": 4,
+      "Prof52": 2,
+      "Prof83": 4,
+      "Prof09": 4,
+      "Prof03": 4,
+      "Prof57": 3,
+      "Prof84": 2,
+      "Prof126": 4,
+      "Prof20": 6,
+      "Prof56": 4,
+      "Prof32": 4,
+      "Prof31": 5,
+      "Prof05": 5,
+      "Prof129": 4,
+      "Prof82": 4,
+      "Prof114": 2,
+      "Prof60": 4,
+      "Prof130": 4,
+      "Prof77": 6,
+      "Prof15": 3,
+      "Prof36": 5,
+      "Prof132": 4,
+      "Prof80": 5,
+      "Prof04": 4,
+      "Prof22": 3,
+      "Prof10": 6,
+      "Prof11": 5,
+      "Prof123": 4,
+      "Prof110": 4,
+      "Prof30": 4,
+      "Prof43": 6,
+      "Prof87": 7,
+      "Prof64": 3,
+      "Prof86": 4,
+      "Prof131": 4,
+      "Prof120": 2,
+      "Prof14": 2,
+      "Prof102": 2,
+      "Prof66": 2,
+      "Prof70": 4,
+      "Prof21": 5,
+      "Prof33": 3,
+      "Prof13": 4,
+      "Prof109": 4,
+      "Prof118": 2,
+      "Prof51": 2,
+      "Prof44": 2,
+      "Prof35": 4,
+      "Prof16": 4,
+      "Prof92": 2,
+      "Prof101": 0,
+      "Prof127": 3,
+      "Prof34": 7,
+      "Prof46": 4,
+      "Prof45": 4,
+      "Prof01": 3,
+      "Prof88": 6,
+      "Prof28": 4,
+      "Prof17": 4,
+      "Prof25": 4,
+      "Prof55": 4,
+      "Prof18": 8,
+      "Prof100": 4,
+      "Prof89": 3,
+      "Prof128": 5,
+      "Prof93": 3,
+      "Prof29": 4,
+      "Prof53": 4,
+      "Prof78": 4,
+      "Prof107": 2,
+      "Prof23": 2,
+      "Prof108": 2,
+      "Prof38": 6,
+      "Prof104": 6,
+      "Prof12": 2,
+      "Prof116": 2,
+      "Prof85": 4,
+      "Prof67": 3,
+      "Prof106": 5,
+      "Prof37": 6,
+      "Prof27": 4,
+      "Prof76": 3,
+      "Prof112": 3,
+      "Prof125": 4,
+      "Prof81": 3,
+      "Prof90": 4,
+      "Prof54": 4,
+      "Prof08": 3,
+      "Prof122": 3,
+      "Prof06": 6,
+      "Prof48": 6,
+      "Prof61": 6,
+      "Prof79": 3,
+      "Prof103": 2,
+      "Prof68": 4,
+      "Prof73": 4,
+      "Prof75": 3,
+      "Prof07": 4,
+      "Prof59": 4,
+      "Prof111": 2,
+      "Prof50": 2,
+      "Prof26": 7,
+      "Prof47": 4
+    },
+    "dispersao_carga_etapa_periodos": {
+      "ARQU/etapa 8": 6,
+      "DPRO/etapa 1": 14,
+      "DPRO/etapa 8": 3,
+      "DVIS/etapa 2": 4,
+      "DVIS/etapa 5": 7,
+      "ARQU/etapa 2": 5,
+      "DPRO/etapa 2": 6,
+      "ARQU/etapa 5": 14,
+      "DVIS/etapa 6": 4,
+      "DPRO/etapa 5": 4,
+      "ARQU/etapa 6": 9,
+      "DPRO/etapa 6": 4,
+      "ARQU/etapa 1": 3,
+      "DVIS/etapa 4": 4,
+      "DVIS/etapa 7": 5,
+      "DVIS/etapa 9": 3,
+      "DVIS/etapa 3": 6,
+      "ARQU/etapa 4": 15,
+      "ARQU/etapa 9": 10,
+      "DPRO/etapa 4": 5,
+      "ARQU/etapa 7": 12,
+      "DVIS/etapa 8": 5,
+      "DVIS/etapa 1": 14,
+      "DPRO/etapa 7": 7,
+      "DPRO/etapa 9": 3,
+      "ARQU/etapa 3": 16,
+      "DPRO/etapa 3": 8
+    },
+    "prioridade_turmas": [
+      "alunos_desc",
+      "obrigatoria_antes_eletiva",
+      "encontros_desc",
+      "ch_semanal_desc"
+    ],
+    "ordem_prioridade_turmas": [
+      {
+        "turma_academica_id": "TU-8529875cdc9348ef",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02005",
+        "turma": "A",
+        "alunos": 55,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-329ff71f155f93e4",
+        "curso": "ARQU",
+        "codigo_disciplina": "DIR04401",
+        "turma": "C",
+        "alunos": 54,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-070c424e058ee201",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG01175",
+        "turma": "U",
+        "alunos": 50,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-300d5a62c004c47d",
+        "curso": "ARQU",
+        "codigo_disciplina": "ADM01185",
+        "turma": "D",
+        "alunos": 50,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-68edf42ac74a674b",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG01171",
+        "turma": "U",
+        "alunos": 45,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-e045fbf23ac45db9",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG01172",
+        "turma": "U",
+        "alunos": 45,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-f086a929b6fccf87",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG01176",
+        "turma": "A",
+        "alunos": 45,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-fd7a3ad13ac81d2f",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG01173",
+        "turma": "U",
+        "alunos": 45,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-d07658c25500c95d",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG01174",
+        "turma": "U",
+        "alunos": 45,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-5579b10e054f9952",
+        "curso": "ARQU",
+        "codigo_disciplina": "ADM01030",
+        "turma": "A",
+        "alunos": 45,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-54533f6943a9e753",
+        "curso": "ARQU",
+        "codigo_disciplina": "IPH02050",
+        "turma": "B",
+        "alunos": 45,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-8cc47904b5ea124e",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03092",
+        "turma": "A",
+        "alunos": 44,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-99cf181ea7f311a6",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03064",
+        "turma": "A",
+        "alunos": 44,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-bdec8cca3b872047",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03092",
+        "turma": "A",
+        "alunos": 44,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-f38b921e1a2c576e",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03064",
+        "turma": "A",
+        "alunos": 44,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-27dcd456c65e782f",
+        "curso": "ARQU",
+        "codigo_disciplina": "DIR04401",
+        "turma": "B",
+        "alunos": 43,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-3f2359b5f2ce2a2b",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01017",
+        "turma": "U",
+        "alunos": 42,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-3d8b2789c9ab83d5",
+        "curso": "ARQU",
+        "codigo_disciplina": "HUM04824",
+        "turma": "U",
+        "alunos": 41,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-12481c85c970017c",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG01139",
+        "turma": "A",
+        "alunos": 40,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-12c4eec63b394632",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG01139",
+        "turma": "B",
+        "alunos": 40,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-21297e8b6f05b939",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03112",
+        "turma": "A",
+        "alunos": 40,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-2404e51b481c5270",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01099",
+        "turma": "A",
+        "alunos": 40,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-b0fbd720e21f9da5",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03111",
+        "turma": "A",
+        "alunos": 40,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-b5edc76697e793c2",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03112",
+        "turma": "A",
+        "alunos": 40,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-d2e57bee3f16bd40",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03111",
+        "turma": "A",
+        "alunos": 40,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-14cd485c1bc6c336",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03080",
+        "turma": "A",
+        "alunos": 38,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-b7e7dfcba882ffbb",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03080",
+        "turma": "A",
+        "alunos": 38,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-8075bff0e72eacc6",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG01169",
+        "turma": "A",
+        "alunos": 37,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-c995212295da6074",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01001",
+        "turma": "A",
+        "alunos": 37,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-dc3fd3d686b7c3e7",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01001",
+        "turma": "B",
+        "alunos": 37,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-a8a95270cb4b0181",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03079",
+        "turma": "A",
+        "alunos": 36,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-ec3d6853181fab70",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03079",
+        "turma": "A",
+        "alunos": 36,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-681ead4aa764ca01",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ03004",
+        "turma": "A",
+        "alunos": 35,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-c825f96e3d307afb",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01073",
+        "turma": "A",
+        "alunos": 35,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-68139fb746fb9a73",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03085",
+        "turma": "A",
+        "alunos": 35,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-b0533bdb5020bcee",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03085",
+        "turma": "A",
+        "alunos": 35,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-de84d90ddbb787b7",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03082",
+        "turma": "A",
+        "alunos": 35,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-edb0cae9d5b72569",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03082",
+        "turma": "A",
+        "alunos": 35,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-211a84038414f4bd",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03114",
+        "turma": "A",
+        "alunos": 35,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-776f70ba398b3a54",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ03006",
+        "turma": "D",
+        "alunos": 35,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-d08c36cfc3795895",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03114",
+        "turma": "A",
+        "alunos": 35,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-0b20a0726adbc432",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03129",
+        "turma": "A",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-1b0805f2bd5d3029",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01005",
+        "turma": "A",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-2bd05c53ab8c4bb7",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01005",
+        "turma": "B",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-7e71e4673351a7df",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02001",
+        "turma": "A",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-9458ee37ae141062",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03129",
+        "turma": "A",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-89f94dca76f041b0",
+        "curso": "CAGR",
+        "codigo_disciplina": "ARQ03118",
+        "turma": "C",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-14d6b5265297facd",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01094",
+        "turma": "B",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-2c175cba3bb9d9de",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01004",
+        "turma": "A",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-52b46c1c5cd85f61",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01086",
+        "turma": "B",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-52fcbf8a76516115",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01085",
+        "turma": "B",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-60fb1e138191b1dc",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01087",
+        "turma": "A",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-61520a5fc940f20a",
+        "curso": "ARQU",
+        "codigo_disciplina": "IPH02045",
+        "turma": "A",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-8b3c014d8929257c",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG03015",
+        "turma": "B",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-97c86003f61eb6c9",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01087",
+        "turma": "B",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-a018ace9c569a79d",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01094",
+        "turma": "A",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-a13017ad038cff99",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02020",
+        "turma": "A",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-bb715c3127e1e7e2",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG03015",
+        "turma": "A",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-c6ead4a8bbde6391",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01086",
+        "turma": "A",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-dabac7308a1d9798",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02020",
+        "turma": "B",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-fe7c457b2628131c",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01085",
+        "turma": "A",
+        "alunos": 30,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-27b1fa0d4d20e6c2",
+        "curso": "ARQU",
+        "codigo_disciplina": "HUM04815",
+        "turma": "U",
+        "alunos": 30,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-e423e1cd4b2301ac",
+        "curso": "ARQU",
+        "codigo_disciplina": "DIR01014",
+        "turma": "U",
+        "alunos": 30,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-fcfd4710fe2698b8",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02201",
+        "turma": "A",
+        "alunos": 27,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-f364afec1e413f18",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03113",
+        "turma": "A",
+        "alunos": 27,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-50d7caf810abfd94",
+        "curso": "ENGMEC",
+        "codigo_disciplina": "ARQ03152",
+        "turma": "B",
+        "alunos": 26,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-21d5a371dc8bc31b",
+        "curso": "CAGR",
+        "codigo_disciplina": "ARQ03118",
+        "turma": "B",
+        "alunos": 26,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-facfc091ccb1201a",
+        "curso": "CAGR",
+        "codigo_disciplina": "ARQ03118",
+        "turma": "A",
+        "alunos": 26,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-1821115c6b819f86",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01003",
+        "turma": "B",
+        "alunos": 26,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-30bdf8e5458fd6e6",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG02016",
+        "turma": "U",
+        "alunos": 26,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-4f65c8c216f40917",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02201",
+        "turma": "B",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-0db8e6cc68bad6ed",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03075",
+        "turma": "A",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-7c01c183fed70f4f",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03318",
+        "turma": "M",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-8e7c667f4443300a",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03139",
+        "turma": "A",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-9f28c9a611930f42",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03318",
+        "turma": "M",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-f2b5e31f242301d9",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03139",
+        "turma": "A",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-f41bc3f77a4b8538",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03070",
+        "turma": "B",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-3151f9d1e82f1d22",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01018",
+        "turma": "B",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-7cb29ee7366434e7",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01018",
+        "turma": "A",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-2ec6f72ef92d47ef",
+        "curso": "ARQU",
+        "codigo_disciplina": "IPH02045",
+        "turma": "B",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-4065a4341108db3f",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03091",
+        "turma": "A",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-723395000e22e210",
+        "curso": "ARQU",
+        "codigo_disciplina": "IPH02046",
+        "turma": "B",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-9c66a5cd985cd617",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01003",
+        "turma": "A",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-9d5a8255522894ad",
+        "curso": "ARQU",
+        "codigo_disciplina": "IPH02046",
+        "turma": "A",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-a36f7f8355947276",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03091",
+        "turma": "A",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-b17edab0cec15a85",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03095",
+        "turma": "AA",
+        "alunos": 25,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-adea792a565e874b",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03075",
+        "turma": "A",
+        "alunos": 25,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-c6fcf4ee2012fe31",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03070",
+        "turma": "B",
+        "alunos": 25,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-1fd921d0a7315307",
+        "curso": "ARQU",
+        "codigo_disciplina": "IPH01014",
+        "turma": "U",
+        "alunos": 25,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-d2a23beddf744276",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02007",
+        "turma": "U",
+        "alunos": 25,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-18f5fc40354e8cb3",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03095",
+        "turma": "AA",
+        "alunos": 25,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-40ca3007d827dae0",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01095",
+        "turma": "U",
+        "alunos": 25,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-61825f93478d387b",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03147",
+        "turma": "A",
+        "alunos": 25,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-84cee004f22666dd",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03147",
+        "turma": "A",
+        "alunos": 25,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-8c802189ccef5934",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03318",
+        "turma": "MM",
+        "alunos": 24,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-8d0fed011ba0b51a",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03318",
+        "turma": "MM",
+        "alunos": 24,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-af647c8657659d82",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01089",
+        "turma": "B",
+        "alunos": 24,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-55ad5bcc79094280",
+        "curso": "ARQU",
+        "codigo_disciplina": "BIO02224",
+        "turma": "T1",
+        "alunos": 24,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-cebc42f09d0d45bf",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03149",
+        "turma": "A",
+        "alunos": 23,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-3320222d08aac57e",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01004",
+        "turma": "B",
+        "alunos": 23,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-692f8760f0d3f630",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01089",
+        "turma": "A",
+        "alunos": 23,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-25ed2d098e7e5137",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03098",
+        "turma": "A",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-3e07fc786d71a36e",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03139",
+        "turma": "B",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-661473fc8967b971",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03139",
+        "turma": "B",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-936f32d3aadd5f04",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03098",
+        "turma": "A",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-9b9dbc40b0e94968",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03098",
+        "turma": "B",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-9ce3728ce649f117",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02001",
+        "turma": "B",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-f453f97fa798af97",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03098",
+        "turma": "B",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-05a4572a03e76173",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03062",
+        "turma": "A",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-073123a92c5253c4",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03063",
+        "turma": "B",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-3302cf62a1e532f9",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03063",
+        "turma": "A",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-4b804d7180e0530e",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02213",
+        "turma": "A",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-59d0f5ea61bbc0bd",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03062",
+        "turma": "B",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-6c0ef7e613a6be80",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03062",
+        "turma": "B",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-847d7c8888fb614b",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03063",
+        "turma": "A",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-cf9f0d9e8c88ef03",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03062",
+        "turma": "A",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-f812f37b81e7313d",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03063",
+        "turma": "B",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-fcb909a581c7bb46",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02213",
+        "turma": "B",
+        "alunos": 22,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-b9831d9020685145",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ03139",
+        "turma": "B",
+        "alunos": 22,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-9dc0c67cc07e62bd",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03150",
+        "turma": "B",
+        "alunos": 21,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-5e655f90fc385394",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03148",
+        "turma": "A",
+        "alunos": 21,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-ea1fe67a08c7a73b",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03148",
+        "turma": "A",
+        "alunos": 21,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-25b8e5bfb5266819",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03071",
+        "turma": "B",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-3fb7a431062a893d",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03067",
+        "turma": "A",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-579ad922a8eb6498",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03067",
+        "turma": "A",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-7e3e7074c86cd5b2",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03067",
+        "turma": "AA",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-832d8118be01302e",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03138",
+        "turma": "A",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-faf7d3cb91551fab",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03071",
+        "turma": "B",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-fbebaaf76121f104",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03130",
+        "turma": "A",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-fcdb34235b29a50b",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03067",
+        "turma": "AA",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-0f2eb3163d20f899",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01046",
+        "turma": "B",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-1ae25c2c925bb36a",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ03006",
+        "turma": "A",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-d8aba656d8cac542",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ03006",
+        "turma": "B",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-d1e10ac531225331",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03140",
+        "turma": "B",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-e2633af527529bb8",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03140",
+        "turma": "B",
+        "alunos": 20,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-3a847acfe185db6a",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03138",
+        "turma": "A",
+        "alunos": 20,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-414a28208f342dc7",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03130",
+        "turma": "A",
+        "alunos": 20,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-52ac10654ef13c37",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02027",
+        "turma": "A",
+        "alunos": 20,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-684b6ed65a3f9950",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ03140",
+        "turma": "B",
+        "alunos": 20,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-37450ce8d7552686",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03084",
+        "turma": "A",
+        "alunos": 19,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-e376a2ee9f8fe44a",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03142",
+        "turma": "A",
+        "alunos": 19,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-06697f2b86ff372a",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01046",
+        "turma": "C",
+        "alunos": 19,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-8c40bc65fcb88d22",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01046",
+        "turma": "A",
+        "alunos": 19,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-e7779f5bf601d09e",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01046",
+        "turma": "D",
+        "alunos": 19,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-90d879bff53f8a98",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01088",
+        "turma": "A",
+        "alunos": 19,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-5811d3e393904512",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03142",
+        "turma": "A",
+        "alunos": 19,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-772345c1c781bb20",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01044",
+        "turma": "A",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 9
+      },
+      {
+        "turma_academica_id": "TU-e39fe68587caa1fb",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01044",
+        "turma": "B",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 9
+      },
+      {
+        "turma_academica_id": "TU-988eba49c1f1c25c",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03072",
+        "turma": "A",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-c108f039c4439ea8",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03078",
+        "turma": "A",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-f6b62ebc5f8e079d",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03087",
+        "turma": "A",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-44e0cce3d07f3e19",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ03004",
+        "turma": "C",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-638b0d19e9eac8a1",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03099",
+        "turma": "A",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-6ff6d925a385a512",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ03004",
+        "turma": "D",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-0e53fb75f0f7bebe",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01045",
+        "turma": "A",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-2035041cfc4c1733",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01045",
+        "turma": "B",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-95c5481488bfb12b",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01045",
+        "turma": "D",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-dc8268f3827ab5ff",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01045",
+        "turma": "C",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-4117cbf0ab9e0caa",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03140",
+        "turma": "A",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-fed73798fd984cb7",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03140",
+        "turma": "A",
+        "alunos": 18,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-3eec36de9715169b",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03099",
+        "turma": "A",
+        "alunos": 18,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-012c4162655b6a4e",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01044",
+        "turma": "D",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 9
+      },
+      {
+        "turma_academica_id": "TU-fbcc190d028b8f0c",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01044",
+        "turma": "C",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 9
+      },
+      {
+        "turma_academica_id": "TU-206eff3267feea68",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02003",
+        "turma": "C",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 7
+      },
+      {
+        "turma_academica_id": "TU-3dc02a002212d769",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02006",
+        "turma": "B",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 7
+      },
+      {
+        "turma_academica_id": "TU-596c5680e6f1f1b8",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02003",
+        "turma": "A",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 7
+      },
+      {
+        "turma_academica_id": "TU-b3c67e9f65abf450",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02006",
+        "turma": "C",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 7
+      },
+      {
+        "turma_academica_id": "TU-c650b58b52882475",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02003",
+        "turma": "B",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 7
+      },
+      {
+        "turma_academica_id": "TU-f6b06f0b2a2eddcc",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02006",
+        "turma": "A",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 7
+      },
+      {
+        "turma_academica_id": "TU-119093eaf44b67c8",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03065",
+        "turma": "B",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-35aab04f564b093a",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03318",
+        "turma": "I",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-4059e0b0c6036fc0",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03065",
+        "turma": "A",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-91f408913275306d",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03318",
+        "turma": "I",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-96612ab40976d4d5",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03065",
+        "turma": "A",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-d35e0cfa130c397d",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03065",
+        "turma": "B",
+        "alunos": 17,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-5d452c3d3c7efe38",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG02042",
+        "turma": "B",
+        "alunos": 17,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-1319ab1661fa3900",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01011",
+        "turma": "D",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-280fe322f63dec42",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01016",
+        "turma": "A",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-3d7d36d4ec3f3c2d",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01011",
+        "turma": "B",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-43494861903727df",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01016",
+        "turma": "C",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-5664e6251ad9e602",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01011",
+        "turma": "A",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-af5bd1c3302f57bb",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01016",
+        "turma": "B",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-bea52cad5ee06d88",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03073",
+        "turma": "A",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-169a53846b6c4cc6",
+        "curso": "DPRO",
+        "codigo_disciplina": "ENG03040",
+        "turma": "U",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-2a925d5a20347e3b",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03318",
+        "turma": "II",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-bcc469c6c25eee05",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03318",
+        "turma": "II",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-c55a0d3eb9b77c82",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01047",
+        "turma": "C",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-edda376879fb204a",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01047",
+        "turma": "A",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-29b1758e6c971e9c",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01088",
+        "turma": "B",
+        "alunos": 16,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-037dcab6bcb181be",
+        "curso": "ARQU",
+        "codigo_disciplina": "DIR03017",
+        "turma": "U",
+        "alunos": 16,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-fd7bdc3ba5aa626c",
+        "curso": "ARQU",
+        "codigo_disciplina": "AGR06014",
+        "turma": "B",
+        "alunos": 16,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-032ef2caf74a0289",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01008",
+        "turma": "B",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-17bcb2e9c7e7e994",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01009",
+        "turma": "C",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-23a8270279361ce2",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01013",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-25214fb94a2f2163",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01013",
+        "turma": "C",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-32fcd975a590f212",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01008",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-56b5fde3943e6e89",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01020",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-666552cb6bbdc862",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01007",
+        "turma": "B",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-6b616d2ffbf6a6d0",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01009",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-783ba81a78f4e008",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01007",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-81efad5ca5365ce4",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01009",
+        "turma": "D",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-89ad203311460dbd",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01020",
+        "turma": "C",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-90c7b0b68a6cd8df",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01020",
+        "turma": "B",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-b1977dc168ec7580",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01013",
+        "turma": "D",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-bc9b3dca8810a1c8",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01008",
+        "turma": "D",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-c75cc4304b2afddd",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01007",
+        "turma": "D",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-db149e711b91b955",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01009",
+        "turma": "B",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-fe42805dbbebf071",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01007",
+        "turma": "C",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-fffbfd648396c6f3",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01008",
+        "turma": "C",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 10
+      },
+      {
+        "turma_academica_id": "TU-824a57e1a69b966a",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01049",
+        "turma": "C",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 9
+      },
+      {
+        "turma_academica_id": "TU-9418d927355933f0",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01049",
+        "turma": "D",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 9
+      },
+      {
+        "turma_academica_id": "TU-d782e3afd0473b19",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01049",
+        "turma": "B",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 9
+      },
+      {
+        "turma_academica_id": "TU-e13aea28d7c77045",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01049",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 3,
+        "ch_periodos_semanais": 9
+      },
+      {
+        "turma_academica_id": "TU-0c797958b7224567",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02004",
+        "turma": "B",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 7
+      },
+      {
+        "turma_academica_id": "TU-b686b905bf4562e6",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02004",
+        "turma": "C",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 7
+      },
+      {
+        "turma_academica_id": "TU-ecac8b5fb9a0c3d6",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02004",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 7
+      },
+      {
+        "turma_academica_id": "TU-168bd32ed8a2b3a3",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03081",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-1d9f94851ee7b8eb",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02002",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-4d8f7f777d69b98f",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03077",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-63e9c337f43f5db3",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02002",
+        "turma": "B",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-68b472c8c228d2c1",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03081",
+        "turma": "B",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-8e870318928a61aa",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03081",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-96026d69dfc3f884",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03081",
+        "turma": "B",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-b4561cd16bc1bd7a",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02002",
+        "turma": "C",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-a3ace0ad41caf19b",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03071",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-f0e1c4912ab6c7cc",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03071",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-0bf84a75a5e66659",
+        "curso": "DPRO",
+        "codigo_disciplina": "ENG03019",
+        "turma": "D",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-1097709108c631e2",
+        "curso": "DPRO",
+        "codigo_disciplina": "ENG03019",
+        "turma": "C",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-6bf6591be63fd585",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01047",
+        "turma": "B",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-b128aa5e9e55e9d7",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01047",
+        "turma": "D",
+        "alunos": 15,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 3
+      },
+      {
+        "turma_academica_id": "TU-8becc1527ec4f66b",
+        "curso": "ARQU",
+        "codigo_disciplina": "IPH01005",
+        "turma": "U",
+        "alunos": 15,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-b949603b5320ccda",
+        "curso": "ARQU",
+        "codigo_disciplina": "ENG02009",
+        "turma": "U",
+        "alunos": 15,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-563e1e2754702d67",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03110",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-672517f13272e5f5",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03110",
+        "turma": "A",
+        "alunos": 15,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-b4c59298e62a05b0",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01084",
+        "turma": "U",
+        "alunos": 15,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-09df67896527af9c",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03090",
+        "turma": "A",
+        "alunos": 14,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-51744dee0fd2b00e",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03090",
+        "turma": "A",
+        "alunos": 14,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-5717fdcaf1ab7ac1",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03083",
+        "turma": "A",
+        "alunos": 14,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-71117854640ea349",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03090",
+        "turma": "B",
+        "alunos": 14,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-c6e4bb43004774f2",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03090",
+        "turma": "B",
+        "alunos": 14,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-1b5404ae43c65b1e",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01098",
+        "turma": "B",
+        "alunos": 14,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-f01281bae61c02f2",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01098",
+        "turma": "A",
+        "alunos": 14,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-140d0228b5e7f548",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01098",
+        "turma": "C",
+        "alunos": 13,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-a16cbedab7a55152",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01098",
+        "turma": "D",
+        "alunos": 13,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-01221bd693c9f3fa",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01076",
+        "turma": "A",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-1d9dc51f9a5296c0",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01076",
+        "turma": "B",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-98f3d57a2bc89bea",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01075",
+        "turma": "A",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-cb0421a99a06eb03",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01075",
+        "turma": "B",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-ddb0aa4c0240624b",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03086",
+        "turma": "A",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-f3addc6f894e28cc",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01075",
+        "turma": "C1",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-f629c14ce99eeeb8",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01076",
+        "turma": "E",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-fb1414f2ec14cc4f",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01076",
+        "turma": "D",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-120a13b3a288abf8",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03066",
+        "turma": "B",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-1b8badbeeb24b116",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03066",
+        "turma": "AA",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-3082cebe81d86ac9",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03066",
+        "turma": "BB",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-3cc0d1b3b2be5f23",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03066",
+        "turma": "B",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-44434a2d9fb0ac42",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03066",
+        "turma": "AA",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-5bd980f7fa068e72",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03066",
+        "turma": "A",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-663b78b90c4bedc1",
+        "curso": "DVIS",
+        "codigo_disciplina": "ARQ03066",
+        "turma": "A",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-6f5aaf2e9b2bc82d",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03066",
+        "turma": "BB",
+        "alunos": 12,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 4
+      },
+      {
+        "turma_academica_id": "TU-7f7a3284f3cdb21c",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01075",
+        "turma": "E",
+        "alunos": 11,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-fd61772a790b6aa7",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01075",
+        "turma": "D",
+        "alunos": 11,
+        "obrigatoria": true,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-4169475337caa4b2",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01030",
+        "turma": "B",
+        "alunos": 10,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-a092a4210619c5f8",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01030",
+        "turma": "A",
+        "alunos": 10,
+        "obrigatoria": false,
+        "encontros_semanais": 2,
+        "ch_periodos_semanais": 6
+      },
+      {
+        "turma_academica_id": "TU-a1d8bccdafbc49b0",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ02025",
+        "turma": "A",
+        "alunos": 9,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-1ca62949e744a117",
+        "curso": "DPRO",
+        "codigo_disciplina": "ARQ03151",
+        "turma": "A",
+        "alunos": 8,
+        "obrigatoria": false,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 2
+      },
+      {
+        "turma_academica_id": "TU-6d426e3050f9e1c0",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01090",
+        "turma": "G1",
+        "alunos": 6,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 1
+      },
+      {
+        "turma_academica_id": "TU-08d8c17bdfbb8375",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01091",
+        "turma": "G2",
+        "alunos": 5,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 1
+      },
+      {
+        "turma_academica_id": "TU-0fe4af951d7a056d",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01090",
+        "turma": "E1",
+        "alunos": 5,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 1
+      },
+      {
+        "turma_academica_id": "TU-13b03bdf858a13a3",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01091",
+        "turma": "E2",
+        "alunos": 5,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 1
+      },
+      {
+        "turma_academica_id": "TU-1504206390f719fb",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01091",
+        "turma": "L2",
+        "alunos": 5,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 1
+      },
+      {
+        "turma_academica_id": "TU-18a642a4b0a4d682",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01090",
+        "turma": "I1",
+        "alunos": 5,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 1
+      },
+      {
+        "turma_academica_id": "TU-36848fb302b5ba2d",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01090",
+        "turma": "F1",
+        "alunos": 5,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 1
+      },
+      {
+        "turma_academica_id": "TU-62be3c4764dbd8ae",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01090",
+        "turma": "H1",
+        "alunos": 5,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 1
+      },
+      {
+        "turma_academica_id": "TU-92414b46ebd1c164",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01090",
+        "turma": "D1",
+        "alunos": 5,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 1
+      },
+      {
+        "turma_academica_id": "TU-b8fb15d6fa877424",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01091",
+        "turma": "D2",
+        "alunos": 5,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 1
+      },
+      {
+        "turma_academica_id": "TU-c1a36410fb7cf41a",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01091",
+        "turma": "J2",
+        "alunos": 5,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 1
+      },
+      {
+        "turma_academica_id": "TU-c65c2e5f90444dfc",
+        "curso": "ARQU",
+        "codigo_disciplina": "ARQ01091",
+        "turma": "F2",
+        "alunos": 5,
+        "obrigatoria": true,
+        "encontros_semanais": 1,
+        "ch_periodos_semanais": 1
+      }
+    ]
+  },
+  "quantidade_encontros_alterados": 63,
+  "alteracoes": [
+    {
+      "encontro_id": "EV-021bebb126472257",
+      "codigo_disciplina": "ARQ02201",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 313",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 313",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-0449477aec1ca0a2",
+      "codigo_disciplina": "ARQ01075",
+      "turmas_compartilhando_sala": "A/E",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-0ae557b20d28883b",
+      "codigo_disciplina": "ARQ03073",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "19:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-0cf6371e978c979c",
+      "codigo_disciplina": "ARQ02020",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 313",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 314",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-1030cdb9a6e88d96",
+      "codigo_disciplina": "ARQ01044",
+      "turmas_compartilhando_sala": "A/B/C/D",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 304",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 409",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-1043e9daf09f5d56",
+      "codigo_disciplina": "ARQ01003",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-133389ab84a7d614",
+      "codigo_disciplina": "ENG02016",
+      "turmas_compartilhando_sala": "U",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "08:30",
+        "hora_fim": "12:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-17ae881fe637ac80",
+      "codigo_disciplina": "ARQ01001",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-22c8f9835eb20f3e",
+      "codigo_disciplina": "ARQ01084",
+      "turmas_compartilhando_sala": "U",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 403",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "08:30",
+        "hora_fim": "12:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-23a8b8d5c65791e1",
+      "codigo_disciplina": "ARQ01003",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 413",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 413",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-25d4940088fd73ea",
+      "codigo_disciplina": "AGR06014",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 405",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 405",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-293bd616dcd629ae",
+      "codigo_disciplina": "ARQ03083",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 405",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-297b8a1a31688ccd",
+      "codigo_disciplina": "IPH01014",
+      "turmas_compartilhando_sala": "U",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 314",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 314",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-2b0da82f918bfb6e",
+      "codigo_disciplina": "ARQ03090",
+      "turmas_compartilhando_sala": "A/B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 401",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 401",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "nivel_preservacao": 5,
+      "tipo_mudanca": "dia+horario"
+    },
+    {
+      "encontro_id": "EV-2e4cf490635ec137",
+      "codigo_disciplina": "ARQ03140",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 501",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-3147d3f1619e79fe",
+      "codigo_disciplina": "ARQ01095",
+      "turmas_compartilhando_sala": "U",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 313",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-3640e1e402a958fb",
+      "codigo_disciplina": "ARQ03067",
+      "turmas_compartilhando_sala": "A/AA",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "17:30",
+        "hora_fim": "19:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-382d00e98a0a504c",
+      "codigo_disciplina": "ARQ01087",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 503",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 503",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-38c2fff0b5b6ae23",
+      "codigo_disciplina": "ARQ01013",
+      "turmas_compartilhando_sala": "C/D",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "19:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-417818449d9aeafb",
+      "codigo_disciplina": "ENG02042",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "08:30",
+        "hora_fim": "12:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-433ab36486d2764f",
+      "codigo_disciplina": "ARQ03083",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-48954290e8d4e262",
+      "codigo_disciplina": "ARQ03073",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "19:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-498dbd9c6e977728",
+      "codigo_disciplina": "ARQ03086",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 502",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-4ac7f018128ef7e0",
+      "codigo_disciplina": "ARQ03090",
+      "turmas_compartilhando_sala": "A/B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 401",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-4e6d544db3b90e03",
+      "codigo_disciplina": "ARQ03086",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 502",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-50a781086939a0ff",
+      "codigo_disciplina": "ARQ03139",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "11:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 501",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "21:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-5692f3158c566783",
+      "codigo_disciplina": "ARQ01013",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 403",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "19:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 403",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-610000f3f4debcf1",
+      "codigo_disciplina": "ARQ03151",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 502",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 304",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "17:30",
+        "hora_fim": "19:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-651606854a844f7b",
+      "codigo_disciplina": "ARQ03071",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "17:30",
+        "hora_fim": "19:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-6e3e601fbf03a899",
+      "codigo_disciplina": "ARQ01087",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-6fdd9b047de74760",
+      "codigo_disciplina": "ARQ03071",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "17:30",
+        "hora_fim": "19:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-79fbdfa2de31d1a6",
+      "codigo_disciplina": "ARQ02025",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 413",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 413",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-810ab87abe6cac00",
+      "codigo_disciplina": "ENG03019",
+      "turmas_compartilhando_sala": "C",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "17:30",
+        "hora_fim": "20:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-8a8cbdff16827ad2",
+      "codigo_disciplina": "ENG01171",
+      "turmas_compartilhando_sala": "U",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 413",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 415",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "20:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-8cd8f07b600f9f9b",
+      "codigo_disciplina": "ARQ02027",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "08:30",
+        "hora_fim": "12:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-99e5386dc4ccbe1b",
+      "codigo_disciplina": "IPH02050",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 314",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "09:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-9a0db8f85665d3ed",
+      "codigo_disciplina": "BIO02224",
+      "turmas_compartilhando_sala": "T1",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 401",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "07:30",
+        "hora_fim": "10:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-9b5198461809810a",
+      "codigo_disciplina": "ARQ01076",
+      "turmas_compartilhando_sala": "D/E",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "nivel_preservacao": 5,
+      "tipo_mudanca": "sala+dia+horario"
+    },
+    {
+      "encontro_id": "EV-a1910ab8d1e63677",
+      "codigo_disciplina": "ARQ03139",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 503",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "20:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-a2cf9038d61d1ac3",
+      "codigo_disciplina": "ENG03015",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "20:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-a516e20b0b7ddcff",
+      "codigo_disciplina": "ARQ01098",
+      "turmas_compartilhando_sala": "A/B/C/D",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 401",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-a5b5c8f11f553992",
+      "codigo_disciplina": "ARQ02007",
+      "turmas_compartilhando_sala": "U",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 413",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "18:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-a794dda0ac19cd35",
+      "codigo_disciplina": "ARQ02201",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 313",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-afba449db6c05669",
+      "codigo_disciplina": "ARQ01076",
+      "turmas_compartilhando_sala": "D/E",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-b13f2886444dbc4f",
+      "codigo_disciplina": "ARQ03004",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "21:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-bc2a17d270a11dc7",
+      "codigo_disciplina": "ARQ03064",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 503",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 409",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-be761c4eb3c75d10",
+      "codigo_disciplina": "ARQ03071",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "11:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "20:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-c762f88f70b1d4a8",
+      "codigo_disciplina": "ARQ03113",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 404",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 403",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-c799ee6ce44c101e",
+      "codigo_disciplina": "ARQ03071",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "11:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "17:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-c87941b03ed122b3",
+      "codigo_disciplina": "ARQ01098",
+      "turmas_compartilhando_sala": "A/B/C/D",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "14:30",
+        "hora_fim": "17:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 303",
+        "dia_semana": "QUARTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-c93db3eb7229cefe",
+      "codigo_disciplina": "ARQ03111",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 313",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "08:30",
+        "hora_fim": "10:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 313",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "17:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-ce3eda40307f0a18",
+      "codigo_disciplina": "ENG03019",
+      "turmas_compartilhando_sala": "D",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 314",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 314",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "15:30",
+        "hora_fim": "18:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-d264fd8c96a86aa3",
+      "codigo_disciplina": "ARQ03099",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-d3369f1d525bd5b7",
+      "codigo_disciplina": "ENG03040",
+      "turmas_compartilhando_sala": "U",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 409",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 409",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-d494b2e95a1f368a",
+      "codigo_disciplina": "ARQ01075",
+      "turmas_compartilhando_sala": "B/D",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 302",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301B",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-d892ccf5275994b7",
+      "codigo_disciplina": "ARQ01001",
+      "turmas_compartilhando_sala": "B",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 312",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 415",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "18:30",
+        "hora_fim": "20:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-d894a77d65ed1ed5",
+      "codigo_disciplina": "ARQ01075",
+      "turmas_compartilhando_sala": "C1",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-e664008277d8f681",
+      "codigo_disciplina": "ARQ03004",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 504",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-e66dd2990c32bc82",
+      "codigo_disciplina": "ARQ01030",
+      "turmas_compartilhando_sala": "B/A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 304",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-eb29d599791807c5",
+      "codigo_disciplina": "ARQ03099",
+      "turmas_compartilhando_sala": "A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 414",
+        "dia_semana": "QUINTA-FEIRA",
+        "hora_inicio": "16:30",
+        "hora_fim": "18:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "sala+horario"
+    },
+    {
+      "encontro_id": "EV-efbadc0c9ac4075a",
+      "codigo_disciplina": "ENG03040",
+      "turmas_compartilhando_sala": "U",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 301A",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "15:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-f4dfaa5fffe740ca",
+      "codigo_disciplina": "ARQ01030",
+      "turmas_compartilhando_sala": "B/A",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "13:30",
+        "hora_fim": "16:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 402",
+        "dia_semana": "SEXTA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "22:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    },
+    {
+      "encontro_id": "EV-ffdec6771729059d",
+      "codigo_disciplina": "ARQ03067",
+      "turmas_compartilhando_sala": "A/AA",
+      "original": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "10:30",
+        "hora_fim": "12:30"
+      },
+      "proposta": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 103",
+        "dia_semana": "TERÇA-FEIRA",
+        "hora_inicio": "19:30",
+        "hora_fim": "21:30"
+      },
+      "nivel_preservacao": 3,
+      "tipo_mudanca": "horario"
+    }
+  ],
+  "excecoes_turno": [
+    {
+      "encontro_id": "EV-1b9bb21c43eaa816",
+      "cursos": [
+        "ARQU"
+      ],
+      "codigo_disciplina": "ARQ02005",
+      "turmas_compartilhando_sala": "A",
+      "turnos_alvo": [
+        "Manhã/Noite"
+      ],
+      "alocacao": {
+        "predio": "Faculdade de Arquitetura - 12103",
+        "sala": "Sala 413",
+        "dia_semana": "SEGUNDA-FEIRA",
+        "hora_inicio": "09:30",
+        "hora_fim": "13:30"
+      },
+      "minutos_fora_do_alvo": 60,
+      "justificativa": "Posição fora do turno-alvo já existente na fonte, mantida pela prioridade de preservação da Solução A.",
+      "restricao_impeditiva": "Não inferida individualmente pelo CP-SAT; a solução A otimiza preservação global e registra o relaxamento."
+    }
+  ],
+  "diagnosticos": [
+    {
+      "regra": "H003",
+      "severidade": "baseline",
+      "mensagem": "Encontro EV-1b9bb21c43eaa816: 09:30–13:30 sobrepõe o almoço 12:30–13:30.",
+      "encontros": [
+        "EV-1b9bb21c43eaa816"
+      ]
+    },
+    {
+      "regra": "H010",
+      "severidade": "excecao",
+      "mensagem": "Encontro EV-1b9bb21c43eaa816: relaxamento de turno registrado (60 min fora do alvo): Posição fora do turno-alvo já existente na fonte, mantida pela prioridade de preservação da Solução A.",
+      "encontros": [
+        "EV-1b9bb21c43eaa816"
+      ]
+    },
+    {
+      "regra": "H008",
+      "severidade": "baseline",
+      "mensagem": "Encontro EV-22377ba592ff5286: 37 vagas excedem 120% da capacidade 30 da sala.",
+      "encontros": [
+        "EV-22377ba592ff5286"
+      ]
+    },
+    {
+      "regra": "H008",
+      "severidade": "baseline",
+      "mensagem": "Encontro EV-836b4818dbe5c0ba: 37 vagas excedem 120% da capacidade 30 da sala.",
+      "encontros": [
+        "EV-836b4818dbe5c0ba"
+      ]
+    }
+  ],
+  "violacoes_bloqueantes": []
+}

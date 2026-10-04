@@ -9,8 +9,10 @@ from pathlib import Path
 from typing import Any
 
 from modelo_ocupacao_03 import ModeloOcupacao, carregar_modelo
+from restricoes_03 import etapa_cursavel, secoes_por_etapa
 
 CURSOS_ALVO = {"ARQU", "DPRO", "DVIS"}
+LIMITE_CAPACIDADE = 1.20
 JANELAS_TURNO = {"Manhã": (0, 750), "Tarde": (810, 1110), "Noite": (1110, 1440)}
 ALMOCO = (750, 810)
 
@@ -54,9 +56,6 @@ def _conflitos(ocorrencias: list[dict[str, Any]]) -> list[dict[str, Any]]:
             docentes = sorted(atual["docentes"] & outro["docentes"])
             if docentes:
                 conflitos.append({"regra": "CONFLITO_DOCENTE", "docentes": docentes, **comum})
-            etapas = sorted(atual["etapas"] & outro["etapas"])
-            if etapas:
-                conflitos.append({"regra": "CONFLITO_ETAPA", "curso_etapa": etapas, **comum})
     return conflitos
 
 
@@ -136,10 +135,16 @@ def auditar_baseline(modelo: ModeloOcupacao) -> dict[str, Any]:
             "horario": f"{_horario(inicio)}–{_horario(fim)}",
             "alunos": alunos, "capacidade_sala": capacidade,
             "ocupacao_percentual": 100 * alunos / capacidade if capacidade else None,
-            "violacao_110": alunos > capacidade * 1.10,
+            "violacao_limite": alunos > capacidade * LIMITE_CAPACIDADE,
         })
 
     conflitos = _conflitos(ocorrencias)
+    horarios = {e["id"]: (e["dia"], e["inicio"], e["fim"]) for e in ocorrencias}
+    etapas_sem_combinacao = [
+        {"semestre": semestre, "curso": curso, "etapa": etapa}
+        for (semestre, curso, etapa), disciplinas in sorted(secoes_por_etapa(modelo).items())
+        if not etapa_cursavel(disciplinas, horarios)
+    ]
     linhas = [item["valores"] for item in modelo.linhas_fonte]
     cursos = {linha["curso"] for linha in linhas}
     cursos_objetivo = {"ARQU": {"Manhã", "Noite"}, "DPRO": {"Tarde", "Noite"}, "DVIS": {"Tarde", "Noite"}}
@@ -185,13 +190,14 @@ def auditar_baseline(modelo: ModeloOcupacao) -> dict[str, Any]:
         "padroes_por_numero_encontros": dict(sorted(padroes_por_frequencia.items())),
         "turnos_por_curso": turnos,
         "capacidade": {
-            "acima_110_percentual": sum(item["violacao_110"] for item in capacidade_eventos),
+            "acima_limite_percentual": sum(item["violacao_limite"] for item in capacidade_eventos),
             "maior_ocupacao_percentual": max((item["ocupacao_percentual"] or 0 for item in capacidade_eventos), default=0),
             "divergencias_vagas": divergencias_vagas,
             "divergencias_vagas_por_tipo": dict(sorted(divergencias_por_tipo.items())),
             "encontros": capacidade_eventos,
         },
         "conflitos_baseline": conflitos,
+        "etapas_sem_combinacao": etapas_sem_combinacao,
         "cargas_etapa_por_dia": [
             {"curso": c, "etapa": e, "dia": d, "periodos": n} for (c, e, d), n in sorted(cargas_etapa.items())
         ],
@@ -215,7 +221,7 @@ def gerar_relatorio_markdown(resultado: dict[str, Any]) -> str:
         "- CH de turno é a duração em horas da interseção do encontro com cada janela. Encontros que cruzam limites são repartidos; almoço fica fora dos turnos.",
         "- O percentual-alvo divide horas de turno-alvo pela soma de `numero_periodos` uma vez por encontro e curso. Diferenças entre relógio e períodos não são redistribuídas.",
         "- Capacidade soma `vagas_oferecidas` por membro físico único (`turma`); compara também `vagas_turma` e `vagas_totais_compartilhadas`, sem somar cópias de linhas.",
-        "- Conflito de etapa inclui somente ARQU/DPRO/DVIS e etapa diferente de 0. Etapa 0 continua sujeita a conflitos de sala e docente.",
+        "- Conflito de etapa (H006): em cada curso ARQU/DPRO/DVIS e etapa diferente de 0, deve existir uma turma por disciplina sem sobreposição entre as escolhidas; turmas da mesma disciplina são alternativas e podem coincidir. Etapa 0 continua sujeita a conflitos de sala e docente.",
         "- Cargas semanais são períodos por encontro, deduplicados. Conflitos também incluem cursos externos registrados.",
         "", "## Inventário", "", "| Métrica | Quantidade |", "| --- | ---: |",
     ]
@@ -230,15 +236,15 @@ def gerar_relatorio_markdown(resultado: dict[str, Any]) -> str:
     for curso, dados in resultado["turnos_por_curso"].items():
         linhas.append(f"| {curso} | {', '.join(dados['objetivo']) or 'N/A'} | {dados['horas_turno_alvo']:.2f} | {dados['ch_periodos_total']} | {dados['percentual_ch_alvo']:.2f}% |")
     capacidade = resultado["capacidade"]
-    linhas.extend(["", f"Encontros acima de 110% da capacidade: {capacidade['acima_110_percentual']}; maior ocupação: {capacidade['maior_ocupacao_percentual']:.2f}%.",
+    linhas.extend(["", f"Encontros acima de 120% da capacidade: {capacidade['acima_limite_percentual']}; maior ocupação: {capacidade['maior_ocupacao_percentual']:.2f}%.",
                    f"Divergências nos campos de vagas por tipo: {capacidade['divergencias_vagas_por_tipo']}.",
                    "`vagas_oferecidas` foi comparada a `vagas_totais_compartilhadas`; `vagas_turma` foi comparada separadamente, sem presumir equivalência.",
                    "", "### Encontros por tipo de espaço", "",
                    "| Tipo | Encontros físicos |", "| --- | ---: |"])
     linhas.extend(f"| {tipo} | {quantidade} |" for tipo, quantidade in resultado["eventos_por_tipo_sala"].items())
-    violacoes_capacidade = [evento for evento in capacidade["encontros"] if evento["violacao_110"]]
+    violacoes_capacidade = [evento for evento in capacidade["encontros"] if evento["violacao_limite"]]
     if violacoes_capacidade:
-        linhas.extend(["", "### Encontros acima de 110% da capacidade", "",
+        linhas.extend(["", "### Encontros acima de 120% da capacidade", "",
                        "| Disciplina | Grupo | Curso | Dia | Horário | Sala | Alunos | Capacidade | Ocupação |",
                        "| --- | --- | --- | --- | --- | --- | ---: | ---: | ---: |"])
         for evento in violacoes_capacidade:
@@ -248,8 +254,11 @@ def gerar_relatorio_markdown(resultado: dict[str, Any]) -> str:
     linhas.extend(f"| {frequencia} | {quantidade} |" for frequencia, quantidade in resultado["padroes_por_numero_encontros"].items())
     por_regra = Counter(item["regra"] for item in resultado["conflitos_baseline"])
     linhas.extend(["", "## Conflitos potenciais no ANTES", "", "| Regra | Pares em conflito |", "| --- | ---: |"])
-    for regra in ("CONFLITO_SALA", "CONFLITO_DOCENTE", "CONFLITO_ETAPA"):
+    for regra in ("CONFLITO_SALA", "CONFLITO_DOCENTE"):
         linhas.append(f"| {regra} | {por_regra[regra]} |")
+    linhas.extend(["", f"Etapas sem combinação de turmas válida (H006): {len(resultado['etapas_sem_combinacao'])}."])
+    for item in resultado["etapas_sem_combinacao"]:
+        linhas.append(f"- {item['curso']}/etapa {item['etapa']} ({item['semestre']})")
     if resultado["conflitos_baseline"]:
         linhas.extend(["", "| Regra | Encontro 1 | Encontro 2 | Dia | Sobreposição |", "| --- | --- | --- | --- | --- |"])
         linhas.extend(f"| {conflito['regra']} | {conflito['encontro_1']} | {conflito['encontro_2']} | {conflito['dia']} | {conflito['sobreposicao']} |" for conflito in resultado["conflitos_baseline"])

@@ -8,7 +8,7 @@
 
 Por orientação do responsável pelo projeto, o arquivo `mapa_salas_tidy_03.csv` é a base original a considerar. O README está desatualizado e será atualizado depois da conclusão do trabalho. O CSV da raiz e a descrição atual do README não foram usados como critério para aceitar ou rejeitar a fonte da atividade 03.
 
-O CSV-fonte não foi alterado. A auditoria abaixo registra seu hash para permitir confirmar que a entrada usada em etapas futuras continua a mesma.
+O CSV-fonte não foi alterado pela auditoria. Em 2026-10-04 a coluna `capacidade_sala` foi editada manualmente (Salas 403, 404, 405 e 414: 30; 407: 15; 304: 60; 503: 40; 94 linhas), o que mudou o hash. As seções abaixo refletem a versão atual; os achados da versão anterior (hash `6101ab29…`) são citados apenas como histórico.
 
 ## Integridade e esquema
 
@@ -16,7 +16,7 @@ O CSV-fonte não foi alterado. A auditoria abaixo registra seu hash para permiti
 | --- | --- |
 | Arquivo | `entregas/atividade03/mapa_salas_tidy_03.csv` |
 | Tamanho | 72.799 bytes |
-| SHA-256 | `6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2f3ab5e0` |
+| SHA-256 | `5980965c9e96effa0d44f879551425e2f67f44b2c6b81cb7cc3e4fcd6a10c086` |
 | Registros | 452 |
 | Colunas | 20 |
 | Período registrado | `2026/2` em todas as 452 linhas |
@@ -44,7 +44,7 @@ As colunas numéricas inferidas são `capacidade_sala`, `vagas_turma`, `numero_p
 - Inícios entre 07:30 e 20:30; encerramentos entre 08:30 e 22:30.
 - Distribuição de `etapa`: 0: 60, 1: 70, 2: 56, 3: 61, 4: 38, 5: 34, 6: 32, 7: 34, 8: 33 e 9: 34.
 - Distribuição de `creditos`: 1: 12, 2: 57, 3: 26, 4: 171, 6: 72, 7: 18, 9: 24 e 10: 72.
-- Cada sala tem um único valor de `capacidade_sala` no arquivo; não foram encontrados valores conflitantes para uma mesma sala.
+- Cada sala tem um único valor de `capacidade_sala` no arquivo; não foram encontrados valores conflitantes para uma mesma sala. Valores atuais ajustados manualmente: Salas 403, 404, 405 e 414 com 30; 407 com 15; 304 com 60; 503 com 40.
 
 ## Verificações de horários
 
@@ -113,7 +113,7 @@ Exemplos conferidos no CSV:
 
 Os testes em `test_modelo_ocupacao_03.py` cobrem oferta compartilhada entre cursos, múltiplos encontros semanais, metadados acadêmicos por curso, linhagem reversível, estabilidade dos IDs, rejeição de membro incompatível ou ausente e leitura integral do CSV real. Execução: `python -m unittest discover -s entregas/atividade03 -p "test_modelo_ocupacao_03.py" -v` — 6 testes passaram.
 
-O SHA-256 atual do CSV continua `6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2f3ab5e0`, igual ao registrado na fase 1. Nenhuma dependência foi adicionada.
+O SHA-256 atual do CSV é `5980965c9e96effa0d44f879551425e2f67f44b2c6b81cb7cc3e4fcd6a10c086` (mudou da fase 1 por causa do ajuste de capacidades; a estrutura de linhas e encontros é a mesma). Nenhuma dependência foi adicionada.
 
 O padrão semanal agrupa pelo código da disciplina e pelo grupo declarado, não afirma equivalência de vagas nem define uma regra de capacidade. Reservas externas, regras de conflito e classificação de turnos continuam fora do escopo desta fase; serão tratadas nas fases de baseline e restrições. A normalização não reorganiza nem altera a grade.
 
@@ -127,8 +127,8 @@ O padrão semanal agrupa pelo código da disciplina e pelo grupo declarado, não
 
 - A unidade física é o encontro canônico; cursos, docentes e membros repetidos nas linhas não multiplicam sala nem conflito.
 - Turnos: manhã antes de 12:30; tarde de 13:30 a 18:30; noite a partir de 18:30. O almoço (12:30–13:30) fica fora dos turnos. CH por turno é a interseção em horas do intervalo de relógio com cada janela, dividindo encontros que atravessam limites. O percentual-alvo usa como denominador `numero_periodos` por encontro e curso.
-- Ocupação física usa `vagas_oferecidas` somadas uma vez por membro único (`turma`). O total é confrontado com `vagas_totais_compartilhadas`; `vagas_turma` é comparada separadamente, sem presumir equivalência. O limite baseline é 110% da capacidade da sala.
-- Conflito de etapa usa cursos-alvo e etapa diferente de 0; a etapa 0 continua considerada em conflitos de sala/docente. Diagnósticos incluem cursos externos registrados.
+- Ocupação física usa `vagas_oferecidas` somadas uma vez por membro único (`turma`). O total é confrontado com `vagas_totais_compartilhadas`; `vagas_turma` é comparada separadamente, sem presumir equivalência. O limite é 120% da capacidade da sala.
+- Conflito de etapa (H006): em cada curso-alvo e etapa diferente de 0, deve existir uma turma por disciplina sem sobreposição entre as escolhidas; turmas da mesma disciplina são alternativas e podem coincidir. A etapa 0 continua considerada em conflitos de sala/docente. Diagnósticos incluem cursos externos registrados.
 - Cargas por etapa/docente somam `numero_periodos` por encontro físico. Padrões semanais são contados pela quantidade de encontros canônicos associados.
 
 ### Resultado observado
@@ -139,14 +139,14 @@ O padrão semanal agrupa pelo código da disciplina e pelo grupo declarado, não
 | Grupos acadêmicos / salas / horários distintos / docentes | 278 / 23 / 92 / 127 |
 | Padrões semanais / encontros físicos / duplicatas exatas | 184 / 289 / 0 |
 | Frequência: 1, 2 e 3 encontros por padrão | 99, 65 e 20 padrões |
-| Encontros acima de 110% da capacidade | 46 |
-| Conflitos baseline: sala / docente / etapa | 0 / 0 / 2 |
+| Encontros acima de 120% da capacidade | 2 |
+| Baseline: conflitos de sala / docente / etapas sem combinação de turmas válida (H006) | 0 / 0 / 0 |
 | Encontros cruzando o almoço | 1 |
 
-No CSV real, a soma de `vagas_oferecidas` por membros únicos reconcilia com `vagas_totais_compartilhadas` em todos os encontros. Em 277 encontros há diferença entre essa soma e `vagas_turma`; por isso esse campo permanece reportado como divergente, sem ser usado como substituto ou somado aos demais. A maior ocupação calculada é 308,33%; os 46 encontros acima do limite são detalhados no baseline por disciplina, grupo, curso, dia, horário e sala.
+No CSV real, a soma de `vagas_oferecidas` por membros únicos reconcilia com `vagas_totais_compartilhadas` em todos os encontros. Em 277 encontros há diferença entre essa soma e `vagas_turma`; por isso esse campo permanece reportado como divergente, sem ser usado como substituto ou somado aos demais. A maior ocupação calculada é 123,33%; os 2 encontros acima do limite são os dois encontros semanais de `ENG01169`, grupo A (quarta e sexta, 07:30–09:30, Sala 405, 37 vagas contra capacidade 30), detalhados no baseline. Com as capacidades originais e o limite de 110%, eram 46 encontros e a maior ocupação era 308,33%.
 
-O conflito de etapa detectado envolve dois pares na quarta-feira, das 07:30 às 08:30. Não foram encontrados conflitos de sala ou docente no baseline. A ocorrência `ARQ02005`, grupo A, na segunda-feira, 09:30–13:30, cruza o almoço e permanece como exceção preexistente; uma hora de relógio desse evento não é atribuída a turno.
+Nenhuma etapa de curso-alvo fica sem combinação de turmas válida e não há conflitos de sala ou docente no baseline. (Pela regra anterior, que tratava toda sobreposição de etapa como conflito, havia 93 pares; ela foi substituída porque turmas da mesma disciplina são alternativas.) A ocorrência `ARQ02005`, grupo A, na segunda-feira, 09:30–13:30, cruza o almoço e permanece como exceção preexistente; uma hora de relógio desse evento não é atribuída a turno.
 
 As horas-alvo calculadas são: ARQU 447 h (81,27% de 550 períodos), DPRO 131 h (71,58% de 183) e DVIS 137 h (78,74% de 174). Essas métricas medem o baseline, não uma proposta reorganizada. As cargas completas por etapa/dia, docente/dia e os diagnósticos individualizados estão em `baseline_03.md` e no resultado de `auditar_baseline`.
 
-**Validação:** `python -m unittest discover -s entregas/atividade03 -v` — 8 testes passaram. A auditoria não altera o CSV-fonte.
+**Validação:** `python -m unittest discover -s entregas/atividade03 -v` — 48 testes passaram (suite completa, 2026-10-04). A auditoria não altera o CSV-fonte.

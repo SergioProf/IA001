@@ -19,7 +19,18 @@ from candidatos_03 import (
     alocacoes_fixos,
 )
 from modelo_ocupacao_03 import ModeloOcupacao
-from restricoes_03 import CURSOS_ALVO, DIAS_VALIDOS, metricas_preferencia
+from restricoes_03 import (
+    CURSOS_ALVO,
+    DIAS_VALIDOS,
+    etapa_cursavel,
+    metricas_preferencia,
+    secoes_por_etapa,
+    validar_grade,
+)
+
+# Janela do turno que NÃO é alvo de cada curso (mesma definição da página Agenda, item 6).
+JANELA_FORA_ALVO = {"ARQU": (810, 1110), "DPRO": (0, 750), "DVIS": (0, 750)}
+ESCALA_PERCENTUAL = 10_000_000
 
 
 @dataclass(frozen=True)
@@ -41,9 +52,10 @@ def _recursos_etapa(registros: list[dict[str, Any]]) -> set[tuple[str, str]]:
 def _validar_dominios(
     ocupacao: ModeloOcupacao,
     dominios: dict[str, tuple[Candidato, ...]],
+    fixados: frozenset[str] = frozenset(),
 ) -> None:
     encontros = {encontro.id: encontro for encontro in ocupacao.encontros_fisicos}
-    fixos = set(alocacoes_fixos(ocupacao))
+    fixos = set(alocacoes_fixos(ocupacao, fixados))
     esperados = set(encontros).difference(fixos)
     if set(dominios) != esperados:
         raise ValueError(
@@ -68,7 +80,7 @@ def _validar_dominios(
     docentes_por_encontro: dict[str, set[str]] = defaultdict(set)
     for atribuicao in ocupacao.atribuicoes_docentes:
         docentes_por_encontro[atribuicao.evento_fisico_id].add(atribuicao.docente)
-    for encontro_id, alocacao in alocacoes_fixos(ocupacao).items():
+    for encontro_id, alocacao in alocacoes_fixos(ocupacao, fixados).items():
         encontro = encontros[encontro_id]
         atributos = encontro.atributos_fisicos
         registros = linhas[encontro_id]
@@ -80,7 +92,6 @@ def _validar_dominios(
             "predio": alocacao["predio"],
             "sala": alocacao["sala"],
             "docentes": docentes_por_encontro[encontro_id],
-            "etapas": _recursos_etapa(registros),
         })
 
     for encontro_id, candidatos in dominios.items():
@@ -107,14 +118,13 @@ def _validar_dominios(
                 raise ValueError(f"Dia ou duração inválidos no candidato {candidato!r}.")
             if _intervalos_sobrepostos(inicio, fim, *ALMOCO):
                 raise ValueError(f"Candidato sobrepõe o almoço: {candidato!r}.")
-            if sala is None or vagas > sala[0] * 1.10:
+            if sala is None or vagas > sala[0] * 1.20:
                 raise ValueError(f"Sala inexistente ou capacidade excedida: {candidato!r}.")
             if dependente_computador and not any("laborat" in tipo.casefold() for tipo in sala[1]):
                 raise ValueError(f"Candidato de turma dependente não é laboratório: {candidato!r}.")
             if candidato.minutos_fora_turno_alvo < 0 or candidato.minutos_fora_turno_alvo > duracao:
                 raise ValueError(f"Minutos fora do turno-alvo inválidos: {candidato!r}.")
             docentes = docentes_por_encontro[encontro_id]
-            etapas = _recursos_etapa(registros)
             for fixo in bloqueios_fixos:
                 if fixo["semestre"] != atributos["semestre"] or fixo["dia"] != candidato.dia_semana:
                     continue
@@ -122,18 +132,81 @@ def _validar_dominios(
                     continue
                 mesma_sala = (candidato.predio, candidato.sala) == (fixo["predio"], fixo["sala"])
                 conflito_docente = bool(docentes & fixo["docentes"])
-                conflito_etapa = bool(etapas & fixo["etapas"])
-                if mesma_sala or conflito_docente or conflito_etapa:
+                if mesma_sala or conflito_docente:
                     raise ValueError(f"Candidato colide com encontro fixo: {candidato!r}.")
+
+
+def _adicionar_restricoes_etapa(
+    modelo: cp_model.CpModel,
+    ocupacao: ModeloOcupacao,
+    variaveis: dict[str, tuple[tuple[Candidato, Any], ...]],
+    intervalo_minutos: int,
+    fixados: frozenset[str],
+    etapas_toleradas: frozenset[tuple[str, str, str]],
+) -> None:
+    """H006: em cada etapa/curso, uma turma por disciplina precisa caber sem sobreposição."""
+
+    # Para cada encontro: (dia, período) -> literais que o ocupam (True = encontro fixo).
+    ocupa: dict[str, dict[tuple[str, int], list[Any]]] = defaultdict(lambda: defaultdict(list))
+    for encontro_id, alocacao in alocacoes_fixos(ocupacao, fixados).items():
+        dia = alocacao["dia_semana"].strip().upper()
+        inicio = _minutos(alocacao["hora_inicio"]) // intervalo_minutos
+        fim = _minutos(alocacao["hora_fim"]) // intervalo_minutos
+        for periodo in range(inicio, fim):
+            ocupa[encontro_id][(dia, periodo)].append(True)
+    for encontro_id, escolhas in variaveis.items():
+        for candidato, variavel in escolhas:
+            inicio = _minutos(candidato.hora_inicio) // intervalo_minutos
+            fim = _minutos(candidato.hora_fim) // intervalo_minutos
+            for periodo in range(inicio, fim):
+                ocupa[encontro_id][(candidato.dia_semana, periodo)].append(variavel)
+
+    for chave, disciplinas in secoes_por_etapa(ocupacao).items():
+        if chave in etapas_toleradas:
+            continue
+        escolhida: dict[tuple[str, str], Any] = {}
+        for codigo, turmas in disciplinas.items():
+            for turma in turmas:
+                escolhida[(codigo, turma)] = modelo.new_bool_var(f"turma_{chave}_{codigo}_{turma}")
+            modelo.add_exactly_one([escolhida[(codigo, turma)] for turma in turmas])
+
+        por_periodo: dict[tuple[str, int], dict[tuple[str, str], list[Any]]] = defaultdict(lambda: defaultdict(list))
+        for codigo, turmas in disciplinas.items():
+            for turma, encontros_turma in turmas.items():
+                for encontro_id in encontros_turma:
+                    for ponto, literais in ocupa.get(encontro_id, {}).items():
+                        por_periodo[ponto][(codigo, turma)].extend(literais)
+
+        for ponto, secoes in por_periodo.items():
+            if len({codigo for codigo, _ in secoes}) < 2:
+                continue
+            presentes = []
+            for secao, literais in secoes.items():
+                selecionada = escolhida[secao]
+                if any(literal is True for literal in literais):
+                    presentes.append(selecionada)
+                    continue
+                if len(literais) == 1:
+                    ocupado = literais[0]
+                else:
+                    ocupado = modelo.new_bool_var(f"ocupa_{chave}_{secao}_{ponto}")
+                    for literal in literais:
+                        modelo.add_implication(literal, ocupado)
+                presente = modelo.new_bool_var(f"presente_{chave}_{secao}_{ponto}")
+                modelo.add_bool_or([selecionada.Not(), ocupado.Not(), presente])
+                presentes.append(presente)
+            modelo.add_at_most_one(presentes)
 
 
 def construir_modelo_cp_sat(
     ocupacao: ModeloOcupacao,
     dominios: dict[str, tuple[Candidato, ...]],
+    fixados: frozenset[str] = frozenset(),
+    etapas_toleradas: frozenset[tuple[str, str, str]] = frozenset(),
 ) -> ModeloCPsat:
     """Cria um problema de viabilidade; objetivos são adicionados nas fases A/B/C."""
 
-    return _construir_modelo_cp_sat(ocupacao, dominios, frozenset())
+    return _construir_modelo_cp_sat(ocupacao, dominios, frozenset(), fixados, etapas_toleradas)
 
 
 def construir_modelo_cp_sat_diagnostico(
@@ -157,10 +230,12 @@ def _construir_modelo_cp_sat(
     ocupacao: ModeloOcupacao,
     dominios: dict[str, tuple[Candidato, ...]],
     recursos_ignorados: frozenset[str],
+    fixados: frozenset[str] = frozenset(),
+    etapas_toleradas: frozenset[tuple[str, str, str]] = frozenset(),
 ) -> ModeloCPsat:
     """Implementação comum do modelo, opcionalmente relaxada para diagnóstico."""
 
-    _validar_dominios(ocupacao, dominios)
+    _validar_dominios(ocupacao, dominios, fixados)
     linhas = _linhas_por_encontro(ocupacao)
     encontros = {encontro.id: encontro for encontro in ocupacao.encontros_fisicos}
 
@@ -168,7 +243,7 @@ def _construir_modelo_cp_sat(
     for candidatos in dominios.values():
         for candidato in candidatos:
             marcas_tempo.extend((_minutos(candidato.hora_inicio), _minutos(candidato.hora_fim)))
-    for alocacao in alocacoes_fixos(ocupacao).values():
+    for alocacao in alocacoes_fixos(ocupacao, fixados).values():
         marcas_tempo.extend((_minutos(alocacao["hora_inicio"]), _minutos(alocacao["hora_fim"])))
     intervalo_minutos = 0
     for marca in marcas_tempo:
@@ -188,7 +263,6 @@ def _construir_modelo_cp_sat(
             for atribuicao in ocupacao.atribuicoes_docentes
             if atribuicao.evento_fisico_id == encontro_id
         }
-        etapas = _recursos_etapa(linhas[encontro_id])
         semestre = atributos["semestre"]
 
         for indice, candidato in enumerate(candidatos):
@@ -200,14 +274,17 @@ def _construir_modelo_cp_sat(
                 grupos_recursos[("sala", semestre, candidato.dia_semana, candidato.predio, candidato.sala, periodo)].append(variavel)
                 for docente in docentes:
                     grupos_recursos[("docente", semestre, candidato.dia_semana, docente, periodo)].append(variavel)
-                for curso, etapa in etapas:
-                    grupos_recursos[("etapa", semestre, candidato.dia_semana, curso, etapa, periodo)].append(variavel)
         modelo.add_exactly_one([variavel for _, variavel in escolhas])
         variaveis[encontro_id] = tuple(escolhas)
 
     for chave_recurso, selecoes in grupos_recursos.items():
         if chave_recurso[0] not in recursos_ignorados and len(selecoes) > 1:
             modelo.add_at_most_one(selecoes)
+
+    if "etapa" not in recursos_ignorados:
+        _adicionar_restricoes_etapa(
+            modelo, ocupacao, variaveis, intervalo_minutos, fixados, etapas_toleradas
+        )
 
     validacao = modelo.validate()
     if validacao:
@@ -403,4 +480,178 @@ def resolver_solucao_a(
         "quantidade_variaveis": len(modelagem.modelo.proto.variables),
         "quantidade_restricoes": len(modelagem.modelo.proto.constraints),
     }
+    return status, solucao, detalhes
+
+
+def _fora_do_alvo(curso: str, inicio: int, fim: int) -> int:
+    janela_inicio, janela_fim = JANELA_FORA_ALVO[curso]
+    return max(0, min(fim, janela_fim) - max(inicio, janela_inicio))
+
+
+def fixados_baseline(
+    ocupacao: ModeloOcupacao, fixar_todos: bool
+) -> tuple[frozenset[str], frozenset[tuple[str, str, str]]]:
+    """Encontros fixos na posição atual por já violarem regras invioláveis, e etapas H006 toleradas.
+
+    H003/H008 fixam o encontro; etapas/curso sem combinação de turmas válida hoje
+    ficam toleradas e todos os seus encontros fixos; para conflitos H004/H005 fixa-se
+    uma cobertura gulosa dos pares (ou ambos os lados, se `fixar_todos`).
+    H010 não fixa: é o que o fallback tenta reduzir.
+    """
+
+    externos = set(alocacoes_fixos(ocupacao))
+    fixados: set[str] = set()
+    arestas: set[tuple[str, ...]] = set()
+    for item in validar_grade(ocupacao):
+        if item.severidade != "baseline" or item.regra in ("H010", "H006"):
+            continue
+        if item.regra in ("H004", "H005") and len(item.encontros) == 2:
+            arestas.add(tuple(sorted(item.encontros)))
+        else:
+            fixados.update(item.encontros)
+    horarios = {
+        encontro.id: (
+            encontro.atributos_fisicos["dia_semana"].strip().upper(),
+            _minutos(encontro.atributos_fisicos["hora_inicio"]),
+            _minutos(encontro.atributos_fisicos["hora_fim"]),
+        )
+        for encontro in ocupacao.encontros_fisicos
+    }
+    toleradas = set()
+    for chave, disciplinas in secoes_por_etapa(ocupacao).items():
+        if not etapa_cursavel(disciplinas, horarios):
+            toleradas.add(chave)
+            fixados.update(i for turmas in disciplinas.values() for secao in turmas.values() for i in secao)
+    if fixar_todos:
+        for aresta in arestas:
+            fixados.update(aresta)
+        return frozenset(fixados - externos), frozenset(toleradas)
+
+    pendentes = {aresta for aresta in arestas if not (externos | fixados).intersection(aresta)}
+    while pendentes:
+        grau: dict[str, int] = defaultdict(int)
+        for aresta in pendentes:
+            for encontro_id in aresta:
+                grau[encontro_id] += 1
+        escolhido = max(sorted(grau), key=lambda encontro_id: grau[encontro_id])
+        fixados.add(escolhido)
+        pendentes = {aresta for aresta in pendentes if escolhido not in aresta}
+    return frozenset(fixados - externos), frozenset(toleradas)
+
+
+def resolver_solucao_a_fallback(
+    ocupacao: ModeloOcupacao,
+    modelagem: ModeloCPsat,
+    fixados: frozenset[str],
+    limite_segundos: float = 300.0,
+) -> tuple[int, dict[str, Candidato], dict[str, Any]]:
+    """Reduz o uso fora do turno-alvo sem piorar nenhum curso e depois maximiza a preservação.
+
+    Etapa 1 minimiza a soma dos percentuais fora do alvo por curso (cada curso
+    limitado ao valor atual); a etapa 2 mantém esse valor e aplica o objetivo de A.
+    """
+
+    linhas = _linhas_por_encontro(ocupacao)
+    fixos = alocacoes_fixos(ocupacao, fixados)
+    totais: dict[str, int] = defaultdict(int)
+    atual: dict[str, int] = defaultdict(int)
+    fora_fixo: dict[str, int] = defaultdict(int)
+    termos: dict[str, list[Any]] = defaultdict(list)
+    originais = {encontro.id: encontro.atributos_fisicos for encontro in ocupacao.encontros_fisicos}
+    for encontro_id, original in originais.items():
+        inicio0, fim0 = _minutos(original["hora_inicio"]), _minutos(original["hora_fim"])
+        cursos = {registro["curso"] for registro in linhas[encontro_id]} & set(JANELA_FORA_ALVO)
+        for curso in cursos:
+            totais[curso] += fim0 - inicio0
+            atual[curso] += _fora_do_alvo(curso, inicio0, fim0)
+            if encontro_id in fixos:
+                fora_fixo[curso] += _fora_do_alvo(curso, inicio0, fim0)
+            else:
+                for candidato, variavel in modelagem.variaveis[encontro_id]:
+                    minutos = _fora_do_alvo(curso, _minutos(candidato.hora_inicio), _minutos(candidato.hora_fim))
+                    if minutos:
+                        termos[curso].append(minutos * variavel)
+
+    modelo = modelagem.modelo
+    cursos_ativos = [curso for curso in JANELA_FORA_ALVO if totais[curso] > 0]
+    fora_curso = {curso: fora_fixo[curso] + sum(termos[curso]) for curso in cursos_ativos}
+    for curso in cursos_ativos:
+        modelo.add(fora_curso[curso] <= atual[curso])
+    objetivo_fora = sum(
+        fora_curso[curso] * (ESCALA_PERCENTUAL // totais[curso]) for curso in cursos_ativos
+    )
+    modelo.minimize(objetivo_fora)
+    for encontro_id, escolhas in modelagem.variaveis.items():
+        original = originais[encontro_id]
+        for candidato, variavel in escolhas:
+            modelo.add_hint(variavel, int(all(
+                candidato.alocacao()[campo] == original[campo]
+                for campo in ("predio", "sala", "dia_semana", "hora_inicio", "hora_fim")
+            )))
+
+    def novo_solver(tempo: float) -> cp_model.CpSolver:
+        solver = cp_model.CpSolver()
+        solver.parameters.max_time_in_seconds = tempo
+        solver.parameters.num_search_workers = 8
+        solver.parameters.random_seed = 0
+        return solver
+
+    def extrair(solver: cp_model.CpSolver) -> dict[str, Candidato]:
+        return {
+            encontro_id: next(c for c, variavel in escolhas if solver.boolean_value(variavel))
+            for encontro_id, escolhas in modelagem.variaveis.items()
+        }
+
+    solver_1 = novo_solver(limite_segundos * 0.4)
+    status_1 = solver_1.solve(modelo)
+    nomes = cp_model.CpSolver()
+    detalhes: dict[str, Any] = {
+        "modo": "fallback",
+        "encontros_fixados_baseline": len(fixados),
+        "status_etapa_1": nomes.status_name(status_1),
+        "limite_segundos": limite_segundos,
+        "quantidade_variaveis": len(modelo.proto.variables),
+        "quantidade_restricoes": len(modelo.proto.constraints),
+    }
+    if status_1 not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        detalhes.update({"status": nomes.status_name(status_1), "valor_objetivo": None,
+                         "melhor_limite": None, "tempo_segundos": solver_1.wall_time})
+        return status_1, {}, detalhes
+
+    solucao = extrair(solver_1)
+    melhor_fora = int(round(solver_1.objective_value))
+    modelo.clear_hints()
+    for escolhas in modelagem.variaveis.values():
+        for _, variavel in escolhas:
+            modelo.add_hint(variavel, solver_1.boolean_value(variavel))
+    modelo.add(objetivo_fora <= melhor_fora)
+    adicionar_objetivo_solucao_a(ocupacao, modelagem)
+
+    solver_2 = novo_solver(max(limite_segundos - solver_1.wall_time, limite_segundos * 0.2))
+    status_2 = solver_2.solve(modelo)
+    if status_2 in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        solucao = extrair(solver_2)
+        status = cp_model.OPTIMAL if status_1 == status_2 == cp_model.OPTIMAL else cp_model.FEASIBLE
+        valor, limite = solver_2.objective_value, solver_2.best_objective_bound
+    else:
+        status, valor, limite = cp_model.FEASIBLE, None, None
+
+    cursos_por_encontro = {e: {r["curso"] for r in linhas[e]} for e in originais}
+    proposto = {
+        curso: fora_fixo[curso] + sum(
+            _fora_do_alvo(curso, _minutos(candidato.hora_inicio), _minutos(candidato.hora_fim))
+            for encontro_id, candidato in solucao.items()
+            if curso in cursos_por_encontro[encontro_id]
+        )
+        for curso in cursos_ativos
+    }
+    detalhes.update({
+        "status": nomes.status_name(status),
+        "status_etapa_2": nomes.status_name(status_2),
+        "valor_objetivo": valor,
+        "melhor_limite": limite,
+        "tempo_segundos": solver_1.wall_time + solver_2.wall_time,
+        "fora_do_alvo_percentual_atual": {c: round(100 * atual[c] / totais[c], 2) for c in cursos_ativos},
+        "fora_do_alvo_percentual_proposto": {c: round(100 * proposto[c] / totais[c], 2) for c in cursos_ativos},
+    })
     return status, solucao, detalhes

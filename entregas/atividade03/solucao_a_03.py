@@ -16,7 +16,9 @@ from modelo_ocupacao_03 import ModeloOcupacao, carregar_modelo
 from modelo_otimizacao_03 import (
     adicionar_objetivo_solucao_a,
     construir_modelo_cp_sat,
+    fixados_baseline,
     resolver_solucao_a,
+    resolver_solucao_a_fallback,
 )
 from restricoes_03 import (
     TURNOS_ALVO,
@@ -151,24 +153,64 @@ def preflight_solucao_a(
     }
 
 
+def _resolver_fallback(
+    ocupacao: ModeloOcupacao,
+    limite_segundos: float,
+    usar_grade_horaria_meia_hora: bool,
+) -> tuple[int, dict[str, Any], dict[str, Any], frozenset[str]]:
+    """Fixa a cobertura dos conflitos da grade atual; se inviável, fixa todos os envolvidos."""
+
+    for fixar_todos in (False, True):
+        fixados, toleradas = fixados_baseline(ocupacao, fixar_todos)
+        dominios = gerar_candidatos(
+            ocupacao,
+            usar_grade_horaria_meia_hora=usar_grade_horaria_meia_hora,
+            fixados=fixados,
+        )
+        if any(not candidatos for candidatos in dominios.values()):
+            continue
+        modelagem = construir_modelo_cp_sat(ocupacao, dominios, fixados, toleradas)
+        status, escolhidos, detalhes = resolver_solucao_a_fallback(
+            ocupacao, modelagem, fixados, limite_segundos
+        )
+        detalhes["fixacao"] = "todos_os_envolvidos" if fixar_todos else "cobertura_dos_conflitos"
+        if status in (cp_model.FEASIBLE, cp_model.OPTIMAL) or fixar_todos:
+            return status, escolhidos, detalhes, fixados
+    raise ValueError("Fallback sem domínios válidos para os encontros móveis.")
+
+
 def calcular_solucao_a(
     ocupacao: ModeloOcupacao,
     limite_segundos: float = 300.0,
     usar_grade_horaria_meia_hora: bool = False,
+    modo: str = "estrito",
 ) -> dict[str, Any]:
-    """Resolve e valida A; nenhum arquivo é escrito por esta função."""
+    """Resolve e valida A; nenhum arquivo é escrito por esta função.
 
-    dominios = gerar_candidatos(
-        ocupacao,
-        usar_grade_horaria_meia_hora=usar_grade_horaria_meia_hora,
-    )
-    modelagem = construir_modelo_cp_sat(ocupacao, dominios)
-    status, escolhidos, detalhes_solver = resolver_solucao_a(
-        ocupacao, modelagem, limite_segundos
-    )
+    `modo`: "estrito" (sem violações de baseline), "fallback" (tolera os conflitos
+    atuais fixando-os e reduz o uso fora do turno-alvo) ou "auto" (estrito e, se
+    não houver solução, fallback).
+    """
+
+    fixados: frozenset[str] = frozenset()
+    status, escolhidos, detalhes_solver = cp_model.UNKNOWN, {}, {}
+    if modo in ("estrito", "auto"):
+        dominios = gerar_candidatos(
+            ocupacao,
+            usar_grade_horaria_meia_hora=usar_grade_horaria_meia_hora,
+        )
+        modelagem = construir_modelo_cp_sat(ocupacao, dominios)
+        status, escolhidos, detalhes_solver = resolver_solucao_a(
+            ocupacao, modelagem, limite_segundos
+        )
+    if modo == "fallback" or (modo == "auto" and status not in (cp_model.FEASIBLE, cp_model.OPTIMAL)):
+        status, escolhidos, detalhes_solver, fixados = _resolver_fallback(
+            ocupacao, limite_segundos, usar_grade_horaria_meia_hora
+        )
     resultado: dict[str, Any] = {
         "status_codigo": status,
         "solver": detalhes_solver,
+        "fixados": sorted(fixados),
         "alocacoes": {},
         "excecoes_turno": {},
         "diagnosticos": [],
@@ -178,7 +220,7 @@ def calcular_solucao_a(
     if status not in (cp_model.FEASIBLE, cp_model.OPTIMAL):
         return resultado
 
-    alocacoes = alocacoes_fixos(ocupacao)
+    alocacoes = alocacoes_fixos(ocupacao, fixados)
     alocacoes.update({encontro_id: candidato.alocacao() for encontro_id, candidato in escolhidos.items()})
     encontros = {encontro.id: encontro for encontro in ocupacao.encontros_fisicos}
     fontes: dict[str, list[dict[str, Any]]] = {}
@@ -319,13 +361,17 @@ def exportar_solucao_a(
             "Ótimo lexicográfico provado pelo CP-SAT."
             if otimo_provado else
             "FEASIBLE: solução viável encontrada, mas não prova o ótimo lexicográfico; candidata provisória."
+        ) + (
+            " Modo fallback: encontros que já violavam regras invioláveis na grade atual permanecem "
+            "fixos, nenhum curso piora no uso fora do turno-alvo e a otimalidade vale para esse modelo."
+            if resultado["solver"].get("modo") == "fallback" else ""
         ),
         "arquivo_json": caminho_json.name,
         "arquivo_fonte": arquivo_fonte.name,
         "sha256_fonte": hashlib.sha256(arquivo_fonte.read_bytes()).hexdigest(),
         "linhas_fonte": len(ocupacao.linhas_fonte),
         "encontros_fisicos": len(ocupacao.encontros_fisicos),
-        "encontros_moveis": len(resultado["alocacoes"]) - len(alocacoes_fixos(ocupacao)),
+        "encontros_moveis": len(resultado["alocacoes"]) - len(alocacoes_fixos(ocupacao, frozenset(resultado.get("fixados", ())))),
         "solver": resultado["solver"],
         "criterio": "Maximização lexicográfica dos níveis de preservação 1 a 5; prioridades de turma e preferências de espaço são desempates.",
         "metricas": resultado["metricas"],
@@ -380,6 +426,10 @@ def main() -> int:
     parser.add_argument("--entrada", type=Path, default=Path(__file__).with_name("mapa_salas_tidy_03.csv"))
     parser.add_argument("--saida-dir", type=Path, default=Path(__file__).parent)
     parser.add_argument("--limite-segundos", type=float, default=300.0)
+    parser.add_argument(
+        "--modo", choices=("fallback", "estrito", "auto"), default="fallback",
+        help="fallback: reduz o uso fora do turno-alvo tolerando os conflitos atuais; auto: estrito e, sem solução, fallback.",
+    )
     parser.add_argument("--preflight", action="store_true", help="Valida domínios e modelo sem executar o solver.")
     args = parser.parse_args()
 
@@ -393,6 +443,7 @@ def main() -> int:
         ocupacao,
         args.limite_segundos,
         usar_grade_horaria_meia_hora=True,
+        modo=args.modo,
     )
     args.saida_dir.mkdir(parents=True, exist_ok=True)
     caminho_status = args.saida_dir / "status_execucao_A.json"

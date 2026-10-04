@@ -2,7 +2,7 @@
 
 Os apontamentos descrevem o ANTES; não são violações introduzidas por uma solução.
 
-SHA-256 do CSV-fonte: `6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2f3ab5e0`.
+SHA-256 do CSV-fonte: `5980965c9e96effa0d44f879551425e2f67f44b2c6b81cb7cc3e4fcd6a10c086`.
 
 ## Regras de contagem
 
@@ -11,7 +11,7 @@ SHA-256 do CSV-fonte: `6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2
 - CH de turno é a duração em horas da interseção do encontro com cada janela. Encontros que cruzam limites são repartidos; almoço fica fora dos turnos.
 - O percentual-alvo divide horas de turno-alvo pela soma de `numero_periodos` uma vez por encontro e curso. Diferenças entre relógio e períodos não são redistribuídas.
 - Capacidade soma `vagas_oferecidas` por membro físico único (`turma`); compara também `vagas_turma` e `vagas_totais_compartilhadas`, sem somar cópias de linhas.
-- Conflito de etapa inclui somente ARQU/DPRO/DVIS e etapa diferente de 0. Etapa 0 continua sujeita a conflitos de sala e docente.
+- Conflito de etapa (H006): em cada curso ARQU/DPRO/DVIS e etapa diferente de 0, deve existir uma turma por disciplina sem sobreposição entre as escolhidas; turmas da mesma disciplina são alternativas e podem coincidir. Etapa 0 continua sujeita a conflitos de sala e docente.
 - Cargas semanais são períodos por encontro, deduplicados. Conflitos também incluem cursos externos registrados.
 
 ## Inventário
@@ -42,7 +42,7 @@ Cursos encontrados: ARQU, CAGR, DPRO, DVIS, ENGMEC.
 | DVIS | Noite, Tarde | 137.00 | 174 | 78.74% |
 | ENGMEC | N/A | 0.00 | 4 | 0.00% |
 
-Encontros acima de 110% da capacidade: 46; maior ocupação: 308.33%.
+Encontros acima de 120% da capacidade: 2; maior ocupação: 123.33%.
 Divergências nos campos de vagas por tipo: {'vagas_oferecidas_vs_vagas_turma': 277}.
 `vagas_oferecidas` foi comparada a `vagas_totais_compartilhadas`; `vagas_turma` foi comparada separadamente, sem presumir equivalência.
 
@@ -54,56 +54,12 @@ Divergências nos campos de vagas por tipo: {'vagas_oferecidas_vs_vagas_turma': 
 | Laboratório de Informática | 43 |
 | Sala de aula | 98 |
 
-### Encontros acima de 110% da capacidade
+### Encontros acima de 120% da capacidade
 
 | Disciplina | Grupo | Curso | Dia | Horário | Sala | Alunos | Capacidade | Ocupação |
 | --- | --- | --- | --- | --- | --- | ---: | ---: | ---: |
-| ARQ03139 | A | DPRO, DVIS | QUINTA-FEIRA | 15:30–17:30 | Sala 404 | 25 | 12 | 208.33% |
-| ARQ03098 | B | DPRO, DVIS | TERÇA-FEIRA | 13:30–15:30 | Sala 404 | 22 | 12 | 183.33% |
-| ARQ01044 | A/B/C/D | ARQU | QUINTA-FEIRA | 13:30–16:30 | Sala 304 | 70 | 48 | 145.83% |
-| ARQ01044 | A/B/C/D | ARQU | QUINTA-FEIRA | 09:30–12:30 | Sala 304 | 70 | 48 | 145.83% |
-| ENG02016 | U | ARQU | TERÇA-FEIRA | 14:30–18:30 | Sala 414 | 26 | 12 | 216.67% |
-| ARQ02003 | B | ARQU | TERÇA-FEIRA | 09:30–12:30 | Sala 403 | 17 | 12 | 141.67% |
-| ARQ02005 | A | ARQU | SEGUNDA-FEIRA | 09:30–13:30 | Sala 413 | 55 | 48 | 114.58% |
-| ARQ01011 | B | ARQU | TERÇA-FEIRA | 18:30–22:30 | Sala 404 | 16 | 12 | 133.33% |
-| ENG01169 | A | ARQU | SEXTA-FEIRA | 07:30–09:30 | Sala 405 | 37 | 12 | 308.33% |
-| ARQ01084 | U | ARQU | SEGUNDA-FEIRA | 13:30–17:30 | Sala 403 | 15 | 12 | 125.00% |
-| AGR06014 | B | ARQU | QUINTA-FEIRA | 13:30–16:30 | Sala 405 | 16 | 12 | 133.33% |
-| ARQ01007 | D | ARQU | SEXTA-FEIRA | 09:30–12:30 | Sala 404 | 15 | 12 | 125.00% |
-| ARQ01044 | A/B/C/D | ARQU | TERÇA-FEIRA | 09:30–12:30 | Sala 304 | 70 | 48 | 145.83% |
-| ARQ01008 | D/B | ARQU | SEGUNDA-FEIRA | 18:30–22:30 | Sala 405 | 30 | 12 | 250.00% |
-| ARQ03098 | A | DPRO, DVIS | TERÇA-FEIRA | 13:30–15:30 | Sala 403 | 22 | 12 | 183.33% |
-| ENG02042 | B | ARQU | SEGUNDA-FEIRA | 13:30–17:30 | Sala 414 | 17 | 12 | 141.67% |
-| ARQ01013 | A | ARQU | QUINTA-FEIRA | 16:30–19:30 | Sala 403 | 15 | 12 | 125.00% |
-| ARQ03139 | A | DPRO, DVIS | TERÇA-FEIRA | 15:30–17:30 | Sala 404 | 25 | 12 | 208.33% |
-| ARQ01049 | A | ARQU | SEGUNDA-FEIRA | 09:30–12:30 | Sala 407 | 15 | 10 | 150.00% |
-| ARQ01008 | A | ARQU | QUARTA-FEIRA | 09:30–12:30 | Sala 403 | 15 | 12 | 125.00% |
-| ENG03019 | C | DPRO | TERÇA-FEIRA | 09:30–12:30 | Sala 414 | 15 | 12 | 125.00% |
-| ARQ01013 | A | ARQU | TERÇA-FEIRA | 18:30–22:30 | Sala 403 | 15 | 12 | 125.00% |
-| ENG01169 | A | ARQU | QUARTA-FEIRA | 07:30–09:30 | Sala 405 | 37 | 12 | 308.33% |
-| ARQ01013 | A | ARQU | SEGUNDA-FEIRA | 09:30–12:30 | Sala 403 | 15 | 12 | 125.00% |
-| ARQ01008 | D/B | ARQU | QUARTA-FEIRA | 09:30–12:30 | Sala 405 | 30 | 12 | 250.00% |
-| ARQ01011 | B | ARQU | SEGUNDA-FEIRA | 09:30–12:30 | Sala 404 | 16 | 12 | 133.33% |
-| ARQ01007 | D | ARQU | SEGUNDA-FEIRA | 18:30–22:30 | Sala 404 | 15 | 12 | 125.00% |
-| DIR03017 | U | ARQU | TERÇA-FEIRA | 18:30–22:30 | Sala 407 | 16 | 10 | 160.00% |
-| ARQ01020 | A/B/C | ARQU | SEGUNDA-FEIRA | 09:30–12:30 | Sala 503 | 45 | 38 | 118.42% |
-| ARQ01020 | A/B/C | ARQU | QUINTA-FEIRA | 09:30–12:30 | Sala 503 | 45 | 38 | 118.42% |
-| ARQ02213 | A/B | ARQU | QUARTA-FEIRA | 08:30–12:30 | Sala 503 | 44 | 38 | 115.79% |
-| ARQ03098 | B | DPRO, DVIS | QUINTA-FEIRA | 13:30–15:30 | Sala 404 | 22 | 12 | 183.33% |
-| ARQ03085 | A | DPRO, DVIS | QUARTA-FEIRA | 13:30–17:30 | Sala 404 | 35 | 12 | 291.67% |
-| ARQ02004 | C | ARQU | TERÇA-FEIRA | 08:30–12:30 | Sala 404 | 15 | 12 | 125.00% |
-| ARQ03064 | A | DPRO, DVIS | TERÇA-FEIRA | 10:30–12:30 | Sala 503 | 44 | 38 | 115.79% |
-| ARQ01049 | A | ARQU | SEXTA-FEIRA | 09:30–12:30 | Sala 407 | 15 | 10 | 150.00% |
-| ARQ03098 | A | DPRO, DVIS | QUINTA-FEIRA | 13:30–15:30 | Sala 403 | 22 | 12 | 183.33% |
-| ARQ03113 | A | DVIS | QUARTA-FEIRA | 09:30–12:30 | Sala 404 | 27 | 12 | 225.00% |
-| ARQ01011 | B | ARQU | QUINTA-FEIRA | 18:30–21:30 | Sala 404 | 16 | 12 | 133.33% |
-| ARQ02004 | C | ARQU | QUINTA-FEIRA | 09:30–12:30 | Sala 404 | 15 | 12 | 125.00% |
-| ARQ01049 | A | ARQU | QUARTA-FEIRA | 09:30–12:30 | Sala 407 | 15 | 10 | 150.00% |
-| ARQ01008 | A | ARQU | SEGUNDA-FEIRA | 18:30–22:30 | Sala 403 | 15 | 12 | 125.00% |
-| ARQ01020 | A/B/C | ARQU | TERÇA-FEIRA | 18:30–22:30 | Sala 503 | 45 | 38 | 118.42% |
-| ARQ01008 | D/B | ARQU | SEXTA-FEIRA | 09:30–12:30 | Sala 405 | 30 | 12 | 250.00% |
-| ARQ02003 | B | ARQU | QUINTA-FEIRA | 08:30–12:30 | Sala 403 | 17 | 12 | 141.67% |
-| ARQ01007 | D | ARQU | QUARTA-FEIRA | 18:30–21:30 | Sala 404 | 15 | 12 | 125.00% |
+| ENG01169 | A | ARQU | SEXTA-FEIRA | 07:30–09:30 | Sala 405 | 37 | 30 | 123.33% |
+| ENG01169 | A | ARQU | QUARTA-FEIRA | 07:30–09:30 | Sala 405 | 37 | 30 | 123.33% |
 
 ## Frequência dos padrões semanais
 
@@ -119,12 +75,8 @@ Divergências nos campos de vagas por tipo: {'vagas_oferecidas_vs_vagas_turma': 
 | --- | ---: |
 | CONFLITO_SALA | 0 |
 | CONFLITO_DOCENTE | 0 |
-| CONFLITO_ETAPA | 2 |
 
-| Regra | Encontro 1 | Encontro 2 | Dia | Sobreposição |
-| --- | --- | --- | --- | --- |
-| CONFLITO_ETAPA | EV-1b3d850a9da976a9 | EV-59a4bfdb40ac646a | QUARTA-FEIRA | 07:30–08:30 |
-| CONFLITO_ETAPA | EV-1b3d850a9da976a9 | EV-7297f6c5d68ebd65 | QUARTA-FEIRA | 07:30–08:30 |
+Etapas sem combinação de turmas válida (H006): 0.
 
 Encontros que cruzam o almoço: 1; horas não atribuídas a turno: 1.00.
 
@@ -551,5 +503,5 @@ Encontros que cruzam o almoço: 1; horas não atribuídas a turno: 1.00.
 ## Limites
 
 - Sala sem aula no CSV não prova disponibilidade externa à grade registrada.
-- `etapa` é conferida com as etapas/caráteres de `dadosBrutos/curriculos.xlsx`; 119 códigos obrigatórios coincidem, `ARQ01098` é uma alternativa codificada como 0, e 36 ofertas com etapa 0 não constam no currículo específico do curso. A origem e a regra de associação de `creditos` permanecem pendentes.
+- `etapa` e `creditos` são usados como registrados; a origem permanece não confirmada na auditoria de linhagem.
 - Divergências nos campos de vagas são reportadas, não corrigidas automaticamente.

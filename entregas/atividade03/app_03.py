@@ -906,7 +906,7 @@ def _rgba(hex_cor: str, alpha: float) -> str:
     return f"rgba({r},{g},{b},{alpha})"
 
 
-def exibir_animacao_plantas(dados: pd.DataFrame) -> None:
+def exibir_animacao_plantas(dados: pd.DataFrame, contexto: str = "original") -> None:
     st.subheader("5. Ocupação das salas nas plantas baixas")
     st.caption(
         "Escolha o dia e use o controle deslizante ou o botão Play para animar a "
@@ -928,7 +928,7 @@ def exibir_animacao_plantas(dados: pd.DataFrame) -> None:
         st.error("O OBJ não contém polígonos nomeados como 'Sala xxx'.")
         return
 
-    dia = st.selectbox("Dia da semana", ORDEM_DIAS, key="dia_plantas")
+    dia = st.selectbox("Dia da semana", ORDEM_DIAS, key=f"dia_plantas_{contexto}")
     agenda = dados[dados["dia_semana"] == dia]
     agenda = agenda[agenda["sala"].isin(salas)]
     eventos_por_sala = {sala: grupo for sala, grupo in agenda.groupby("sala")}
@@ -1136,7 +1136,7 @@ def exibir_animacao_plantas(dados: pd.DataFrame) -> None:
     evento = st.plotly_chart(
         figura,
         use_container_width=True,
-        key="grafico_plantas",
+        key=f"grafico_plantas_{contexto}",
         on_select="rerun",
         selection_mode="points",
     )
@@ -1320,8 +1320,15 @@ def pagina_agenda() -> None:
     exibir_uso_fora_do_turno_alvo(dados)
 
 
+def caminho_proposta(codigo: str) -> Path:
+    # Prefere a solução final; sem ela, usa a candidata provisória do solver.
+    final = CAMINHO_SOLUCOES[codigo]
+    candidata = PASTA_APP / f"saida_solucao_{codigo}" / f"candidato_{codigo}.csv"
+    return final if final.exists() or not candidata.exists() else candidata
+
+
 def carregar_proposta_para_pagina(codigo: str) -> pd.DataFrame | None:
-    caminho = CAMINHO_SOLUCOES[codigo]
+    caminho = caminho_proposta(codigo)
     if not caminho.exists():
         st.info(
             f"A proposta {codigo} ainda não foi gerada. "
@@ -1345,11 +1352,14 @@ def pagina_proposta(codigo: str, titulo: str, descricao: str) -> None:
         return
 
     st.caption(
-        f"Fonte: {CAMINHO_SOLUCOES[codigo].name}. "
+        f"Fonte: {caminho_proposta(codigo).name}. "
         "A agenda exibe somente os dados desta proposta."
     )
     st.subheader("Agenda interativa por sala")
     exibir_agenda_sala(dados, contexto=f"proposta_{codigo}")
+    exibir_animacao_plantas(dados, contexto=f"proposta_{codigo}")
+    st.subheader("Uso dos cursos fora do turno-alvo")
+    exibir_uso_fora_do_turno_alvo(dados)
 
 
 def pagina_proposta_a() -> None:

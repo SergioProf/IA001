@@ -44,9 +44,9 @@ Restrições invioláveis:
 - Não criar/remover turma ou encontro; preservar frequência, duração, estrutura semanal e compartilhamentos.
 - Usar somente segunda a sexta; não permitir encontro sobre o almoço, das 12:30 às 13:30.
 - Evitar sobreposição de sala e de docente, inclusive entre cursos.
-- Impedir conflito entre disciplinas obrigatórias da mesma etapa e curso. Etapa 0 é isenta somente dessa regra de conflito de estudantes.
+- Cada etapa/curso deve permitir cursar todas as disciplinas obrigatórias escolhendo uma turma de cada, sem sobreposição entre as escolhidas; turmas da mesma disciplina são alternativas e podem coincidir. Etapa 0 é isenta somente dessa regra de conflito de estudantes.
 - Manter cursos externos imóveis e bloqueando recursos.
-- Limitar a ocupação a 110% da capacidade da sala.
+- Limitar a ocupação a 120% da capacidade da sala.
 - Turma dependente de computador só pode ser alocada em laboratório.
 - Turno-alvo pode ser relaxado, mas toda exceção deve ter registro e justificativa.
 
@@ -138,7 +138,7 @@ Gerar tabelas/gráficos ANTES × A/B/C para CH por curso/turno, ocupação de sa
 
 1. **Auditoria:** registrar hash, linhas, colunas e tipos; reconciliar divergências documentais e origem dos campos sem editar a entrada.
 2. **Normalização:** testar chaves, deduplicação de linhas por curso/docente, membros compartilhados, ocorrências semanais e correspondência reversível às linhas-fonte.
-3. **Regras:** testar sobreposição semiaberta, almoço inclusive nos limites, sábado, capacidade em 100%/110%/acima de 110%, salas/laboratórios, docentes, etapa 0 e externas fixas.
+3. **Regras:** testar sobreposição semiaberta, almoço inclusive nos limites, sábado, capacidade em 100%/120%/acima de 120%, salas/laboratórios, docentes, etapa 0 e externas fixas.
 4. **Soluções:** validar independentemente A/B/C e conferir que nenhuma entidade/encontro foi criado/removido nem teve estrutura alterada.
 5. **Métricas:** recalcular CH/percentuais, alterações e equilíbrio a partir dos arquivos exportados; conciliar cada exceção com sua justificativa e restrição.
 6. **Reprodutibilidade:** executar o fluxo documentado em ambiente limpo; não usar `streamlit run` como validação do otimizador. Não há atualmente comando de teste/solver identificado nos arquivos inspecionados; definir o comando quando a estrutura de testes e a dependência forem escolhidas.

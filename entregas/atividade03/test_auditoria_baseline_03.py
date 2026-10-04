@@ -20,8 +20,8 @@ class TestAuditoriaBaseline(unittest.TestCase):
         self.assertEqual(divergencias.get("vagas_oferecidas_vs_vagas_totais_compartilhadas", 0), 0)
         self.assertGreater(divergencias.get("vagas_oferecidas_vs_vagas_turma", 0), 0)
         self.assertEqual(resultado["resumo"]["encontros_cruzam_almoco"], 1)
-        self.assertEqual({item["regra"] for item in resultado["conflitos_baseline"]},
-                         {"CONFLITO_ETAPA"})
+        self.assertEqual(resultado["conflitos_baseline"], [])
+        self.assertEqual(resultado["etapas_sem_combinacao"], [])
 
 
 if __name__ == "__main__":

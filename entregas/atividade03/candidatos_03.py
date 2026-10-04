@@ -102,6 +102,7 @@ def gerar_candidatos(
     *,
     combinar_inicios_observados: bool = False,
     usar_grade_horaria_meia_hora: bool = False,
+    fixados: frozenset[str] = frozenset(),
 ) -> dict[str, tuple[Candidato, ...]]:
     """Gera domínios móveis; encontros externos ficam fixos na posição original.
 
@@ -117,7 +118,10 @@ def gerar_candidatos(
 
     linhas = _linhas_por_encontro(modelo)
     docentes = _docentes_por_encontro(modelo)
-    fixos = [encontro for encontro in modelo.encontros_fisicos if _encontro_externo(encontro, linhas)]
+    fixos = [
+        encontro for encontro in modelo.encontros_fisicos
+        if encontro.id in fixados or _encontro_externo(encontro, linhas)
+    ]
 
     intervalos_por_duracao: dict[int, set[tuple[int, int]]] = defaultdict(set)
     inicios_observados = set()
@@ -157,11 +161,6 @@ def gerar_candidatos(
             "inicio": _minutos(atributos["hora_inicio"]),
             "fim": _minutos(atributos["hora_fim"]),
             "docentes": docentes[encontro.id],
-            "etapas": {
-                (registro["curso"], registro["etapa"])
-                for registro in registros
-                if registro["curso"] in CURSOS_ALVO and registro["etapa"] != "0"
-            },
         })
 
     dominios: dict[str, tuple[Candidato, ...]] = {}
@@ -192,11 +191,6 @@ def gerar_candidatos(
             }
         else:
             intervalos = intervalos_por_duracao[duracao]
-        etapas = {
-            (registro["curso"], registro["etapa"])
-            for registro in registros
-            if registro["curso"] in CURSOS_ALVO and registro["etapa"] != "0"
-        }
         candidatos: set[Candidato] = set()
 
         for inicio, fim in sorted(intervalos):
@@ -207,7 +201,7 @@ def gerar_candidatos(
                     eh_laboratorio = any(
                         "laborat" in _normalizar(tipo) for tipo in informacao["tipos"]
                     )
-                    if vagas < 0 or vagas > capacidade * 1.10:
+                    if vagas < 0 or vagas > capacidade * 1.20:
                         continue
                     if dependente_computador and not eh_laboratorio:
                         continue
@@ -221,9 +215,6 @@ def gerar_candidatos(
                             conflito_fixo = True
                             break
                         if docentes[encontro.id] & fixo["docentes"]:
-                            conflito_fixo = True
-                            break
-                        if etapas & fixo["etapas"]:
                             conflito_fixo = True
                             break
                     if conflito_fixo:
@@ -253,13 +244,16 @@ def resumir_dominios(dominios: dict[str, tuple[Candidato, ...]]) -> dict[str, An
     }
 
 
-def alocacoes_fixos(modelo: ModeloOcupacao) -> dict[str, dict[str, str]]:
-    """Retorna as posições originais dos encontros com qualquer curso externo."""
+def alocacoes_fixos(
+    modelo: ModeloOcupacao,
+    fixados: frozenset[str] = frozenset(),
+) -> dict[str, dict[str, str]]:
+    """Retorna as posições originais dos encontros com curso externo ou em `fixados`."""
 
     linhas = _linhas_por_encontro(modelo)
     resultado = {}
     for encontro in modelo.encontros_fisicos:
-        if _encontro_externo(encontro, linhas):
+        if encontro.id in fixados or _encontro_externo(encontro, linhas):
             atributos = encontro.atributos_fisicos
             resultado[encontro.id] = {
                 campo: atributos[campo]

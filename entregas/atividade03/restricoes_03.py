@@ -43,9 +43,9 @@ REGRAS = (
     Regra("H003", "inviolavel", "Não permitir ocupação entre 12:30 e 13:30.", "test_limites_do_almoco"),
     Regra("H004", "inviolavel", "Impedir sobreposição de sala.", "test_sobreposicao_de_sala_e_intervalos_semiabertos"),
     Regra("H005", "inviolavel", "Impedir sobreposição de docente, em qualquer curso.", "test_conflito_docente_entre_cursos"),
-    Regra("H006", "inviolavel", "Impedir conflito de obrigatórias da mesma etapa e curso; etapa 0 é isenta somente aqui.", "test_etapa_obrigatoria_e_eletiva"),
+    Regra("H006", "inviolavel", "Cada etapa/curso deve permitir cursar todas as disciplinas escolhendo uma turma de cada, sem sobreposição; turmas da mesma disciplina podem coincidir; etapa 0 é isenta somente aqui.", "test_etapa_obrigatoria_e_eletiva"),
     Regra("H007", "inviolavel", "Manter imóveis os encontros de cursos externos.", "test_cursos_externos_imoveis"),
-    Regra("H008", "inviolavel", "Limitar vagas a 110% da capacidade, por membros físicos únicos.", "test_limite_de_capacidade"),
+    Regra("H008", "inviolavel", "Limitar vagas a 120% da capacidade, por membros físicos únicos.", "test_limite_de_capacidade"),
     Regra("H009", "inviolavel", "Manter encontros dependentes de computador em laboratório.", "test_dependencia_de_laboratorio"),
     Regra("H010", "inviolavel_com_excecao", "Exigir justificativa para cada minuto fora do turno-alvo.", "test_relaxamento_de_turno_com_justificativa"),
     Regra("P01", "preferencia", "Priorizar preservação de sala, dia e horário; depois dia/horário, dia e padrão semanal.", "test_nivel_de_preservacao"),
@@ -104,6 +104,52 @@ def _unir_intervalos(intervalos: list[tuple[int, int]]) -> list[tuple[int, int]]
     return [(inicio, fim) for inicio, fim in unidos]
 
 
+def secoes_por_etapa(
+    modelo: ModeloOcupacao,
+) -> dict[tuple[str, str, str], dict[str, dict[str, set[str]]]]:
+    """(semestre, curso, etapa) -> disciplina -> turma -> encontros dessa turma (etapa 0 é isenta)."""
+
+    grupos: dict[tuple[str, str, str], dict[str, dict[str, set[str]]]] = {}
+    for linha in modelo.linhas_fonte:
+        valores = linha["valores"]
+        if valores["curso"] not in CURSOS_ALVO or valores["etapa"] == "0":
+            continue
+        chave = (valores["semestre"], valores["curso"], valores["etapa"])
+        turmas = grupos.setdefault(chave, {}).setdefault(valores["codigo_disciplina"], {})
+        turmas.setdefault(valores["turma"], set()).add(linha["evento_fisico_id"])
+    return grupos
+
+
+def etapa_cursavel(
+    disciplinas: Mapping[str, Mapping[str, set[str]]],
+    horarios: Mapping[str, tuple[str, int, int]],
+) -> bool:
+    """Há uma turma por disciplina tal que nenhuma escolhida se sobrepõe a outra?"""
+
+    opcoes = sorted((list(turmas.values()) for turmas in disciplinas.values()), key=len)
+
+    def sobrepoe(secao_a: set[str], secao_b: set[str]) -> bool:
+        for a in secao_a:
+            for b in secao_b:
+                if a == b or a not in horarios or b not in horarios:
+                    continue
+                (dia_a, inicio_a, fim_a), (dia_b, inicio_b, fim_b) = horarios[a], horarios[b]
+                if dia_a == dia_b and _intervalos_sobrepostos(inicio_a, fim_a, inicio_b, fim_b):
+                    return True
+        return False
+
+    def buscar(indice: int, escolhidas: list[set[str]]) -> bool:
+        if indice == len(opcoes):
+            return True
+        return any(
+            not any(sobrepoe(secao, outra) for outra in escolhidas)
+            and buscar(indice + 1, [*escolhidas, secao])
+            for secao in opcoes[indice]
+        )
+
+    return buscar(0, [])
+
+
 def validar_grade(
     modelo: ModeloOcupacao,
     alocacoes: Mapping[str, Mapping[str, str]] | None = None,
@@ -154,7 +200,6 @@ def validar_grade(
 
     eventos: dict[str, dict[str, Any]] = {}
     docentes: dict[str, set[str]] = {}
-    etapas: dict[str, set[tuple[str, str]]] = {}
 
     for encontro_id, encontro in encontros.items():
         proposta = alocacoes_efetivas[encontro_id]
@@ -193,8 +238,8 @@ def validar_grade(
         if any(len(valores) > 1 for valores in membros_vagas.values()):
             diagnosticos.append(_diagnostico("H008", "inviolavel", f"Encontro {encontro_id}: vagas_oferecidas divergentes para um membro compartilhado.", encontro_id))
         alunos = sum(max(valores) for valores in membros_vagas.values())
-        if capacidade <= 0 or alunos > capacidade * 1.10:
-            diagnosticos.append(_diagnostico("H008", "inviolavel", f"Encontro {encontro_id}: {alunos} vagas excedem 110% da capacidade {capacidade} da sala.", encontro_id))
+        if capacidade <= 0 or alunos > capacidade * 1.20:
+            diagnosticos.append(_diagnostico("H008", "inviolavel", f"Encontro {encontro_id}: {alunos} vagas excedem 120% da capacidade {capacidade} da sala.", encontro_id))
 
         tipo_original = _normalizar(encontro.atributos_fisicos["tipo_sala"])
         dependente_computador = "laborat" in tipo_original
@@ -226,11 +271,6 @@ def validar_grade(
             atribuicao.docente for atribuicao in modelo.atribuicoes_docentes
             if atribuicao.evento_fisico_id == encontro_id
         }
-        etapas[encontro_id] = {
-            (registro["curso"], registro["etapa"])
-            for registro in registros
-            if registro["curso"] in CURSOS_ALVO and registro["etapa"] != "0"
-        }
 
     for encontro_a, encontro_b in combinations(sorted(eventos), 2):
         evento_a, evento_b = eventos[encontro_a], eventos[encontro_b]
@@ -244,10 +284,19 @@ def validar_grade(
         comuns_docentes = sorted(docentes.get(encontro_a, set()) & docentes.get(encontro_b, set()))
         if comuns_docentes:
             diagnosticos.append(_diagnostico("H005", "inviolavel", f"Encontros {encontro_a} e {encontro_b} sobrepõem docente(s): {', '.join(comuns_docentes)}.", encontro_a, encontro_b))
-        comuns_etapas = sorted(etapas.get(encontro_a, set()) & etapas.get(encontro_b, set()))
-        if comuns_etapas:
-            rotulos = ", ".join(f"{curso}/etapa {etapa}" for curso, etapa in comuns_etapas)
-            diagnosticos.append(_diagnostico("H006", "inviolavel", f"Encontros {encontro_a} e {encontro_b} conflitam para {rotulos}.", encontro_a, encontro_b))
+
+    horarios = {
+        encontro_id: (evento["dia"], evento["inicio"], evento["fim"])
+        for encontro_id, evento in eventos.items()
+    }
+    for (semestre, curso, etapa), disciplinas in sorted(secoes_por_etapa(modelo).items()):
+        if not etapa_cursavel(disciplinas, horarios):
+            ids = sorted({i for turmas in disciplinas.values() for secao in turmas.values() for i in secao})
+            diagnosticos.append(_diagnostico(
+                "H006", "inviolavel",
+                f"{curso}/etapa {etapa} ({semestre}): nenhuma escolha de turmas permite cursar todas as disciplinas sem sobreposição.",
+                *ids,
+            ))
 
     for encontro_id in set(excecoes_turno).difference(encontros):
         diagnosticos.append(_diagnostico("H010", "inviolavel", f"Exceção de turno referencia encontro inexistente {encontro_id}.", encontro_id))

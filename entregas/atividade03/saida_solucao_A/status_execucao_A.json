@@ -1,9 +1,10 @@
 {
   "entrada": "mapa_salas_tidy_03.csv",
-  "sha256_fonte": "6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2f3ab5e0",
-  "status_solver": "UNKNOWN",
-  "status_codigo": 0,
-  "solucao_encontrada": false,
-  "limite_segundos": 300.0,
+  "sha256_fonte": "5980965c9e96effa0d44f879551425e2f67f44b2c6b81cb7cc3e4fcd6a10c086",
+  "status_solver": "OPTIMAL",
+  "status_codigo": 4,
+  "politica_inicios": "horaria_meia_hora_limites_fonte",
+  "solucao_encontrada": true,
+  "limite_segundos": 3000.0,
   "violacoes_bloqueantes": []
 }

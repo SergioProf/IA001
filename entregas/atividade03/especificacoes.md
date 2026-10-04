@@ -29,7 +29,8 @@ Não criar, remover, dividir ou fundir turmas.
 - Não dividir encontros.
 
 ## Conflitos de estudantes
-- Disciplinas obrigatórias da mesma etapa e mesmo curso não podem ocorrer simultaneamente.
+- Disciplinas obrigatórias da mesma etapa e mesmo curso não podem deixar o aluno sem opção de matrícula: deve ser possível cursar todas as disciplinas da etapa escolhendo uma turma de cada, sem sobreposição entre as escolhidas.
+- Turmas diferentes da mesma disciplina são alternativas (o aluno cursa uma delas) e podem ocorrer no mesmo horário.
 - Etapa 0 (eletivas) é exceção: pode ser colocada onde houver compatibilidade.
 - Distribuir as disciplinas obrigatórias de cada etapa ao longo da semana, evitando dias muito carregados e outros muito leves.
 - Não impor um limite fixo de horas/dia.
@@ -56,8 +57,8 @@ Não separar compartilhamentos.
 
 ## Capacidade
 Regra:
-`vagas da ocupação <= capacidade da sala × 1,10`
-Até 10% de excedente é aceitável, mas sala com capacidade suficiente é preferida.
+`vagas da ocupação <= capacidade da sala × 1,20`
+Até 20% de excedente é aceitável, mas sala com capacidade suficiente é preferida.
 Para compartilhadas, somar as vagas do grupo.
 
 ## Espaços

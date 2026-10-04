@@ -119,6 +119,21 @@ class TestRestricoes(unittest.TestCase):
         )
         self.assertNotIn("H006", regras(validar_grade(eletivas)))
 
+    def test_h006_aceita_turma_alternativa_da_mesma_disciplina(self):
+        # ARQ001 A coincide com ARQ002, mas a turma B de ARQ001 permite cursar ambas.
+        com_alternativa = modelo(
+            linha("ARQ001", turma="A", etapa="2", docente="Prof01", sala="S1"),
+            linha("ARQ001", turma="B", etapa="2", docente="Prof03", sala="S3", dia="TERÇA-FEIRA"),
+            linha("ARQ002", turma="A", etapa="2", docente="Prof02", sala="S2"),
+        )
+        self.assertNotIn("H006", regras(validar_grade(com_alternativa)))
+        sem_alternativa = modelo(
+            linha("ARQ001", turma="A", etapa="2", docente="Prof01", sala="S1"),
+            linha("ARQ001", turma="B", etapa="2", docente="Prof03", sala="S3"),
+            linha("ARQ002", turma="A", etapa="2", docente="Prof02", sala="S2"),
+        )
+        self.assertIn("H006", regras(validar_grade(sem_alternativa)))
+
     def test_cursos_externos_imoveis(self):
         grade = modelo(linha("MUS001", curso="MUS", dia="TERÇA-FEIRA"))
         encontro = grade.encontros_fisicos[0]
@@ -133,12 +148,12 @@ class TestRestricoes(unittest.TestCase):
         self.assertIn("H007", regras(fixo))
 
     def test_limite_de_capacidade(self):
-        for vagas, violacao in ((10, False), (11, False), (12, True)):
+        for vagas, violacao in ((10, False), (12, False), (13, True)):
             grade = modelo(linha("ARQ001", vagas=vagas, capacidade=10))
             self.assertEqual("H008" in regras(validar_grade(grade)), violacao)
         compartilhada = modelo(
-            linha("DSG001", curso="DPRO", turma="A", grupo="A/B", vagas=6, capacidade=10),
-            linha("DSG001", curso="DVIS", turma="B", grupo="A/B", vagas=6, capacidade=10),
+            linha("DSG001", curso="DPRO", turma="A", grupo="A/B", vagas=7, capacidade=10),
+            linha("DSG001", curso="DVIS", turma="B", grupo="A/B", vagas=7, capacidade=10),
         )
         self.assertIn("H008", regras(validar_grade(compartilhada)))
 

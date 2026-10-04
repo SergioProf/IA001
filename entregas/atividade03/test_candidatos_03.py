@@ -101,8 +101,8 @@ class TestCandidatos(unittest.TestCase):
 
     def test_dominio_respeita_limite_de_capacidade_da_sala(self):
         grade = modelo(
-            linha("ARQ001", sala="S1", vagas=12, capacidade=10),
-            linha("ARQ002", sala="S2", vagas=12, capacidade=20, docente="Prof02"),
+            linha("ARQ001", sala="S1", vagas=13, capacidade=10),
+            linha("ARQ002", sala="S2", vagas=13, capacidade=20, docente="Prof02"),
         )
         evento = next(e for e in grade.encontros_fisicos if e.atributos_fisicos["sala"] == "S1")
         salas_candidatas = {candidato.sala for candidato in gerar_candidatos(grade)[evento.id]}
