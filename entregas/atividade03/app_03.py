@@ -505,6 +505,7 @@ def exibir_grafico_salas(dados: pd.DataFrame) -> None:
         "DPRO": "#1f77b4",
         "DVIS": "#2ca02c",
         "CAGR": "#ff7f0e",
+        "ENGMEC": "#8c564b",
     }
     cores_outros = iter(plt.get_cmap("tab20").colors)
     for curso in cursos:
