@@ -6,6 +6,7 @@
 
 from pathlib import Path
 import html as html_lib
+import json
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -1355,6 +1356,10 @@ def pagina_proposta(codigo: str, titulo: str, descricao: str) -> None:
         f"Fonte: {caminho_proposta(codigo).name}. "
         "A agenda exibe somente os dados desta proposta."
     )
+    if codigo == "A":
+        exibir_status_proposta_a()
+    elif codigo == "B":
+        exibir_equilibrio_proposta_b()
     st.subheader("Agenda interativa por sala")
     exibir_agenda_sala(dados, contexto=f"proposta_{codigo}")
     exibir_animacao_plantas(dados, contexto=f"proposta_{codigo}")
@@ -1370,11 +1375,226 @@ def pagina_proposta_a() -> None:
     )
 
 
+def exibir_status_proposta_a() -> None:
+    caminho = PASTA_APP / "saida_solucao_A" / "solucao_A.json"
+    try:
+        metadados = json.loads(caminho.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        st.warning("Metadados da Solução A não encontrados.")
+        return
+
+    solver = metadados.get("solver", {})
+    status = solver.get("status", "UNKNOWN")
+    bloqueantes = metadados.get("violacoes_bloqueantes", [])
+    if status == "OPTIMAL" and not bloqueantes:
+        st.success(
+            "Estado: **Aceitável e otimizada**. A proposta é viável e não introduz "
+            "violações duras; o solver comprovou o ótimo lexicográfico no modelo "
+            "de fallback, mantendo fixos os encontros que já violavam regras na grade original."
+        )
+    elif bloqueantes:
+        st.error("A proposta contém violações duras novas e não deve ser considerada aceitável.")
+    else:
+        st.warning(f"Estado do solver: {status}. A otimalidade ainda não foi comprovada.")
+
+    primeira, segunda, terceira = st.columns(3)
+    primeira.metric("Encontros alterados", metadados.get("quantidade_encontros_alterados", "—"))
+    segunda.metric("Violações duras novas", len(bloqueantes))
+    terceira.metric("Status do solver", status)
+
+
+def carregar_metricas_proposta_b() -> dict | None:
+    caminho = caminho_proposta("B").with_suffix(".json")
+    if not caminho.exists():
+        return None
+    try:
+        return json.loads(caminho.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
+def rotulo_grupo_equilibrio(grupo: list | str, categoria: str) -> str:
+    if categoria == "etapas_obrigatorias" and isinstance(grupo, list) and len(grupo) == 3:
+        semestre, curso, etapa = grupo
+        return f"{ROTULOS_CURSO.get(curso, curso)} · Etapa {etapa} · {semestre}"
+    return str(grupo)
+
+
+def figura_desvio_equilibrio(metricas: dict) -> go.Figure:
+    nomes = ["Etapas obrigatórias", "Docentes"]
+    categorias = ["etapas_obrigatorias", "docentes"]
+    original = [
+        metricas["equilibrio_grade_original_mesmas_turmas"][categoria][
+            "desvio_absoluto_medio_diario_horas"
+        ]
+        for categoria in categorias
+    ]
+    proposta = [
+        metricas["equilibrio_proposto"][categoria][
+            "desvio_absoluto_medio_diario_horas"
+        ]
+        for categoria in categorias
+    ]
+    figura = go.Figure()
+    figura.add_trace(go.Bar(
+        name="Grade original",
+        x=nomes,
+        y=original,
+        marker_color="#718096",
+        text=[f"{valor:.3f}" for valor in original],
+        textposition="outside",
+        hovertemplate="%{x}<br>Desvio médio: %{y:.3f} h<extra>Grade original</extra>",
+    ))
+    figura.add_trace(go.Bar(
+        name="Proposta B",
+        x=nomes,
+        y=proposta,
+        marker_color="#287C72",
+        text=[f"{valor:.3f}" for valor in proposta],
+        textposition="outside",
+        hovertemplate="%{x}<br>Desvio médio: %{y:.3f} h<extra>Proposta B</extra>",
+    ))
+    figura.update_layout(
+        barmode="group",
+        height=360,
+        margin={"t": 30, "b": 20},
+        yaxis_title="Desvio absoluto médio diário (horas)",
+        legend_title_text="",
+        hoverlabel={"align": "left"},
+    )
+    return figura
+
+
+def figura_cargas_diarias_equilibrio(
+    original: dict,
+    proposta: dict,
+    categoria: str,
+    limite_grupos: int | None = None,
+) -> go.Figure | None:
+    def por_grupo(resumo: dict) -> dict[tuple, dict]:
+        return {
+            tuple(item["grupo"]) if isinstance(item["grupo"], list) else (item["grupo"],): item
+            for item in resumo["grupos"]
+        }
+
+    grupos_originais = por_grupo(original)
+    grupos_propostos = por_grupo(proposta)
+    chaves = grupos_originais.keys() & grupos_propostos.keys()
+    if not chaves:
+        return None
+
+    def desvio(item: dict) -> float:
+        return item["desvio_absoluto_medio_diario_horas"]
+
+    if categoria == "etapas_obrigatorias":
+        ordem_cursos = {"ARQU": 2, "DPRO": 1, "DVIS": 0}
+        chaves_ordenadas = sorted(
+            chaves,
+            key=lambda chave: (
+                ordem_cursos.get(str(grupos_propostos[chave]["grupo"][1]), 3),
+                int(grupos_propostos[chave]["grupo"][2]),
+                str(grupos_propostos[chave]["grupo"][0]),
+            ),
+        )
+    else:
+        chaves_ordenadas = sorted(
+            chaves,
+            key=lambda chave: (
+                -desvio(grupos_propostos[chave]),
+                rotulo_grupo_equilibrio(grupos_propostos[chave]["grupo"], categoria),
+            ),
+        )
+    if limite_grupos is not None:
+        chaves_ordenadas = chaves_ordenadas[:limite_grupos]
+    dias_curto = ["Seg", "Ter", "Qua", "Qui", "Sex"]
+    dias = ORDEM_DIAS
+    rotulos_x = [f"Orig. {dia}" for dia in dias_curto] + [f"B · {dia}" for dia in dias_curto]
+    valores = []
+    rotulos_y = []
+    for chave in chaves_ordenadas:
+        item_original = grupos_originais[chave]
+        item_proposto = grupos_propostos[chave]
+        rotulos_y.append(rotulo_grupo_equilibrio(item_proposto["grupo"], categoria))
+        valores.append(
+            [item_original["carga_diaria_horas"].get(dia, 0) for dia in dias]
+            + [item_proposto["carga_diaria_horas"].get(dia, 0) for dia in dias]
+        )
+
+    altura = min(1100, max(420, len(rotulos_y) * 25 + 130))
+    figura = go.Figure(go.Heatmap(
+        z=valores,
+        x=rotulos_x,
+        y=rotulos_y,
+        colorscale="YlGnBu",
+        colorbar={"title": "Horas"},
+        hovertemplate="%{y}<br>%{x}: %{z:.1f} h<extra></extra>",
+        xgap=2,
+        ygap=1,
+    ))
+    figura.update_layout(
+        height=altura,
+        margin={"t": 25, "b": 60, "l": 20, "r": 20},
+        xaxis={"side": "top", "title": "Carga semanal por dia"},
+        yaxis={"autorange": "reversed", "title": ""},
+        hoverlabel={"align": "left"},
+    )
+    figura.add_vline(x=4.5, line_color="#44515C", line_width=2)
+    return figura
+
+
+def exibir_equilibrio_proposta_b() -> None:
+    metadados = carregar_metricas_proposta_b()
+    if metadados is None:
+        st.warning("Métricas de equilíbrio da Proposta B não encontradas.")
+        return
+
+    status = metadados.get("status_solver", {}).get("status", "UNKNOWN")
+    bloqueantes = metadados.get("violacoes_bloqueantes", [])
+    metricas = metadados.get("metricas", {})
+    if status == "FEASIBLE" and not bloqueantes:
+        st.success(
+            "Estado: **Aceitável, não otimizada**. A proposta é viável e não introduz "
+            "violações duras, mas o solver não comprovou que atingiu o ótimo."
+        )
+    elif status == "OPTIMAL" and not bloqueantes:
+        st.success("Estado: **Aceitável e otimizada**. O solver comprovou o ótimo do objetivo.")
+    elif bloqueantes:
+        st.error("A proposta contém violações duras e não deve ser considerada aceitável.")
+    else:
+        st.warning(f"Estado do solver: {status}. A aceitabilidade ainda não foi confirmada.")
+
+    if not metricas:
+        st.info("O arquivo não contém métricas de equilíbrio para exibir.")
+        return
+
+    primeira, segunda, terceira = st.columns(3)
+    primeira.metric("Encontros alterados", metricas.get("encontros_alterados", "—"))
+    segunda.metric("Violações duras novas", len(bloqueantes))
+    terceira.metric("Status do solver", status)
+
+    st.subheader("Equilíbrio semanal")
+    st.caption(
+        "Menor desvio absoluto médio diário indica uma distribuição mais uniforme. "
+        "A comparação da grade original usa as mesmas turmas escolhidas para a B."
+    )
+    st.plotly_chart(figura_desvio_equilibrio(metricas), use_container_width=True)
+
+    original = metricas["equilibrio_grade_original_mesmas_turmas"]
+    proposta = metricas["equilibrio_proposto"]
+    st.subheader("Carga diária por etapa obrigatória")
+    figura_etapas = figura_cargas_diarias_equilibrio(
+        original["etapas_obrigatorias"],
+        proposta["etapas_obrigatorias"],
+        "etapas_obrigatorias",
+    )
+    if figura_etapas is not None:
+        st.plotly_chart(figura_etapas, use_container_width=True)
+
 def pagina_proposta_b() -> None:
     pagina_proposta(
         "B",
         "Proposta B — Equilíbrio",
-        "Agenda da solução que prioriza a distribuição semanal das disciplinas e "
+        "Agenda da proposta que prioriza a distribuição semanal das disciplinas e "
         "da carga docente.",
     )
 

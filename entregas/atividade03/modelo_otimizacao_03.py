@@ -37,6 +37,7 @@ ESCALA_PERCENTUAL = 10_000_000
 class ModeloCPsat:
     modelo: cp_model.CpModel
     variaveis: dict[str, tuple[tuple[Candidato, Any], ...]]
+    escolhas_etapa: dict[tuple[str, str, str], dict[tuple[str, str], Any]]
     intervalo_minutos: int
     quantidade_restricoes: int
 
@@ -143,7 +144,7 @@ def _adicionar_restricoes_etapa(
     intervalo_minutos: int,
     fixados: frozenset[str],
     etapas_toleradas: frozenset[tuple[str, str, str]],
-) -> None:
+) -> dict[tuple[str, str, str], dict[tuple[str, str], Any]]:
     """H006: em cada etapa/curso, uma turma por disciplina precisa caber sem sobreposição."""
 
     # Para cada encontro: (dia, período) -> literais que o ocupam (True = encontro fixo).
@@ -161,6 +162,7 @@ def _adicionar_restricoes_etapa(
             for periodo in range(inicio, fim):
                 ocupa[encontro_id][(candidato.dia_semana, periodo)].append(variavel)
 
+    escolhas_etapa = {}
     for chave, disciplinas in secoes_por_etapa(ocupacao).items():
         if chave in etapas_toleradas:
             continue
@@ -196,6 +198,9 @@ def _adicionar_restricoes_etapa(
                 modelo.add_bool_or([selecionada.Not(), ocupado.Not(), presente])
                 presentes.append(presente)
             modelo.add_at_most_one(presentes)
+
+        escolhas_etapa[chave] = escolhida
+    return escolhas_etapa
 
 
 def construir_modelo_cp_sat(
@@ -281,8 +286,9 @@ def _construir_modelo_cp_sat(
         if chave_recurso[0] not in recursos_ignorados and len(selecoes) > 1:
             modelo.add_at_most_one(selecoes)
 
+    escolhas_etapa = {}
     if "etapa" not in recursos_ignorados:
-        _adicionar_restricoes_etapa(
+        escolhas_etapa = _adicionar_restricoes_etapa(
             modelo, ocupacao, variaveis, intervalo_minutos, fixados, etapas_toleradas
         )
 
@@ -292,9 +298,182 @@ def _construir_modelo_cp_sat(
     return ModeloCPsat(
         modelo=modelo,
         variaveis=variaveis,
+        escolhas_etapa=escolhas_etapa,
         intervalo_minutos=intervalo_minutos,
         quantidade_restricoes=len(modelo.proto.constraints),
     )
+
+
+def adicionar_objetivo_solucao_b(
+    ocupacao: ModeloOcupacao,
+    modelagem: ModeloCPsat,
+    fixados: frozenset[str] = frozenset(),
+) -> None:
+    """Minimiza a dispersão diária de etapas e docentes; preserva em caso de empate."""
+
+    modelo = modelagem.modelo
+    dias = sorted(DIAS_VALIDOS)
+    fixos = alocacoes_fixos(ocupacao, fixados)
+    linhas_por_encontro = _linhas_por_encontro(ocupacao)
+    encontros = {encontro.id: encontro for encontro in ocupacao.encontros_fisicos}
+    escolhas_por_etapa = secoes_por_etapa(ocupacao)
+    cargas_etapas: list[list[Any]] = []
+    limites_etapas: list[int] = []
+    cargas_docentes: dict[str, list[list[Any]]] = {}
+    limites_docentes: dict[str, int] = defaultdict(int)
+    ativos_dia: dict[tuple[str, str], Any] = {}
+
+    def ativo_no_dia(encontro_id: str, dia: str) -> Any | None:
+        chave = (encontro_id, dia)
+        if chave in ativos_dia:
+            return ativos_dia[chave]
+        escolhas = modelagem.variaveis.get(encontro_id, ())
+        variaveis_dia = [variavel for candidato, variavel in escolhas if candidato.dia_semana == dia]
+        if not variaveis_dia:
+            ativos_dia[chave] = None
+            return None
+        ativo = modelo.new_bool_var(f"ativo_{encontro_id}_{dia}")
+        modelo.add(ativo == sum(variaveis_dia))
+        ativos_dia[chave] = ativo
+        return ativo
+
+    for chave, disciplinas in escolhas_por_etapa.items():
+        if chave not in modelagem.escolhas_etapa:
+            continue
+        escolhas = modelagem.escolhas_etapa[chave]
+        cargas = [[] for _ in dias]
+        ids_etapa: set[str] = set()
+        for codigo, turmas in disciplinas.items():
+            for turma, ids_encontros in turmas.items():
+                selecionada = escolhas[(codigo, turma)]
+                for encontro_id in ids_encontros:
+                    ids_etapa.add(encontro_id)
+                    duracao = (
+                        _minutos(encontros[encontro_id].atributos_fisicos["hora_fim"])
+                        - _minutos(encontros[encontro_id].atributos_fisicos["hora_inicio"])
+                    ) // modelagem.intervalo_minutos
+                    if encontro_id in fixos:
+                        dia_original = fixos[encontro_id]["dia_semana"].strip().upper()
+                        if dia_original in dias:
+                            cargas[dias.index(dia_original)].append(duracao * selecionada)
+                        continue
+                    for indice, dia in enumerate(dias):
+                        ativo = ativo_no_dia(encontro_id, dia)
+                        if ativo is None:
+                            continue
+                        conjunto = modelo.new_bool_var(f"etapa_{chave}_{codigo}_{turma}_{encontro_id}_{dia}")
+                        modelo.add_bool_and([selecionada, ativo]).only_enforce_if(conjunto)
+                        modelo.add_bool_or([selecionada.Not(), ativo.Not(), conjunto])
+                        cargas[indice].append(duracao * conjunto)
+        cargas_etapas.append(cargas)
+        limites_etapas.append(sum(
+            (
+                _minutos(encontros[encontro_id].atributos_fisicos["hora_fim"])
+                - _minutos(encontros[encontro_id].atributos_fisicos["hora_inicio"])
+            ) // modelagem.intervalo_minutos
+            for encontro_id in ids_etapa
+        ))
+
+    docentes_por_encontro: dict[str, set[str]] = defaultdict(set)
+    for atribuicao in ocupacao.atribuicoes_docentes:
+        docentes_por_encontro[atribuicao.evento_fisico_id].add(atribuicao.docente)
+    for encontro_id, encontro in encontros.items():
+        duracao = (
+            _minutos(encontro.atributos_fisicos["hora_fim"])
+            - _minutos(encontro.atributos_fisicos["hora_inicio"])
+        ) // modelagem.intervalo_minutos
+        for docente in docentes_por_encontro[encontro_id]:
+            cargas_docentes.setdefault(docente, [[] for _ in dias])
+            limites_docentes[docente] += duracao
+            if encontro_id in fixos:
+                dia_original = fixos[encontro_id]["dia_semana"].strip().upper()
+                if dia_original in dias:
+                    cargas_docentes[docente][dias.index(dia_original)].append(duracao)
+                continue
+            for indice, dia in enumerate(dias):
+                escolhas_dia = [
+                    variavel for candidato, variavel in modelagem.variaveis[encontro_id]
+                    if candidato.dia_semana == dia
+                ]
+                if escolhas_dia:
+                    cargas_docentes[docente][indice].append(duracao * sum(escolhas_dia))
+
+    def termos_dispersao(cargas: list[list[Any]], limites: list[int]) -> list[Any]:
+        termos = []
+        for indice_grupo, (carga_dias, limite) in enumerate(zip(cargas, limites)):
+            total = sum(sum(carga) for carga in carga_dias)
+            if limite <= 0:
+                continue
+            for indice_dia, carga in enumerate(carga_dias):
+                desvio = modelo.new_int_var(0, 5 * limite, f"desvio_{indice_grupo}_{indice_dia}")
+                modelo.add_abs_equality(desvio, 5 * sum(carga) - total)
+                termos.append(desvio)
+        return termos
+
+    dispersao_etapas = termos_dispersao(cargas_etapas, limites_etapas)
+    cargas_docentes_lista = list(cargas_docentes.values())
+    dispersao_docentes = termos_dispersao(
+        cargas_docentes_lista,
+        [limites_docentes[docente] for docente in cargas_docentes],
+    )
+    quantidade_etapas = len(cargas_etapas)
+    quantidade_docentes = len(cargas_docentes_lista)
+    equilibrio = (
+        sum(dispersao_etapas) * max(quantidade_docentes, 1)
+        + sum(dispersao_docentes) * max(quantidade_etapas, 1)
+    )
+
+    preservados = []
+    for encontro_id, escolhas in modelagem.variaveis.items():
+        original = encontros[encontro_id].atributos_fisicos
+        preservados.extend(
+            variavel for candidato, variavel in escolhas
+            if all(candidato.alocacao()[campo] == original[campo]
+                   for campo in ("predio", "sala", "dia_semana", "hora_inicio", "hora_fim"))
+        )
+    modelagem.modelo.minimize(equilibrio * (len(modelagem.variaveis) + 1) - sum(preservados))
+    validacao = modelagem.modelo.validate()
+    if validacao:
+        raise ValueError(f"Modelo CP-SAT inválido para a Solução B: {validacao}")
+
+
+def resolver_solucao_b(
+    ocupacao: ModeloOcupacao,
+    modelagem: ModeloCPsat,
+    fixados: frozenset[str] = frozenset(),
+    limite_segundos: float = 300.0,
+) -> tuple[int, dict[str, Candidato], dict[tuple[str, str, str], tuple[str, ...]], dict[str, Any]]:
+    """Resolve B e retorna alocações, turmas de etapa escolhidas e metadados do solver."""
+
+    adicionar_objetivo_solucao_b(ocupacao, modelagem, fixados)
+    solver = cp_model.CpSolver()
+    solver.parameters.max_time_in_seconds = limite_segundos
+    solver.parameters.num_search_workers = 8
+    solver.parameters.random_seed = 0
+    status = solver.solve(modelagem.modelo)
+    alocacoes = {}
+    etapas_escolhidas = {}
+    if status in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        for encontro_id, escolhas in modelagem.variaveis.items():
+            alocacoes[encontro_id] = next(
+                candidato for candidato, variavel in escolhas if solver.boolean_value(variavel)
+            )
+        for chave, escolhas in modelagem.escolhas_etapa.items():
+            etapas_escolhidas[chave] = tuple(sorted(
+                f"{codigo}:{turma}" for (codigo, turma), variavel in escolhas.items()
+                if solver.boolean_value(variavel)
+            ))
+    detalhes = {
+        "status": solver.status_name(status),
+        "valor_objetivo": solver.objective_value if alocacoes else None,
+        "melhor_limite": solver.best_objective_bound if alocacoes else None,
+        "tempo_segundos": solver.wall_time,
+        "limite_segundos": limite_segundos,
+        "quantidade_variaveis": len(modelagem.modelo.proto.variables),
+        "quantidade_restricoes": len(modelagem.modelo.proto.constraints),
+        "objetivo": "desvio absoluto diário médio de etapas obrigatórias e docentes; alterações minimizadas em empate",
+    }
+    return status, alocacoes, etapas_escolhidas, detalhes
 
 
 def resolver_viabilidade(modelagem: ModeloCPsat, limite_segundos: float = 30.0) -> tuple[int, dict[str, Candidato]]:
