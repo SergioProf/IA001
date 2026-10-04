@@ -4,6 +4,20 @@
 
 Implementar a reorganização global das disciplinas ARQU, DPRO e DVIS em fases verificáveis, preservando a estrutura acadêmica e o CSV-fonte. A solução deve produzir três propostas independentes (A: preservação; B: equilíbrio; C: maximização de CH nos turnos-alvo), acompanhadas de validação independente, exceções rastreáveis e comparação reproduzível. Nenhuma alteração da grade ocorre durante auditoria e modelagem. É um detalhamento do `roadmap01.md`, especificado em fases.
 
+## Situação em 2026-10-04
+
+| Fase | Estado observado |
+| --- | --- |
+| 1–3 | Implementadas; origem de `creditos` e semântica de obrigatoriedade permanecem explicitamente não confirmadas. |
+| 4–5 | Implementadas e cobertas pelos testes existentes. |
+| 6 | Solução A `OPTIMAL` no modelo fallback; mantém fixas violações do baseline. |
+| 7 | B é viável (`FEASIBLE`), sem violações duras novas; otimalidade não comprovada. |
+| 8 | C `OPTIMAL`, com uma exceção de turno justificada. |
+| 9 | Validação dos CSVs A/B/C executada: zero violações duras novas; relatórios gerados. |
+| 10 | Comparação Streamlit e fluxo documentado implementados; ambiente limpo ainda não testado. |
+
+O estado detalhado, os comandos reproduzíveis e os limites estão em `readme_03.md`. O CSV-fonte permanece congelado pelo SHA-256 `5980965c9e96effa0d44f879551425e2f67f44b2c6b81cb7cc3e4fcd6a10c086`.
+
 ## Fases
 
 ### 1. Preparação e integridade do dado
@@ -131,6 +145,8 @@ Gerar tabelas/gráficos ANTES × A/B/C para CH por curso/turno, ocupação de sa
 - `entregas/atividade03/readme_03.md`: histórico, ajustes manuais e discrepâncias a reconciliar com a versão real do CSV.
 - `entregas/atividade03/app_03.py`: referência para checagem de colunas, horários em minutos, classificação de turno, chave de evento físico e relatório de sobreposição; não é solver nem validador completo.
 - `entregas/atividade03/requirements_03.txt`: dependências atuais do dashboard; verificar e registrar eventual dependência nova do solver/testes.
+- `entregas/atividade03/validar_solucao_03.py`: valida os CSVs exportados, sem estado interno do solver, e gera comparação, exceções, ocupação e equilíbrio.
+- `entregas/atividade03/validacao_A_B_C.md` e `*A_B_C.csv`: resultados atuais da validação e métricas recalculadas.
 - `entregas/atividade02/app.py`: referência adicional para deduplicação de eventos e sobreposição, sem assumir que conflitos possíveis confirmam indisponibilidade real.
 - `dadosBrutos/transformar_mapa_salas.py` e `dadosBrutos/relatorio_transformacao_mapa_salas.md`: linhagem da transformação; a fotografia antiga não substitui automaticamente o CSV posterior da atividade 03.
 
@@ -141,7 +157,7 @@ Gerar tabelas/gráficos ANTES × A/B/C para CH por curso/turno, ocupação de sa
 3. **Regras:** testar sobreposição semiaberta, almoço inclusive nos limites, sábado, capacidade em 100%/120%/acima de 120%, salas/laboratórios, docentes, etapa 0 e externas fixas.
 4. **Soluções:** validar independentemente A/B/C e conferir que nenhuma entidade/encontro foi criado/removido nem teve estrutura alterada.
 5. **Métricas:** recalcular CH/percentuais, alterações e equilíbrio a partir dos arquivos exportados; conciliar cada exceção com sua justificativa e restrição.
-6. **Reprodutibilidade:** executar o fluxo documentado em ambiente limpo; não usar `streamlit run` como validação do otimizador. Não há atualmente comando de teste/solver identificado nos arquivos inspecionados; definir o comando quando a estrutura de testes e a dependência forem escolhidas.
+6. **Reprodutibilidade:** comandos de validação, testes e visualização estão documentados em `readme_03.md`. A validação e a suíte foram executadas no ambiente atual; execução em ambiente limpo ainda pendente. Não usar `streamlit run` como validação do otimizador.
 
 ## Decisões e limites
 

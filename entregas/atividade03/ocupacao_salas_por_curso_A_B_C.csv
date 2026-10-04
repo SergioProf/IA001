@@ -1,0 +1,256 @@
+﻿solucao,predio,sala,tipo_sala,curso,encontros,horas_aula
+ANTES,Faculdade de Arquitetura - 12103,Sala 103,Sala de aula,ARQU,2,6.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 103,Sala de aula,DPRO,5,16.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 103,Sala de aula,DVIS,5,16.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 301A,Laboratório de Informática,ARQU,6,20.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 301A,Laboratório de Informática,DPRO,7,14.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 301A,Laboratório de Informática,DVIS,8,18.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 301B,Laboratório de Informática,ARQU,2,6.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 301B,Laboratório de Informática,DPRO,6,12.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 301B,Laboratório de Informática,DVIS,10,24.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 302,Laboratório de Informática,ARQU,10,31.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 302,Laboratório de Informática,DPRO,4,8.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 302,Laboratório de Informática,DVIS,6,14.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 303,Atelier,ARQU,10,33.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 303,Atelier,DPRO,2,6.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 303,Atelier,DVIS,2,6.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 304,Atelier,ARQU,8,25.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 304,Atelier,DVIS,1,4.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 312,Sala de aula,ARQU,19,40.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 312,Sala de aula,DPRO,2,4.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 312,Sala de aula,DVIS,2,4.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 313,Sala de aula,ARQU,16,35.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 313,Sala de aula,DPRO,1,2.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 313,Sala de aula,DVIS,1,2.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 314,Sala de aula,ARQU,9,22.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 314,Sala de aula,CAGR,2,6.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 314,Sala de aula,DPRO,1,3.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 401,Atelier,ARQU,9,24.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 401,Atelier,DPRO,4,14.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 401,Atelier,DVIS,4,14.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 402,Atelier,ARQU,10,33.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 402,Atelier,DPRO,6,16.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 402,Atelier,DVIS,2,4.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 403,Atelier,ARQU,8,28.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 403,Atelier,DPRO,2,4.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 403,Atelier,DVIS,2,4.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 404,Atelier,ARQU,8,27.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 404,Atelier,DPRO,5,12.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 404,Atelier,DVIS,6,15.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 405,Atelier,ARQU,6,17.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 407,Sala de aula,ARQU,4,13.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 409,Atelier,ARQU,9,21.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 409,Atelier,DPRO,1,2.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 413,Sala de aula,ARQU,17,39.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 413,Sala de aula,DPRO,3,7.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 413,Sala de aula,DVIS,3,7.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 414,Atelier,ARQU,6,12.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 414,Atelier,DPRO,1,3.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 415,Sala de aula,ARQU,11,26.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 415,Sala de aula,DPRO,6,12.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 415,Sala de aula,DVIS,6,12.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 501,Atelier,ARQU,7,19.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 501,Atelier,DPRO,3,12.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 501,Atelier,DVIS,2,8.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 501,Atelier,ENGMEC,2,4.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 502,Atelier,ARQU,5,17.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 502,Atelier,DPRO,8,22.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 502,Atelier,DVIS,3,8.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 503,Atelier,ARQU,7,21.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 503,Atelier,DPRO,3,8.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 503,Atelier,DVIS,3,8.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 504,Atelier,ARQU,16,35.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 504,Atelier,DPRO,3,6.0
+ANTES,Faculdade de Arquitetura - 12103,Sala 504,Atelier,DVIS,3,6.0
+A,Faculdade de Arquitetura - 12103,Sala 103,Sala de aula,ARQU,7,19.0
+A,Faculdade de Arquitetura - 12103,Sala 103,Sala de aula,DPRO,5,16.0
+A,Faculdade de Arquitetura - 12103,Sala 103,Sala de aula,DVIS,5,16.0
+A,Faculdade de Arquitetura - 12103,Sala 301A,Laboratório de Informática,ARQU,6,20.0
+A,Faculdade de Arquitetura - 12103,Sala 301A,Laboratório de Informática,DPRO,6,12.0
+A,Faculdade de Arquitetura - 12103,Sala 301A,Laboratório de Informática,DVIS,7,16.0
+A,Faculdade de Arquitetura - 12103,Sala 301B,Laboratório de Informática,ARQU,5,15.0
+A,Faculdade de Arquitetura - 12103,Sala 301B,Laboratório de Informática,DPRO,7,14.0
+A,Faculdade de Arquitetura - 12103,Sala 301B,Laboratório de Informática,DVIS,11,26.0
+A,Faculdade de Arquitetura - 12103,Sala 302,Laboratório de Informática,ARQU,7,22.0
+A,Faculdade de Arquitetura - 12103,Sala 302,Laboratório de Informática,DPRO,4,8.0
+A,Faculdade de Arquitetura - 12103,Sala 302,Laboratório de Informática,DVIS,6,14.0
+A,Faculdade de Arquitetura - 12103,Sala 303,Atelier,ARQU,9,30.0
+A,Faculdade de Arquitetura - 12103,Sala 303,Atelier,DPRO,3,9.0
+A,Faculdade de Arquitetura - 12103,Sala 303,Atelier,DVIS,2,6.0
+A,Faculdade de Arquitetura - 12103,Sala 304,Atelier,ARQU,8,25.0
+A,Faculdade de Arquitetura - 12103,Sala 304,Atelier,DPRO,1,2.0
+A,Faculdade de Arquitetura - 12103,Sala 304,Atelier,DVIS,1,4.0
+A,Faculdade de Arquitetura - 12103,Sala 312,Sala de aula,ARQU,17,36.0
+A,Faculdade de Arquitetura - 12103,Sala 312,Sala de aula,DPRO,2,4.0
+A,Faculdade de Arquitetura - 12103,Sala 312,Sala de aula,DVIS,2,4.0
+A,Faculdade de Arquitetura - 12103,Sala 313,Sala de aula,ARQU,13,28.0
+A,Faculdade de Arquitetura - 12103,Sala 313,Sala de aula,DPRO,1,2.0
+A,Faculdade de Arquitetura - 12103,Sala 313,Sala de aula,DVIS,1,2.0
+A,Faculdade de Arquitetura - 12103,Sala 314,Sala de aula,ARQU,9,22.0
+A,Faculdade de Arquitetura - 12103,Sala 314,Sala de aula,CAGR,2,6.0
+A,Faculdade de Arquitetura - 12103,Sala 314,Sala de aula,DPRO,1,3.0
+A,Faculdade de Arquitetura - 12103,Sala 401,Atelier,ARQU,11,30.0
+A,Faculdade de Arquitetura - 12103,Sala 401,Atelier,DPRO,3,11.0
+A,Faculdade de Arquitetura - 12103,Sala 401,Atelier,DVIS,3,11.0
+A,Faculdade de Arquitetura - 12103,Sala 402,Atelier,ARQU,8,27.0
+A,Faculdade de Arquitetura - 12103,Sala 402,Atelier,DPRO,2,6.0
+A,Faculdade de Arquitetura - 12103,Sala 403,Atelier,ARQU,7,24.0
+A,Faculdade de Arquitetura - 12103,Sala 403,Atelier,DPRO,2,4.0
+A,Faculdade de Arquitetura - 12103,Sala 403,Atelier,DVIS,3,7.0
+A,Faculdade de Arquitetura - 12103,Sala 404,Atelier,ARQU,8,27.0
+A,Faculdade de Arquitetura - 12103,Sala 404,Atelier,DPRO,5,12.0
+A,Faculdade de Arquitetura - 12103,Sala 404,Atelier,DVIS,5,12.0
+A,Faculdade de Arquitetura - 12103,Sala 405,Atelier,ARQU,6,17.0
+A,Faculdade de Arquitetura - 12103,Sala 405,Atelier,DPRO,1,3.0
+A,Faculdade de Arquitetura - 12103,Sala 407,Sala de aula,ARQU,4,13.0
+A,Faculdade de Arquitetura - 12103,Sala 409,Atelier,ARQU,10,24.0
+A,Faculdade de Arquitetura - 12103,Sala 409,Atelier,DPRO,2,4.0
+A,Faculdade de Arquitetura - 12103,Sala 409,Atelier,DVIS,1,2.0
+A,Faculdade de Arquitetura - 12103,Sala 413,Sala de aula,ARQU,15,33.0
+A,Faculdade de Arquitetura - 12103,Sala 413,Sala de aula,DPRO,3,7.0
+A,Faculdade de Arquitetura - 12103,Sala 413,Sala de aula,DVIS,3,7.0
+A,Faculdade de Arquitetura - 12103,Sala 414,Atelier,ARQU,6,12.0
+A,Faculdade de Arquitetura - 12103,Sala 414,Atelier,DPRO,4,11.0
+A,Faculdade de Arquitetura - 12103,Sala 414,Atelier,DVIS,2,5.0
+A,Faculdade de Arquitetura - 12103,Sala 415,Sala de aula,ARQU,13,30.0
+A,Faculdade de Arquitetura - 12103,Sala 415,Sala de aula,DPRO,6,12.0
+A,Faculdade de Arquitetura - 12103,Sala 415,Sala de aula,DVIS,6,12.0
+A,Faculdade de Arquitetura - 12103,Sala 501,Atelier,ARQU,9,23.0
+A,Faculdade de Arquitetura - 12103,Sala 501,Atelier,DPRO,5,16.0
+A,Faculdade de Arquitetura - 12103,Sala 501,Atelier,DVIS,4,12.0
+A,Faculdade de Arquitetura - 12103,Sala 501,Atelier,ENGMEC,2,4.0
+A,Faculdade de Arquitetura - 12103,Sala 502,Atelier,ARQU,5,17.0
+A,Faculdade de Arquitetura - 12103,Sala 502,Atelier,DPRO,5,14.0
+A,Faculdade de Arquitetura - 12103,Sala 502,Atelier,DVIS,3,8.0
+A,Faculdade de Arquitetura - 12103,Sala 503,Atelier,ARQU,8,23.0
+A,Faculdade de Arquitetura - 12103,Sala 503,Atelier,DPRO,3,8.0
+A,Faculdade de Arquitetura - 12103,Sala 503,Atelier,DVIS,3,8.0
+A,Faculdade de Arquitetura - 12103,Sala 504,Atelier,ARQU,14,33.0
+A,Faculdade de Arquitetura - 12103,Sala 504,Atelier,DPRO,2,5.0
+A,Faculdade de Arquitetura - 12103,Sala 504,Atelier,DVIS,1,2.0
+B,Faculdade de Arquitetura - 12103,Sala 103,Sala de aula,ARQU,11,27.0
+B,Faculdade de Arquitetura - 12103,Sala 103,Sala de aula,DPRO,6,17.0
+B,Faculdade de Arquitetura - 12103,Sala 103,Sala de aula,DVIS,5,14.0
+B,Faculdade de Arquitetura - 12103,Sala 301A,Laboratório de Informática,ARQU,5,14.0
+B,Faculdade de Arquitetura - 12103,Sala 301A,Laboratório de Informática,DPRO,5,10.0
+B,Faculdade de Arquitetura - 12103,Sala 301A,Laboratório de Informática,DVIS,7,16.0
+B,Faculdade de Arquitetura - 12103,Sala 301B,Laboratório de Informática,ARQU,7,22.0
+B,Faculdade de Arquitetura - 12103,Sala 301B,Laboratório de Informática,DPRO,7,14.0
+B,Faculdade de Arquitetura - 12103,Sala 301B,Laboratório de Informática,DVIS,10,24.0
+B,Faculdade de Arquitetura - 12103,Sala 302,Laboratório de Informática,ARQU,12,37.0
+B,Faculdade de Arquitetura - 12103,Sala 302,Laboratório de Informática,DPRO,5,10.0
+B,Faculdade de Arquitetura - 12103,Sala 302,Laboratório de Informática,DVIS,7,16.0
+B,Faculdade de Arquitetura - 12103,Sala 303,Atelier,ARQU,9,27.0
+B,Faculdade de Arquitetura - 12103,Sala 303,Atelier,DPRO,1,4.0
+B,Faculdade de Arquitetura - 12103,Sala 303,Atelier,DVIS,1,4.0
+B,Faculdade de Arquitetura - 12103,Sala 304,Atelier,ARQU,9,24.0
+B,Faculdade de Arquitetura - 12103,Sala 304,Atelier,DPRO,3,8.0
+B,Faculdade de Arquitetura - 12103,Sala 304,Atelier,DVIS,4,12.0
+B,Faculdade de Arquitetura - 12103,Sala 312,Sala de aula,ARQU,12,28.0
+B,Faculdade de Arquitetura - 12103,Sala 312,Sala de aula,DPRO,3,6.0
+B,Faculdade de Arquitetura - 12103,Sala 312,Sala de aula,DVIS,3,6.0
+B,Faculdade de Arquitetura - 12103,Sala 313,Sala de aula,ARQU,9,25.0
+B,Faculdade de Arquitetura - 12103,Sala 313,Sala de aula,DPRO,1,4.0
+B,Faculdade de Arquitetura - 12103,Sala 313,Sala de aula,DVIS,1,4.0
+B,Faculdade de Arquitetura - 12103,Sala 314,Sala de aula,ARQU,7,20.0
+B,Faculdade de Arquitetura - 12103,Sala 314,Sala de aula,CAGR,2,6.0
+B,Faculdade de Arquitetura - 12103,Sala 314,Sala de aula,DPRO,3,6.0
+B,Faculdade de Arquitetura - 12103,Sala 314,Sala de aula,DVIS,3,6.0
+B,Faculdade de Arquitetura - 12103,Sala 401,Atelier,ARQU,10,26.0
+B,Faculdade de Arquitetura - 12103,Sala 401,Atelier,DPRO,3,10.0
+B,Faculdade de Arquitetura - 12103,Sala 401,Atelier,DVIS,3,10.0
+B,Faculdade de Arquitetura - 12103,Sala 402,Atelier,ARQU,9,29.0
+B,Faculdade de Arquitetura - 12103,Sala 402,Atelier,DPRO,1,3.0
+B,Faculdade de Arquitetura - 12103,Sala 403,Atelier,ARQU,10,29.0
+B,Faculdade de Arquitetura - 12103,Sala 403,Atelier,DPRO,4,11.0
+B,Faculdade de Arquitetura - 12103,Sala 403,Atelier,DVIS,4,11.0
+B,Faculdade de Arquitetura - 12103,Sala 404,Atelier,ARQU,7,22.0
+B,Faculdade de Arquitetura - 12103,Sala 404,Atelier,DPRO,2,4.0
+B,Faculdade de Arquitetura - 12103,Sala 404,Atelier,DVIS,2,4.0
+B,Faculdade de Arquitetura - 12103,Sala 405,Atelier,ARQU,6,16.0
+B,Faculdade de Arquitetura - 12103,Sala 405,Atelier,DPRO,3,8.0
+B,Faculdade de Arquitetura - 12103,Sala 405,Atelier,DVIS,1,2.0
+B,Faculdade de Arquitetura - 12103,Sala 407,Sala de aula,ARQU,2,7.0
+B,Faculdade de Arquitetura - 12103,Sala 407,Sala de aula,DPRO,1,3.0
+B,Faculdade de Arquitetura - 12103,Sala 409,Atelier,ARQU,9,23.0
+B,Faculdade de Arquitetura - 12103,Sala 409,Atelier,DPRO,1,4.0
+B,Faculdade de Arquitetura - 12103,Sala 409,Atelier,DVIS,1,4.0
+B,Faculdade de Arquitetura - 12103,Sala 413,Sala de aula,ARQU,18,37.0
+B,Faculdade de Arquitetura - 12103,Sala 413,Sala de aula,DPRO,2,5.0
+B,Faculdade de Arquitetura - 12103,Sala 413,Sala de aula,DVIS,2,5.0
+B,Faculdade de Arquitetura - 12103,Sala 414,Atelier,ARQU,9,23.0
+B,Faculdade de Arquitetura - 12103,Sala 414,Atelier,DPRO,4,11.0
+B,Faculdade de Arquitetura - 12103,Sala 414,Atelier,DVIS,3,9.0
+B,Faculdade de Arquitetura - 12103,Sala 415,Sala de aula,ARQU,11,27.0
+B,Faculdade de Arquitetura - 12103,Sala 415,Sala de aula,DPRO,4,10.0
+B,Faculdade de Arquitetura - 12103,Sala 415,Sala de aula,DVIS,4,10.0
+B,Faculdade de Arquitetura - 12103,Sala 501,Atelier,ARQU,7,18.0
+B,Faculdade de Arquitetura - 12103,Sala 501,Atelier,DPRO,1,2.0
+B,Faculdade de Arquitetura - 12103,Sala 501,Atelier,DVIS,1,2.0
+B,Faculdade de Arquitetura - 12103,Sala 501,Atelier,ENGMEC,2,4.0
+B,Faculdade de Arquitetura - 12103,Sala 502,Atelier,ARQU,8,23.0
+B,Faculdade de Arquitetura - 12103,Sala 502,Atelier,DPRO,8,21.0
+B,Faculdade de Arquitetura - 12103,Sala 502,Atelier,DVIS,3,6.0
+B,Faculdade de Arquitetura - 12103,Sala 503,Atelier,ARQU,7,18.0
+B,Faculdade de Arquitetura - 12103,Sala 503,Atelier,DPRO,2,5.0
+B,Faculdade de Arquitetura - 12103,Sala 503,Atelier,DVIS,2,5.0
+B,Faculdade de Arquitetura - 12103,Sala 504,Atelier,ARQU,11,28.0
+B,Faculdade de Arquitetura - 12103,Sala 504,Atelier,DPRO,3,7.0
+B,Faculdade de Arquitetura - 12103,Sala 504,Atelier,DVIS,2,4.0
+C,Faculdade de Arquitetura - 12103,Sala 103,Sala de aula,ARQU,12,32.0
+C,Faculdade de Arquitetura - 12103,Sala 103,Sala de aula,DPRO,8,23.0
+C,Faculdade de Arquitetura - 12103,Sala 103,Sala de aula,DVIS,7,21.0
+C,Faculdade de Arquitetura - 12103,Sala 301A,Laboratório de Informática,ARQU,10,30.0
+C,Faculdade de Arquitetura - 12103,Sala 301A,Laboratório de Informática,DPRO,6,13.0
+C,Faculdade de Arquitetura - 12103,Sala 301A,Laboratório de Informática,DVIS,7,18.0
+C,Faculdade de Arquitetura - 12103,Sala 301B,Laboratório de Informática,ARQU,10,27.0
+C,Faculdade de Arquitetura - 12103,Sala 301B,Laboratório de Informática,DPRO,9,19.0
+C,Faculdade de Arquitetura - 12103,Sala 301B,Laboratório de Informática,DVIS,10,22.0
+C,Faculdade de Arquitetura - 12103,Sala 302,Laboratório de Informática,ARQU,7,22.0
+C,Faculdade de Arquitetura - 12103,Sala 302,Laboratório de Informática,DPRO,8,19.0
+C,Faculdade de Arquitetura - 12103,Sala 302,Laboratório de Informática,DVIS,9,22.0
+C,Faculdade de Arquitetura - 12103,Sala 303,Atelier,ARQU,9,29.0
+C,Faculdade de Arquitetura - 12103,Sala 303,Atelier,DPRO,4,11.0
+C,Faculdade de Arquitetura - 12103,Sala 303,Atelier,DVIS,3,8.0
+C,Faculdade de Arquitetura - 12103,Sala 304,Atelier,ARQU,10,34.0
+C,Faculdade de Arquitetura - 12103,Sala 304,Atelier,DVIS,1,4.0
+C,Faculdade de Arquitetura - 12103,Sala 312,Sala de aula,ARQU,13,28.0
+C,Faculdade de Arquitetura - 12103,Sala 312,Sala de aula,DPRO,2,4.0
+C,Faculdade de Arquitetura - 12103,Sala 312,Sala de aula,DVIS,2,4.0
+C,Faculdade de Arquitetura - 12103,Sala 313,Sala de aula,ARQU,12,25.0
+C,Faculdade de Arquitetura - 12103,Sala 314,Sala de aula,ARQU,8,19.0
+C,Faculdade de Arquitetura - 12103,Sala 314,Sala de aula,CAGR,2,6.0
+C,Faculdade de Arquitetura - 12103,Sala 401,Atelier,ARQU,8,22.0
+C,Faculdade de Arquitetura - 12103,Sala 401,Atelier,DPRO,2,8.0
+C,Faculdade de Arquitetura - 12103,Sala 401,Atelier,DVIS,2,8.0
+C,Faculdade de Arquitetura - 12103,Sala 402,Atelier,ARQU,7,24.0
+C,Faculdade de Arquitetura - 12103,Sala 402,Atelier,DPRO,3,9.0
+C,Faculdade de Arquitetura - 12103,Sala 403,Atelier,ARQU,6,21.0
+C,Faculdade de Arquitetura - 12103,Sala 403,Atelier,DPRO,2,4.0
+C,Faculdade de Arquitetura - 12103,Sala 403,Atelier,DVIS,2,4.0
+C,Faculdade de Arquitetura - 12103,Sala 404,Atelier,ARQU,9,29.0
+C,Faculdade de Arquitetura - 12103,Sala 404,Atelier,DPRO,5,12.0
+C,Faculdade de Arquitetura - 12103,Sala 404,Atelier,DVIS,5,12.0
+C,Faculdade de Arquitetura - 12103,Sala 405,Atelier,ARQU,6,17.0
+C,Faculdade de Arquitetura - 12103,Sala 407,Sala de aula,ARQU,4,13.0
+C,Faculdade de Arquitetura - 12103,Sala 409,Atelier,ARQU,9,21.0
+C,Faculdade de Arquitetura - 12103,Sala 413,Sala de aula,ARQU,13,29.0
+C,Faculdade de Arquitetura - 12103,Sala 413,Sala de aula,DPRO,3,7.0
+C,Faculdade de Arquitetura - 12103,Sala 413,Sala de aula,DVIS,3,7.0
+C,Faculdade de Arquitetura - 12103,Sala 414,Atelier,ARQU,7,12.0
+C,Faculdade de Arquitetura - 12103,Sala 415,Sala de aula,ARQU,9,22.0
+C,Faculdade de Arquitetura - 12103,Sala 415,Sala de aula,DPRO,6,12.0
+C,Faculdade de Arquitetura - 12103,Sala 415,Sala de aula,DVIS,6,12.0
+C,Faculdade de Arquitetura - 12103,Sala 501,Atelier,ARQU,7,19.0
+C,Faculdade de Arquitetura - 12103,Sala 501,Atelier,DPRO,3,12.0
+C,Faculdade de Arquitetura - 12103,Sala 501,Atelier,DVIS,2,8.0
+C,Faculdade de Arquitetura - 12103,Sala 501,Atelier,ENGMEC,2,4.0
+C,Faculdade de Arquitetura - 12103,Sala 502,Atelier,ARQU,6,19.0
+C,Faculdade de Arquitetura - 12103,Sala 502,Atelier,DPRO,5,14.0
+C,Faculdade de Arquitetura - 12103,Sala 502,Atelier,DVIS,3,8.0
+C,Faculdade de Arquitetura - 12103,Sala 503,Atelier,ARQU,7,21.0
+C,Faculdade de Arquitetura - 12103,Sala 503,Atelier,DPRO,2,6.0
+C,Faculdade de Arquitetura - 12103,Sala 503,Atelier,DVIS,2,6.0
+C,Faculdade de Arquitetura - 12103,Sala 504,Atelier,ARQU,16,35.0
+C,Faculdade de Arquitetura - 12103,Sala 504,Atelier,DPRO,5,10.0
+C,Faculdade de Arquitetura - 12103,Sala 504,Atelier,DVIS,5,10.0

@@ -1,6 +1,6 @@
 # Reestruturação dos horários — Atividade 03
 
-Este documento descreve o que existe hoje na Atividade 03: a base de dados, as regras, o modelo de otimização e a Solução A. Será atualizado ao final de todas as fases.
+Este documento registra a implementação, os resultados validados e os limites conhecidos do fluxo de reorganização da Atividade 03.
 
 ## Estado das fases
 
@@ -10,9 +10,12 @@ Este documento descreve o que existe hoje na Atividade 03: a base de dados, as r
 | 4 | Regras executáveis e testes | Concluída (`restricoes_03.py`) |
 | 5 | Candidatos e modelo CP-SAT | Concluída (`candidatos_03.py`, `modelo_otimizacao_03.py`) |
 | 6 | Solução A — preservação | Concluída em modo fallback (ver abaixo) |
-| 7–8 | Soluções B e C | Não iniciadas |
-| 9 | Validação independente (`validar_solucao_03.py`) e comparação A/B/C | Não iniciada |
-| 10 | Entrega reproduzível e visualização comparativa | Parcial: a página Streamlit já exibe a Proposta A |
+| 7 | Solução B — equilíbrio | Proposta viável `FEASIBLE`; ótimo não comprovado |
+| 8 | Solução C — turnos | Concluída (`OPTIMAL`), com 1 exceção de turno |
+| 9 | Validação exportada A/B/C | Concluída: 0 violações duras novas |
+| 10 | Entrega reproduzível e visualização comparativa | Implementada; ambiente limpo ainda não verificado |
+
+**Validação atual:** fonte SHA-256 `5980965c9e96effa0d44f879551425e2f67f44b2c6b81cb7cc3e4fcd6a10c086`; 452 linhas e 289 encontros físicos. A, B e C não introduzem violações duras. As 3 violações duras do ANTES e as exceções de turno são reportadas separadamente.
 
 ## Base de dados
 
@@ -113,13 +116,36 @@ Arquivos em `saida_solucao_A/`: `solucao_A.csv` (20 colunas de origem mais `enco
 
 Com a H006 antiga (qualquer sobreposição de etapa proibida), capacidade de 110% e as capacidades originais, o modelo estrito era inviável (`INFEASIBLE`, 31,97 s; a grade original tinha 93 pares H006, 46 encontros acima de 110% e 1 no almoço). Os JSONs `diagnostico_*.json` e `status_execucao_A.json` anteriores em `saida_solucao_A/` registram essa investigação e não refletem o modelo atual. A viabilidade foi resolvida pela definição de H006 por turmas alternativas e pelas novas capacidades.
 
+## Solução B — equilíbrio (fase 7)
+
+`solucao_b_03.py` gerou `saida_solucao_B/candidato_B.csv` com status `FEASIBLE` em 2.572 s de um limite de 3.000 s. A proposta tem 178 encontros alterados e nenhuma violação dura nova. Não se declara ótimo: a candidata é uma proposta viável, sem prova de otimalidade.
+
+As métricas do objetivo de B, usando as mesmas turmas escolhidas pelo modelo, estão em `saida_solucao_B/candidato_B.md` e `.json`. A comparação independente também resume a oferta completa de cada etapa: desvio absoluto médio diário de etapas cai de 3,935 h no ANTES para 2,519 h em B; para docentes, de 1,487 h para 1,261 h. A oferta completa inclui turmas alternativas e não representa a carga de um estudante individual.
+
+## Solução C — turnos (fase 8)
+
+`saida_solucao_C/solucao_C.csv` tem status `OPTIMAL`, 68 encontros alterados e 1 exceção de turno. A CH no alvo, recalculada por turma acadêmica × encontro, é 772/777 h (99,36%) para ARQU, 217/219 h (99,09%) para DPRO e 208/210 h (99,05%) para DVIS.
+
+## Validação e comparação (fases 9–10)
+
+`validar_solucao_03.py` reconstrói a fonte, confere linhagem/colunas e valida os CSVs exportados de A/B/C; não lê estado interno do CP-SAT. Reutiliza as regras executáveis em `restricoes_03.py`, ou seja, é independente dos objetos e resultados internos do solver, mas não mantém uma segunda implementação das regras. Violações baseline são separadas das novas.
+
+Execute a partir da raiz:
+
+```powershell
+.venv/Scripts/python.exe entregas/atividade03/validar_solucao_03.py
+.venv/Scripts/python.exe -m unittest discover -s entregas/atividade03 -p "test_*.py"
+```
+
+A validação gera `validacao_A_B_C.md`, `comparacao_A_B_C.csv`, `excecoes_A_B_C.csv`, `ocupacao_salas_A_B_C.csv`, `ocupacao_salas_por_curso_A_B_C.csv`, `distribuicao_semanal_A_B_C.csv` e `equilibrio_semanal_A_B_C.csv`. CH é contada por turma acadêmica e encontro, sem multiplicar linhas de docentes. O gráfico de ocupação comparativa usa a mesma regra da página inicial: cada encontro físico conta uma vez por curso em cada sala, com barras empilhadas por curso. O total físico da sala continua separado; salas usadas no ANTES e vazias depois ficam marcadas como liberadas.
+
 ## Página Streamlit (`app_03.py`)
 
 Execução: `.venv/Scripts/python.exe -m streamlit run entregas/atividade03/app_03.py`.
 
 - **Agenda:** grade atual, com agenda interativa por sala, ocupação das salas nas plantas baixas (`PlantasBaixas.obj`; Plotly, passos de 30 min, cores por curso) e o item 6, uso dos cursos fora do turno-alvo.
-- **Proposta A:** lê `solucao_A.csv` (ou `saida_solucao_A/candidato_A.csv` se ainda não houver solução final) e mostra agenda por sala, plantas baixas e uso fora do turno-alvo.
-- **Propostas B e C:** ainda sem arquivo (`solucao_B.csv`, `solucao_C.csv`).
+- **Propostas A/B/C:** mostram agenda por sala, plantas baixas e métricas específicas; B carrega a candidata viável quando ainda não há arquivo final.
+- **Comparação A/B/C:** apresenta CH no alvo, turmas atendidas, mudanças, violações, uso/liberação de salas, distribuição semanal e exceções. Requer os relatórios gerados pelo validador.
 
 ## Testes
 
@@ -129,5 +155,6 @@ Execução: `.venv/Scripts/python.exe -m streamlit run entregas/atividade03/app_
 
 ## Pendências
 
-- Esclarecer a origem de `creditos` e a obrigatoriedade das disciplinas (hoje, tudo com etapa diferente de 0 é obrigatório).
-- Fases 7 a 10: Soluções B e C, `validar_solucao_03.py`, comparação A/B/C e visualizações.
+- B permanece `FEASIBLE`: não há prova de otimalidade; seu uso como proposta viável está sinalizado.
+- A origem de `creditos` e a obrigatoriedade das disciplinas não foram confirmadas externamente; operacionalmente, ofertas com etapa diferente de 0 são tratadas como obrigatórias.
+- O fluxo foi reproduzido no ambiente atual, mas ainda não em uma instalação limpa. Versões estão fixadas em `requirements_03.txt`.

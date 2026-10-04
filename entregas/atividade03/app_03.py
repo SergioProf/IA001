@@ -30,6 +30,12 @@ CAMINHO_SOLUCOES = {
     codigo: PASTA_APP / f"solucao_{codigo}.csv"
     for codigo in ("A", "B", "C")
 }
+CAMINHO_COMPARACAO = PASTA_APP / "comparacao_A_B_C.csv"
+CAMINHO_OCUPACAO_COMPARATIVA = PASTA_APP / "ocupacao_salas_A_B_C.csv"
+CAMINHO_OCUPACAO_CURSOS_COMPARATIVA = PASTA_APP / "ocupacao_salas_por_curso_A_B_C.csv"
+CAMINHO_DISTRIBUICAO_COMPARATIVA = PASTA_APP / "distribuicao_semanal_A_B_C.csv"
+CAMINHO_EQUILIBRIO_COMPARATIVO = PASTA_APP / "equilibrio_semanal_A_B_C.csv"
+CAMINHO_EXCECOES_COMPARATIVAS = PASTA_APP / "excecoes_A_B_C.csv"
 
 # Estas colunas identificam um encontro físico da disciplina. A coluna `curso`
 # fica fora da chave porque a mesma aula pode aparecer uma vez para cada curso
@@ -1705,6 +1711,112 @@ def pagina_proposta_c() -> None:
     )
 
 
+def pagina_comparacao() -> None:
+    st.title("Comparação A/B/C")
+    caminhos = (
+        CAMINHO_COMPARACAO,
+        CAMINHO_OCUPACAO_COMPARATIVA,
+        CAMINHO_OCUPACAO_CURSOS_COMPARATIVA,
+        CAMINHO_DISTRIBUICAO_COMPARATIVA,
+        CAMINHO_EQUILIBRIO_COMPARATIVO,
+    )
+    if not all(caminho.is_file() for caminho in caminhos):
+        st.warning("Execute `validar_solucao_03.py` para gerar os relatórios comparativos.")
+        return
+
+    comparacao = pd.read_csv(CAMINHO_COMPARACAO)
+    ocupacao = pd.read_csv(CAMINHO_OCUPACAO_COMPARATIVA)
+    ocupacao_cursos = pd.read_csv(CAMINHO_OCUPACAO_CURSOS_COMPARATIVA)
+    distribuicao = pd.read_csv(CAMINHO_DISTRIBUICAO_COMPARATIVA)
+    equilibrio = pd.read_csv(CAMINHO_EQUILIBRIO_COMPARATIVO)
+
+    st.subheader("Carga horária no turno-alvo")
+    figura_ch = px.bar(
+        comparacao,
+        x="curso",
+        y="percentual_turno_alvo",
+        color="solucao",
+        barmode="group",
+        category_orders={"solucao": ["ANTES", "A", "B", "C"]},
+        labels={"curso": "Curso", "percentual_turno_alvo": "% da CH no alvo", "solucao": "Grade"},
+        color_discrete_map={"ANTES": "#718096", "A": "#287C72", "B": "#D07A3E", "C": "#3478A5"},
+    )
+    figura_ch.update_layout(height=360, yaxis_range=[0, 110], margin={"t": 20, "b": 20})
+    st.plotly_chart(figura_ch, use_container_width=True)
+    st.dataframe(
+        comparacao[[
+            "solucao", "curso", "ch_total_horas", "ch_turno_alvo_horas",
+            "percentual_turno_alvo", "turmas_integralmente_no_alvo",
+            "encontros_alterados", "salas_alteradas", "dias_alterados", "horarios_alterados",
+            "violacoes_duras_novas", "excecoes_turno",
+        ]],
+        hide_index=True,
+        use_container_width=True,
+    )
+    if (comparacao["solucao"] == "B").any():
+        st.caption("B é viável, mas o solver não comprovou a otimalidade do equilíbrio.")
+
+    st.subheader("Ocupação das salas")
+    solucao_sala = st.selectbox("Grade", ["ANTES", "A", "B", "C"], key="comparacao_sala")
+    salas = ocupacao[ocupacao["solucao"] == solucao_sala].sort_values("horas_ocupadas", ascending=False)
+    cursos_sala = ocupacao_cursos[ocupacao_cursos["solucao"] == solucao_sala]
+    if not cursos_sala.empty:
+        ordem_salas = (
+            cursos_sala.groupby("sala")["horas_aula"].sum().sort_values().index.tolist()
+        )
+        figura_salas = px.bar(
+            cursos_sala,
+            x="horas_aula",
+            y="sala",
+            color="curso",
+            orientation="h",
+            barmode="stack",
+            category_orders={"sala": ordem_salas, "curso": ["ARQU", "DPRO", "DVIS", "CAGR", "ENGMEC"]},
+            labels={"horas_aula": "Horas-aula semanais", "sala": "Sala", "curso": "Curso"},
+            color_discrete_map={
+                "ARQU": "#d62728", "DPRO": "#1f77b4", "DVIS": "#2ca02c",
+                "CAGR": "#ff7f0e", "ENGMEC": "#8c564b",
+            },
+        )
+        figura_salas.update_layout(height=520, margin={"l": 20, "r": 20})
+        st.plotly_chart(figura_salas, use_container_width=True)
+    else:
+        st.info("Não há horas-aula por curso para esta grade.")
+    liberadas = salas[salas["situacao"] == "liberada"]
+    if not liberadas.empty:
+        st.dataframe(liberadas[["predio", "sala", "horas_ocupadas"]], hide_index=True, use_container_width=True)
+
+    st.subheader("Distribuição semanal")
+    col_grupo, col_grade = st.columns(2)
+    tipo_grupo = col_grupo.selectbox("Grupo", ["etapa_ofertas", "docente"], key="comparacao_grupo")
+    grade_distribuicao = col_grade.selectbox("Grade ", ["ANTES", "A", "B", "C"], key="comparacao_distribuicao")
+    carga = distribuicao[
+        (distribuicao["solucao"] == grade_distribuicao)
+        & (distribuicao["grupo_tipo"] == tipo_grupo)
+    ]
+    grupos = sorted(carga["grupo"].unique())
+    if grupos:
+        grupo = st.selectbox("Etapa ou docente", grupos, key="comparacao_grupo_id")
+        carga_grupo = carga[carga["grupo"] == grupo].sort_values("dia_semana", key=lambda serie: serie.map({dia: indice for indice, dia in enumerate(ORDEM_DIAS)}))
+        figura_carga = px.bar(
+            carga_grupo,
+            x="dia_semana",
+            y="horas",
+            labels={"dia_semana": "Dia", "horas": "Horas ofertadas"},
+            color_discrete_sequence=["#3478A5"],
+        )
+        figura_carga.update_layout(height=320, margin={"t": 20, "b": 20})
+        st.plotly_chart(figura_carga, use_container_width=True)
+    resumo_equilibrio = equilibrio[equilibrio["solucao"] == grade_distribuicao]
+    st.dataframe(resumo_equilibrio, hide_index=True, use_container_width=True)
+
+    if CAMINHO_EXCECOES_COMPARATIVAS.is_file():
+        excecoes = pd.read_csv(CAMINHO_EXCECOES_COMPARATIVAS)
+        if not excecoes.empty:
+            st.subheader("Exceções de turno")
+            st.dataframe(excecoes, hide_index=True, use_container_width=True)
+
+
 def main() -> None:
     st.set_page_config(
         page_title="Mapa de salas - Atividade 03",
@@ -1719,6 +1831,7 @@ def main() -> None:
             st.Page(pagina_proposta_a, title="Proposta A"),
             st.Page(pagina_proposta_b, title="Proposta B"),
             st.Page(pagina_proposta_c, title="Proposta C"),
+            st.Page(pagina_comparacao, title="Comparação A/B/C"),
         ],
         position="top",
     )
