@@ -1272,6 +1272,33 @@ def pagina_inicial() -> None:
     exibir_grafico_salas(dados_filtrados)
 
 
+# Turno fora do alvo de cada curso (alvo: ARQU manhã/noite; DPRO e DVIS tarde/noite).
+TURNO_FORA_ALVO = {
+    "ARQU": ("Arquitetura", "Tarde", (810, 1110)),
+    "DPRO": ("Design de Produto", "Manhã", (0, 750)),
+    "DVIS": ("Design Visual", "Manhã", (0, 750)),
+}
+
+
+def exibir_uso_fora_do_turno_alvo(dados: pd.DataFrame) -> None:
+    # Percentual da carga horária (minutos de relógio) de cada curso alocada
+    # no turno que não é o alvo dele.
+    encontros = dados.drop_duplicates(CHAVE_ENCONTRO_FISICO + ["curso"])
+    for sigla, (nome, turno, (ini, fim)) in TURNO_FORA_ALVO.items():
+        curso = encontros[encontros["curso"] == sigla]
+        total = (curso["fim_minutos"] - curso["inicio_minutos"]).sum()
+        fora = (
+            curso["fim_minutos"].clip(upper=fim) - curso["inicio_minutos"].clip(lower=ini)
+        ).clip(lower=0).sum()
+        percentual = 100 * fora / total if total else 0
+        st.markdown(
+            f'<span style="color:{COR_CURSO_PLANTA[sigla]}">&#9679;</span> '
+            f"**{nome}:** {percentual:.1f}% de carga horária alocada no "
+            f"turno da {turno.lower()}.",
+            unsafe_allow_html=True,
+        )
+
+
 def pagina_agenda() -> None:
     st.title("Agenda")
     st.write(
@@ -1288,6 +1315,9 @@ def pagina_agenda() -> None:
     exibir_agenda_sala(dados)
 
     exibir_animacao_plantas(dados)
+
+    st.subheader("6. Uso dos cursos fora do turno-alvo")
+    exibir_uso_fora_do_turno_alvo(dados)
 
 
 def carregar_proposta_para_pagina(codigo: str) -> pd.DataFrame | None:
