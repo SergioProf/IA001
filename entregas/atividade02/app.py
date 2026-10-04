@@ -233,14 +233,18 @@ def minutos_para_horario(minutos: int) -> str:
     return f"{horas:02d}:{minutos_resto:02d}"
 
 
-def horas_por_sala_e_tipo(dados: pd.DataFrame) -> pd.DataFrame:
-    # Soma horas físicas por sala e tipo de espaço para a terceira pergunta.
+def horas_por_sala_e_curso(dados: pd.DataFrame) -> pd.DataFrame:
+    # Soma as horas por sala e curso, contando cada encontro uma vez por curso.
 
+    encontros_por_curso = dados.drop_duplicates(
+        subset=CHAVE_ENCONTRO_FISICO + ["curso"]
+    )
     return (
-        dados.groupby(["sala", "tipo_sala"], as_index=False)["numero_periodos"]
+        encontros_por_curso.groupby(
+            ["sala", "tipo_sala", "curso"], as_index=False
+        )["numero_periodos"]
         .sum()
         .rename(columns={"numero_periodos": "horas_aula"})
-        .sort_values("horas_aula", ascending=True)
     )
 
 
@@ -457,48 +461,79 @@ def exibir_grafico_horario(dados_fisicos: pd.DataFrame) -> None:
     )
 
 
-def exibir_grafico_salas(dados_fisicos: pd.DataFrame) -> None:
-    # Gráfico 3: horas de ocupação por sala e tipo de espaço.
+def exibir_grafico_salas(dados: pd.DataFrame) -> None:
+    # Gráfico 3: horas de ocupação por sala e curso.
 
-    # Agrega as horas físicas por sala e tipo de espaço para comparar a
-    # utilização dos ambientes sem duplicar encontros compartilhados.
-    agregado = horas_por_sala_e_tipo(dados_fisicos)
+    agregado = horas_por_sala_e_curso(dados)
     if agregado.empty:
-        st.info("Não há dados para o gráfico de salas e tipos de espaço.")
+        st.info("Não há dados para o gráfico de ocupação das salas por curso.")
         return
 
-    # Usa barras horizontais para acomodar a lista de salas e seus rótulos.
-    figura, eixo = plt.subplots(figsize=(10, max(4, len(agregado) * 0.35)))
-    eixo.barh(
-        agregado["sala"],
-        agregado["horas_aula"],
-        color="#2f6690",
-    )
-    eixo.set_title("Horas de ocupação por sala")
+    tabela = agregado.pivot(
+        index="sala", columns="curso", values="horas_aula"
+    ).fillna(0)
+    tabela["total"] = tabela.sum(axis=1)
+    tabela = tabela.sort_values("total", ascending=True)
+    cursos_existentes = set(agregado["curso"].unique())
+    cursos_prioritarios = ["ARQU", "DPRO", "DVIS"]
+    cursos = [curso for curso in cursos_prioritarios if curso in cursos_existentes]
+    cursos.extend(sorted(cursos_existentes.difference(cursos_prioritarios)))
+    tipos_por_sala = agregado.drop_duplicates("sala").set_index("sala")["tipo_sala"]
+    maior_total = tabela["total"].max()
+
+    figura, eixo = plt.subplots(figsize=(10, max(3, len(tabela) * 0.25)))
+    inicio_faixa = pd.Series(0.0, index=tabela.index)
+    cores_cursos = {
+        "ARQU": "#d62728",
+        "DPRO": "#1f77b4",
+        "DVIS": "#2ca02c",
+    }
+    cores_outros = iter(plt.get_cmap("tab20").colors)
+    for indice, curso in enumerate(cursos):
+        horas = tabela[curso]
+        cor = cores_cursos.get(curso)
+        if cor is None:
+            cor = next(cores_outros, "#7f7f7f")
+        eixo.barh(
+            tabela.index,
+            horas,
+            left=inicio_faixa,
+            height=0.45,
+            color=cor,
+            label=ROTULOS_CURSO.get(curso, curso),
+        )
+        inicio_faixa += horas
+
+    eixo.set_title("Horas de ocupação por sala e curso")
     eixo.set_xlabel("Horas-aula")
     eixo.set_ylabel("Sala")
     eixo.grid(axis="x", linestyle="--", alpha=0.35)
+    eixo.set_axisbelow(True)
+    eixo.set_yticks(
+        range(len(tabela)),
+        labels=[str(sala).removeprefix("Sala ") for sala in tabela.index],
+    )
+    eixo.set_xlim(right=maior_total + max(maior_total * 0.25, 1))
 
-    # O tipo do espaço é escrito ao lado da barra para manter a visualização
-    # legível mesmo quando o usuário seleciona muitas salas.
-    maior_valor = agregado["horas_aula"].max()
-    for indice, (_, linha) in enumerate(agregado.iterrows()):
+    for indice, sala in enumerate(tabela.index):
         eixo.text(
-            linha["horas_aula"] + maior_valor * 0.01,
+            tabela.at[sala, "total"] + maior_total * 0.01,
             indice,
-            linha["tipo_sala"],
+            tipos_por_sala[sala],
             va="center",
             fontsize=8,
         )
+    eixo.legend(title="Curso", loc="best", fontsize=8)
 
     # Ajusta os espaços, exibe a figura no Streamlit e libera o objeto Matplotlib.
     figura.tight_layout()
     st.pyplot(figura)
     plt.close(figura)
     st.caption(
-        "As horas são calculadas sobre encontros físicos "
-        "deduplicados; por isso, turmas que compartilham uma sala não inflacionam "
-        "o total do espaço. Biblioteca: Matplotlib. "
+        "Cada segmento representa as horas registradas para um curso. "
+        "Encontros compartilhados podem ser contabilizados em mais de um curso, "
+        "portanto a soma dos segmentos não representa a ocupação física exclusiva. "
+        "Biblioteca: Matplotlib."
     )
 
 
@@ -704,11 +739,10 @@ def main() -> None:
         "mostra as horas de ocupação física por dia e período horário."
     )
     st.markdown(
-        "**3. Como as diferentes salas e tipos de espaço são utilizados ao "
-        "longo da semana?**  \n"
-        "**Configuração:** use `Tipo de espaço`, `Sala` e `Dia da semana`. "
-        "O gráfico **Utilização das salas e tipos de espaço** compara as "
-        "horas-aula por sala, usando encontros físicos deduplicados."
+        "**3. Como cada curso ocupa as diferentes salas ao longo da semana?**  \n"
+        "**Configuração:** use `Curso`, `Sala` e `Dia da semana`. "
+        "O gráfico **Ocupação das salas por curso** compara as horas-aula "
+        "registradas para cada curso em cada sala."
     )
     st.subheader("Perguntas não atendidas nesta entrega")
     st.markdown(
@@ -780,8 +814,8 @@ def main() -> None:
     st.subheader("2. Ocupação ao longo do horário")
     exibir_grafico_horario(dados_fisicos)
 
-    st.subheader("3. Utilização das salas e tipos de espaço")
-    exibir_grafico_salas(dados_fisicos)
+    st.subheader("3. Ocupação das salas por curso")
+    exibir_grafico_salas(dados_filtrados)
 
     st.subheader("4. Agenda interativa por sala")
     exibir_agenda_sala(dados_filtrados)
