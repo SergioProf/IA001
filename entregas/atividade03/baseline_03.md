@@ -551,5 +551,5 @@ Encontros que cruzam o almoço: 1; horas não atribuídas a turno: 1.00.
 ## Limites
 
 - Sala sem aula no CSV não prova disponibilidade externa à grade registrada.
-- `etapa` e `creditos` são usados como registrados; a origem permanece não confirmada na auditoria de linhagem.
+- `etapa` é conferida com as etapas/caráteres de `dadosBrutos/curriculos.xlsx`; 119 códigos obrigatórios coincidem, `ARQ01098` é uma alternativa codificada como 0, e 36 ofertas com etapa 0 não constam no currículo específico do curso. A origem e a regra de associação de `creditos` permanecem pendentes.
 - Divergências nos campos de vagas são reportadas, não corrigidas automaticamente.

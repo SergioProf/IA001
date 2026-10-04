@@ -133,6 +133,33 @@ def construir_modelo_cp_sat(
 ) -> ModeloCPsat:
     """Cria um problema de viabilidade; objetivos são adicionados nas fases A/B/C."""
 
+    return _construir_modelo_cp_sat(ocupacao, dominios, frozenset())
+
+
+def construir_modelo_cp_sat_diagnostico(
+    ocupacao: ModeloOcupacao,
+    dominios: dict[str, tuple[Candidato, ...]],
+    recurso_ignorado: str,
+) -> ModeloCPsat:
+    """Cria modelo diagnóstico sem uma categoria de conflito entre móveis.
+
+    Uso restrito à investigação de inviabilidade; nunca use este modelo para
+    exportar ou validar uma grade candidata.
+    """
+
+    recursos_validos = {"sala", "docente", "etapa"}
+    if recurso_ignorado not in recursos_validos:
+        raise ValueError(f"Recurso diagnóstico inválido: {recurso_ignorado!r}.")
+    return _construir_modelo_cp_sat(ocupacao, dominios, frozenset({recurso_ignorado}))
+
+
+def _construir_modelo_cp_sat(
+    ocupacao: ModeloOcupacao,
+    dominios: dict[str, tuple[Candidato, ...]],
+    recursos_ignorados: frozenset[str],
+) -> ModeloCPsat:
+    """Implementação comum do modelo, opcionalmente relaxada para diagnóstico."""
+
     _validar_dominios(ocupacao, dominios)
     linhas = _linhas_por_encontro(ocupacao)
     encontros = {encontro.id: encontro for encontro in ocupacao.encontros_fisicos}
@@ -178,8 +205,8 @@ def construir_modelo_cp_sat(
         modelo.add_exactly_one([variavel for _, variavel in escolhas])
         variaveis[encontro_id] = tuple(escolhas)
 
-    for selecoes in grupos_recursos.values():
-        if len(selecoes) > 1:
+    for chave_recurso, selecoes in grupos_recursos.items():
+        if chave_recurso[0] not in recursos_ignorados and len(selecoes) > 1:
             modelo.add_at_most_one(selecoes)
 
     validacao = modelo.validate()
@@ -210,12 +237,11 @@ def resolver_viabilidade(modelagem: ModeloCPsat, limite_segundos: float = 30.0) 
     return status, solucao
 
 
-def resolver_solucao_a(
+def adicionar_objetivo_solucao_a(
     ocupacao: ModeloOcupacao,
     modelagem: ModeloCPsat,
-    limite_segundos: float = 300.0,
-) -> tuple[int, dict[str, Candidato], dict[str, Any]]:
-    """Maximiza lexicograficamente a preservação da grade para a Solução A."""
+) -> None:
+    """Adiciona o objetivo lexicográfico de preservação ao modelo CP-SAT."""
 
     encontros = {encontro.id: encontro for encontro in ocupacao.encontros_fisicos}
     linhas = _linhas_por_encontro(ocupacao)
@@ -347,6 +373,15 @@ def resolver_solucao_a(
     if validacao:
         raise ValueError(f"Modelo CP-SAT inválido para a Solução A: {validacao}")
 
+
+def resolver_solucao_a(
+    ocupacao: ModeloOcupacao,
+    modelagem: ModeloCPsat,
+    limite_segundos: float = 300.0,
+) -> tuple[int, dict[str, Candidato], dict[str, Any]]:
+    """Maximiza lexicograficamente a preservação da grade para a Solução A."""
+
+    adicionar_objetivo_solucao_a(ocupacao, modelagem)
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = limite_segundos
     solver.parameters.num_search_workers = 1

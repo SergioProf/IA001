@@ -1,0 +1,54 @@
+{
+  "type": "diagnostic_relax_one_mobile_resource_at_a_time",
+  "source": "mapa_salas_tidy_03.csv",
+  "source_sha256": "6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2f3ab5e0",
+  "source_unchanged": true,
+  "domains": {
+    "encontros_moveis": 285,
+    "candidatos_totais": 155133,
+    "dominios_vazios": 0,
+    "menor_dominio": 31,
+    "maior_dominio": 1255,
+    "dominio_medio": 544.33
+  },
+  "solver_limit_per_variant_seconds": 25,
+  "results": [
+    {
+      "resource_constraint_omitted": "sala",
+      "status": "INFEASIBLE",
+      "status_code": 3,
+      "feasible_assignments_found": false,
+      "build_seconds": 2.984,
+      "solve_seconds": 2.476,
+      "workers": 8,
+      "model_variables": 155133,
+      "model_constraints": 21279,
+      "response_stats": "CpSolverResponse summary:\nstatus: INFEASIBLE\nobjective: NA\nbest_bound: NA\nintegers: 9261\nbooleans: 7683\nconflicts: 0\nbranches: 15366\npropagations: 412386\ninteger_propagations: 429361\nrestarts: 0\nlp_iterations: 181\nwalltime: 2.47\nusertime: 2.47\ndeterministic_time: 1.18386\ngap_integral: 0\n"
+    },
+    {
+      "resource_constraint_omitted": "docente",
+      "status": "UNKNOWN",
+      "status_code": 0,
+      "feasible_assignments_found": false,
+      "build_seconds": 3.164,
+      "solve_seconds": 25.571,
+      "workers": 8,
+      "model_variables": 155133,
+      "model_constraints": 7265,
+      "response_stats": "CpSolverResponse summary:\nstatus: UNKNOWN\nobjective: 0\nbest_bound: 0\nintegers: 147328\nbooleans: 120480\nconflicts: 0\nbranches: 382496\npropagations: 17105580\ninteger_propagations: 18395150\nrestarts: 0\nlp_iterations: 3029\nwalltime: 25.5595\nusertime: 25.5595\ndeterministic_time: 100.049\ngap_integral: 0\n"
+    },
+    {
+      "resource_constraint_omitted": "etapa",
+      "status": "OPTIMAL",
+      "status_code": 4,
+      "feasible_assignments_found": true,
+      "build_seconds": 3.266,
+      "solve_seconds": 15.96,
+      "workers": 8,
+      "model_variables": 155133,
+      "model_constraints": 20699,
+      "response_stats": "CpSolverResponse summary:\nstatus: OPTIMAL\nobjective: 0\nbest_bound: 0\nintegers: 0\nbooleans: 119702\nconflicts: 0\nbranches: 21160\npropagations: 10393036\ninteger_propagations: 0\nrestarts: 0\nlp_iterations: 0\nwalltime: 15.9272\nusertime: 15.9272\ndeterministic_time: 14.009\ngap_integral: 0\nsolution_fingerprint: 0x4ac042856c39b896\n"
+    }
+  ],
+  "warning": "Diagnostic relaxations are not valid schedules and must not be exported."
+}

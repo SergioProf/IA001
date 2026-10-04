@@ -1,0 +1,111 @@
+{
+  "source_sha256": "6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2f3ab5e0",
+  "source_unchanged": true,
+  "status_without_stage_conflicts": "OPTIMAL",
+  "solve_seconds": 16.065,
+  "diagnostics_by_rule_severity": {
+    "H006/baseline": 4,
+    "H006/inviolavel": 75,
+    "H010/excecao": 104
+  },
+  "stage_conflict_examples": [
+    {
+      "rule": "H006",
+      "message": "Encontros EV-012c030554394718 e EV-4d2669be6404eaf1 conflitam para DVIS/etapa 3.",
+      "events": [
+        "EV-012c030554394718",
+        "EV-4d2669be6404eaf1"
+      ]
+    },
+    {
+      "rule": "H006",
+      "message": "Encontros EV-07d07ac7ee470f92 e EV-6b279518bd43c339 conflitam para ARQU/etapa 5.",
+      "events": [
+        "EV-07d07ac7ee470f92",
+        "EV-6b279518bd43c339"
+      ]
+    },
+    {
+      "rule": "H006",
+      "message": "Encontros EV-07f22a32771ab205 e EV-240dc9f311caf6a0 conflitam para ARQU/etapa 8.",
+      "events": [
+        "EV-07f22a32771ab205",
+        "EV-240dc9f311caf6a0"
+      ]
+    },
+    {
+      "rule": "H006",
+      "message": "Encontros EV-0bff37f493a8def6 e EV-878c1db5237a3f7f conflitam para ARQU/etapa 8.",
+      "events": [
+        "EV-0bff37f493a8def6",
+        "EV-878c1db5237a3f7f"
+      ]
+    },
+    {
+      "rule": "H006",
+      "message": "Encontros EV-0dc8360acc1cca47 e EV-8f8fd8f31d240e90 conflitam para ARQU/etapa 6.",
+      "events": [
+        "EV-0dc8360acc1cca47",
+        "EV-8f8fd8f31d240e90"
+      ]
+    },
+    {
+      "rule": "H006",
+      "message": "Encontros EV-1043e9daf09f5d56 e EV-11bb4409d9029e28 conflitam para ARQU/etapa 2.",
+      "events": [
+        "EV-1043e9daf09f5d56",
+        "EV-11bb4409d9029e28"
+      ]
+    },
+    {
+      "rule": "H006",
+      "message": "Encontros EV-1043e9daf09f5d56 e EV-8a82d85d493676e8 conflitam para ARQU/etapa 2.",
+      "events": [
+        "EV-1043e9daf09f5d56",
+        "EV-8a82d85d493676e8"
+      ]
+    },
+    {
+      "rule": "H006",
+      "message": "Encontros EV-10d0d2e56377312a e EV-836b4818dbe5c0ba conflitam para ARQU/etapa 3.",
+      "events": [
+        "EV-10d0d2e56377312a",
+        "EV-836b4818dbe5c0ba"
+      ]
+    },
+    {
+      "rule": "H006",
+      "message": "Encontros EV-10d0d2e56377312a e EV-8371321b16bca952 conflitam para ARQU/etapa 3.",
+      "events": [
+        "EV-10d0d2e56377312a",
+        "EV-8371321b16bca952"
+      ]
+    },
+    {
+      "rule": "H006",
+      "message": "Encontros EV-10d0d2e56377312a e EV-af458b1d1445cf38 conflitam para ARQU/etapa 3.",
+      "events": [
+        "EV-10d0d2e56377312a",
+        "EV-af458b1d1445cf38"
+      ]
+    },
+    {
+      "rule": "H006",
+      "message": "Encontros EV-11bb4409d9029e28 e EV-8a82d85d493676e8 conflitam para ARQU/etapa 2.",
+      "events": [
+        "EV-11bb4409d9029e28",
+        "EV-8a82d85d493676e8"
+      ]
+    },
+    {
+      "rule": "H006",
+      "message": "Encontros EV-11ea73b67b3b1bd5 e EV-23a8b8d5c65791e1 conflitam para ARQU/etapa 2.",
+      "events": [
+        "EV-11ea73b67b3b1bd5",
+        "EV-23a8b8d5c65791e1"
+      ]
+    }
+  ],
+  "non_stage_blocking_diagnostics": [],
+  "allocations_exported": false
+}

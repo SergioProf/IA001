@@ -23,7 +23,7 @@ O arquivo `entregas/atividade03/mapa_salas_tidy_03.csv` contém 452 registros e 
 | Agenda | `dia_semana`, `hora_inicio`, `hora_fim`, `numero_periodos` |
 | Vagas e compartilhamento | `vagas_turma`, `vagas_oferecidas`, `vagas_totais_compartilhadas`, `turmas_compartilhando_sala` |
 
-As sete colunas numéricas do CSV são `capacidade_sala`, `vagas_turma`, `numero_periodos`, `vagas_oferecidas`, `vagas_totais_compartilhadas`, `etapa` e `creditos`; as outras 13 são texto. `etapa` e `creditos` não são produzidos pelo script histórico, e sua fonte e chave de associação não foram confirmadas. A relação semântica entre `capacidade_sala` e `vagas_turma` também não está confirmada; não trate esses campos como equivalentes. O significado de `etapa = 0` está documentado para as regras desta atividade como eletiva, mas a linhagem do valor na base continua pendente.
+As sete colunas numéricas do CSV são `capacidade_sala`, `vagas_turma`, `numero_periodos`, `vagas_oferecidas`, `vagas_totais_compartilhadas`, `etapa` e `creditos`; as outras 13 são texto. `etapa` não é produzida pelo script histórico; sua associação foi conferida contra `dadosBrutos/curriculos.xlsx`, planilha `Sheet1`. O workbook organiza três cursos em blocos com seções `Etapa 1`–`Etapa 10` e linhas `Código`/`Caráter`: 119 códigos obrigatórios coincidem por curso/código com a etapa do CSV; `ARQ01098` consta como `Alternativa` na Etapa 10 e aparece com `etapa=0`; outros 36 códigos etapa 0 não constam do currículo específico do curso. Não foram encontradas outras divergências nos códigos cobertos. O CSV da raiz coincide com o 03 nas 278 chaves acadêmicas para `etapa` e `creditos`, mas isso não é confirmação independente. A origem e a regra de associação de `creditos` continuam pendentes. A relação semântica entre `capacidade_sala` e `vagas_turma` também não está confirmada; não trate esses campos como equivalentes.
 
 ## Ajustes posteriores à transformação
 
@@ -55,7 +55,7 @@ As preferências `P01`–`P05` ficam separadas das restrições duras. `classifi
 Execute os testes a partir da raiz do workspace:
 
 ```powershell
-python -m unittest discover -s entregas/atividade03 -p "test_*.py"
+.venv/Scripts/python.exe -m unittest discover -s entregas/atividade03 -p "test_*.py"
 ```
 
 As regras da fase 4 validam propostas, mas não reorganizam a grade nem produzem soluções A/B/C.
@@ -72,7 +72,7 @@ A fonte contém 289 encontros físicos: 285 móveis e 4 que permanecem fixos por
 
 `modelo_otimizacao_03.py` constrói e valida o modelo CP-SAT: exatamente uma alocação por encontro móvel e não sobreposição por sala, docente e etapa obrigatória. As ocupações externas fixas são retiradas dos domínios; a construção também rejeita colisões com elas. `resolver_viabilidade` permanece disponível para testes mínimos e distingue `INFEASIBLE`, `UNKNOWN`, `FEASIBLE` e `OPTIMAL`.
 
-Validar domínios e modelo com `python -m unittest discover -s entregas/atividade03 -p "test_candidatos_03.py" -v`. Inspecionar a dimensão dos domínios com `python entregas/atividade03/candidatos_03.py`. A construção do modelo não executa o problema real, não seleciona uma grade e não grava soluções.
+Validar domínios e modelo com `.venv/Scripts/python.exe -m unittest discover -s entregas/atividade03 -p "test_candidatos_03.py" -v`. Inspecionar a dimensão dos domínios com `.venv/Scripts/python.exe entregas/atividade03/candidatos_03.py`. A construção do modelo não executa o solver, não seleciona uma grade e não grava soluções.
 
 ## Solução A — preservação, fase 6
 
@@ -81,12 +81,29 @@ Validar domínios e modelo com `python -m unittest discover -s entregas/atividad
 Execute com o ambiente do projeto:
 
 ```powershell
-python entregas/atividade03/solucao_a_03.py --limite-segundos 300
+.venv/Scripts/python.exe entregas/atividade03/solucao_a_03.py --preflight
+.venv/Scripts/python.exe entregas/atividade03/solucao_a_03.py --limite-segundos 300
 ```
 
-O comando lê `mapa_salas_tidy_03.csv` sem sobrescrevê-lo. Com `OPTIMAL` e sem violações invioláveis novas, grava `solucao_A.csv` (20 colunas de origem mais colunas de auditoria), `solucao_A.json` (alocações, mudanças, exceções, diagnósticos e métricas) e `solucao_A.md` (resumo). Com `FEASIBLE`, grava `candidato_A.csv`, `candidato_A.json` e `candidato_A.md`; são artefatos provisórios, não o aceite da fase. Ambos os CSVs registram o status do solver. Use `--entrada` e `--saida-dir` para caminhos alternativos. O limite de tempo é configurável.
+`--preflight` lê `mapa_salas_tidy_03.csv`, gera os domínios, constrói e valida o modelo completo da Solução A, e imprime um relatório JSON com hash, dimensões, tempos e pico de alocações Python. Não chama o solver nem cria arquivos de solução. A medição `tracemalloc` não inclui memória nativa do OR-Tools.
+
+**Preflight da fonte canônica — 2026-10-03:** status `VALIDO`; SHA-256 `6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2f3ab5e0`, inalterado. Foram confirmados 452 linhas, 289 encontros físicos (285 móveis, 4 fixos), 155.133 candidatos e nenhum domínio vazio (mínimo 31, máximo 1.255). O modelo completo, já com o objetivo A, contém 156.789 variáveis, 27.791 restrições e granularidade de 30 minutos. O preflight levou 37,39 s no ambiente medido (0,151 s de carga, 6,832 s de domínios e 30,407 s de modelo); o pico rastreado de alocações Python foi 101.812.273 bytes, sem incluir memória nativa do OR-Tools. Nenhuma busca CP-SAT foi iniciada.
+
+O comando de otimização lê a mesma fonte sem sobrescrevê-la. Toda tentativa grava `status_execucao_A.json` na pasta de saída com o status CP-SAT, o hash da fonte, o limite e se uma alocação foi encontrada, inclusive quando o solver retorna `UNKNOWN` ou `INFEASIBLE`. Com `OPTIMAL` e sem violações invioláveis novas, grava `solucao_A.csv` (20 colunas de origem mais colunas de auditoria), `solucao_A.json` (alocações, mudanças, exceções, diagnósticos e métricas) e `solucao_A.md` (resumo). Com `FEASIBLE`, grava `candidato_A.csv`, `candidato_A.json` e `candidato_A.md`; são artefatos provisórios, não o aceite da fase. Ambos os CSVs registram o status do solver. Use `--entrada` e `--saida-dir` para caminhos alternativos. O limite de tempo é configurável.
 
 `OPTIMAL` significa que o CP-SAT provou o ótimo do objetivo; `FEASIBLE` significa que encontrou uma alocação válida, mas não provou o ótimo; `INFEASIBLE` indica inviabilidade provada; `UNKNOWN` indica que não houve prova nem solução dentro do limite. `INFEASIBLE` e `UNKNOWN` não geram arquivos. Exceções de turno incluem os minutos fora do alvo e uma justificativa; o CP-SAT não atribui uma causa impeditiva individual para cada exceção. A validação usa `validar_grade` após reconstruir a proposta a partir das alocações e bloqueia a exportação quando encontra violações invioláveis novas.
+
+### Diagnóstico de viabilidade — 2026-10-03
+
+O modelo-base sem objetivo A foi executado com oito workers e provou `INFEASIBLE` em 31,97 s. A mesma busca com um worker e limite de 60 s retornou `UNKNOWN`; essa diferença reforça que `UNKNOWN` sozinho não é prova de inviabilidade. A fonte permaneceu com o SHA-256 registrado acima; os 285 encontros móveis têm candidatos (155.133 no total) e nenhum domínio vazio.
+
+Para localizar a restrição associada, foram construídas variantes exclusivamente diagnósticas que omitem uma categoria de conflito entre encontros móveis por vez. Omitir sala continuou `INFEASIBLE` em 2,48 s; omitir docente retornou `UNKNOWN` no limite de 25 s; omitir etapa produziu `OPTIMAL` em 15,96 s. Essa alocação diagnóstica apresentou 75 violações H006 novas, além de 4 já classificadas como baseline, e nenhuma outra violação dura nova. Portanto, não é uma solução utilizável e não foi exportada como grade.
+
+Também foi testada uma ampliação que mantém durações existentes e combina cada uma com todos os inícios observados no CSV, excluindo almoço e encerramentos após 24:00. O domínio cresceu para 219.665 candidatos, sem encontros sem opções, mas o modelo estrito com H006 continuou `INFEASIBLE` (47,66 s, oito workers). O resultado está em `saida_solucao_A/diagnostico_inicios_observados_A.json`; a variante não foi adotada como produção.
+
+Os relatórios reproduzíveis estão em `saida_solucao_A/diagnostico_viabilidade_A.json`, `diagnostico_viabilidade_paralela_A.json`, `diagnostico_recursos_A.json` e `diagnostico_conflitos_etapa_A.json`. `construir_modelo_cp_sat_diagnostico` em `modelo_otimizacao_03.py` serve somente para esse teste de sensibilidade; modelos relaxados não devem ser usados para gerar ou validar entregas.
+
+**Conclusão operacional:** a Solução A não tem grade viável com H006 e os inícios observados, mesmo combinados com todas as durações existentes. A etapa foi conferida contra `curriculos.xlsx`; a pendência de `creditos` não explica o conflito H006. B/C também não devem ser executadas sobre o mesmo modelo inviável. Para continuar, é necessária uma decisão de escopo: autorizar inícios que não aparecem no CSV ou revisar formalmente a regra H006/exceções. Até haver autorização, não gerar horários arbitrários, não relaxar H006 e manter a fonte intacta.
 
 ## Ocupação nas plantas baixas
 

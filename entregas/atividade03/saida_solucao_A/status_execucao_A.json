@@ -1,0 +1,9 @@
+{
+  "entrada": "mapa_salas_tidy_03.csv",
+  "sha256_fonte": "6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2f3ab5e0",
+  "status_solver": "UNKNOWN",
+  "status_codigo": 0,
+  "solucao_encontrada": false,
+  "limite_segundos": 300.0,
+  "violacoes_bloqueantes": []
+}

@@ -1,4 +1,7 @@
+import contextlib
 import csv
+import io
+import hashlib
 import json
 import tempfile
 import unittest
@@ -9,7 +12,7 @@ from candidatos_03 import Candidato
 from modelo_ocupacao_03 import normalizar_registros
 from modelo_otimizacao_03 import construir_modelo_cp_sat, resolver_solucao_a
 from ortools.sat.python import cp_model
-from solucao_a_03 import calcular_solucao_a, exportar_solucao_a
+from solucao_a_03 import calcular_solucao_a, exportar_solucao_a, main, preflight_solucao_a
 from test_restricoes_03 import CABECALHO, linha
 from restricoes_03 import classificar_preservacao
 
@@ -28,6 +31,55 @@ def _candidato(encontro, *, sala=None, dia=None, inicio=None, fim=None):
 
 
 class TestSolucaoA(unittest.TestCase):
+    def test_cli_persiste_status_unknown_sem_gerar_grade(self):
+        resultado = {
+            "solver": {"status": "UNKNOWN"},
+            "status_codigo": cp_model.UNKNOWN,
+            "alocacoes": {},
+            "violacoes_bloqueantes": [],
+        }
+        with tempfile.TemporaryDirectory() as diretorio:
+            saida = Path(diretorio) / "isolada"
+            argumentos = ["solucao_a_03.py", "--saida-dir", str(saida)]
+            with patch("sys.argv", argumentos), patch("solucao_a_03.calcular_solucao_a", return_value=resultado):
+                with contextlib.redirect_stdout(io.StringIO()):
+                    codigo_saida = main()
+
+            status_path = saida / "status_execucao_A.json"
+            status = json.loads(status_path.read_text(encoding="utf-8"))
+            self.assertEqual(codigo_saida, 2)
+            self.assertEqual(status["status_solver"], "UNKNOWN")
+            self.assertFalse(status["solucao_encontrada"])
+            self.assertFalse(list(saida.glob("solucao_A.*")))
+            self.assertFalse(list(saida.glob("candidato_A.*")))
+
+    def test_preflight_inspeciona_modelo_sem_resolver_nem_exportar(self):
+        with tempfile.TemporaryDirectory() as diretorio:
+            pasta = Path(diretorio)
+            fonte = pasta / "mapa_salas_tidy_03.csv"
+            registro = linha("ARQ001")
+            with fonte.open("w", encoding="utf-8", newline="") as arquivo:
+                escritor = csv.DictWriter(arquivo, fieldnames=CABECALHO)
+                escritor.writeheader()
+                escritor.writerow(registro)
+            hash_fonte = hashlib.sha256(fonte.read_bytes()).hexdigest()
+
+            with patch("solucao_a_03.resolver_solucao_a", side_effect=AssertionError("solver chamado")):
+                relatorio = preflight_solucao_a(fonte)
+
+            self.assertEqual(relatorio["sha256_fonte"], hash_fonte)
+            self.assertEqual(relatorio["resumo_ocupacao"]["encontros_fisicos"], 1)
+            self.assertEqual(relatorio["dominios"]["dominios_vazios"], 0)
+            self.assertEqual(relatorio["modelo"]["status"], "VALIDO")
+            self.assertGreater(
+                relatorio["modelo"]["variaveis"],
+                relatorio["dominios"]["candidatos_totais"],
+            )
+            self.assertFalse(relatorio["solver_executado"])
+            self.assertGreaterEqual(relatorio["memoria"]["pico_python_bytes"], 0)
+            self.assertEqual(hashlib.sha256(fonte.read_bytes()).hexdigest(), hash_fonte)
+            self.assertEqual(list(pasta.glob("solucao_A.*")), [])
+
     def test_excecao_de_turno_fora_do_alvo_e_rastreada_sem_bloquear(self):
         ocupacao = normalizar_registros(CABECALHO, [
             linha("ARQ001", inicio="14:00", fim="15:00"),

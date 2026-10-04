@@ -2,7 +2,11 @@ import unittest
 
 from candidatos_03 import alocacoes_fixos, gerar_candidatos, resumir_dominios
 from candidatos_03 import Candidato
-from modelo_otimizacao_03 import construir_modelo_cp_sat, resolver_viabilidade
+from modelo_otimizacao_03 import (
+    construir_modelo_cp_sat,
+    construir_modelo_cp_sat_diagnostico,
+    resolver_viabilidade,
+)
 from ortools.sat.python import cp_model
 from test_restricoes_03 import linha, modelo
 
@@ -24,6 +28,45 @@ class TestCandidatos(unittest.TestCase):
                 self.assertIn(candidato.dia_semana, {
                     "SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA"
                 })
+
+    def test_diagnostico_combina_inicio_observado_com_duracao_existente(self):
+        grade = modelo(
+            linha("ARQ001", inicio="09:00", fim="10:00"),
+            linha("ARQ002", inicio="10:00", fim="12:00", docente="Prof02"),
+        )
+        encontro = next(
+            item for item in grade.encontros_fisicos
+            if item.atributos_fisicos["codigo_disciplina"] == "ARQ001"
+        )
+        original = gerar_candidatos(grade)[encontro.id]
+        expandido = gerar_candidatos(grade, combinar_inicios_observados=True)[encontro.id]
+        posicoes_originais = {(item.hora_inicio, item.hora_fim) for item in original}
+        posicoes_expandidas = {(item.hora_inicio, item.hora_fim) for item in expandido}
+
+        self.assertIn(("10:00", "11:00"), posicoes_expandidas)
+        self.assertNotIn(("10:00", "11:00"), posicoes_originais)
+        for candidato in expandido:
+            self.assertEqual(candidato.hora_fim, "10:00" if candidato.hora_inicio == "09:00" else "11:00")
+            self.assertNotEqual((candidato.hora_inicio, candidato.hora_fim), ("12:00", "13:00"))
+
+    def test_grade_horaria_usa_somente_inicios_hh30_e_preserva_limites(self):
+        grade = modelo(
+            linha("ARQ001", inicio="09:30", fim="10:30"),
+            linha("ARQ002", inicio="13:30", fim="14:30", docente="Prof02"),
+        )
+        encontro = next(
+            item for item in grade.encontros_fisicos
+            if item.atributos_fisicos["codigo_disciplina"] == "ARQ001"
+        )
+        candidatos = gerar_candidatos(grade, usar_grade_horaria_meia_hora=True)[encontro.id]
+
+        self.assertTrue(candidatos)
+        self.assertTrue(all(candidato.hora_inicio.endswith(":30") for candidato in candidatos))
+        self.assertIn(("11:30", "12:30"), {
+            (candidato.hora_inicio, candidato.hora_fim) for candidato in candidatos
+        })
+        self.assertFalse(any(candidato.hora_inicio == "12:30" for candidato in candidatos))
+        self.assertTrue(all(candidato.hora_fim <= "14:30" for candidato in candidatos))
 
     def test_encontros_externos_ficam_fixos_e_bloqueiam_sala(self):
         grade = modelo(
@@ -110,7 +153,7 @@ class TestCandidatos(unittest.TestCase):
     def test_modelo_cp_sat_impede_sobreposicao_de_sala(self):
         grade = modelo(
             linha("ARQ001", sala="S1", docente="Prof01"),
-            linha("ARQ002", sala="S2", docente="Prof02"),
+            linha("ARQ002", sala="S2", docente="Prof02", etapa="2"),
         )
         primeiro, segundo = grade.encontros_fisicos
         dominios = {
@@ -120,6 +163,16 @@ class TestCandidatos(unittest.TestCase):
         modelagem = construir_modelo_cp_sat(grade, dominios)
         status, _ = resolver_viabilidade(modelagem, limite_segundos=5)
         self.assertEqual(status, cp_model.INFEASIBLE)
+
+        diagnostico = construir_modelo_cp_sat_diagnostico(grade, dominios, "sala")
+        status_relaxado, _ = resolver_viabilidade(diagnostico, limite_segundos=5)
+        self.assertEqual(status_relaxado, cp_model.OPTIMAL)
+
+    def test_modelo_diagnostico_rejeita_recurso_desconhecido(self):
+        grade = modelo(linha("ARQ001"))
+        dominios = gerar_candidatos(grade)
+        with self.assertRaisesRegex(ValueError, "Recurso diagnóstico inválido"):
+            construir_modelo_cp_sat_diagnostico(grade, dominios, "curso")
 
     def test_fonte_real_tem_candidato_para_cada_encontro_movivel(self):
         from pathlib import Path

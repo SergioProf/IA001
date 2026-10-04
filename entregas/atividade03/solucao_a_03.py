@@ -6,12 +6,18 @@ import argparse
 import csv
 import hashlib
 import json
+import time
+import tracemalloc
 from pathlib import Path
 from typing import Any
 
-from candidatos_03 import alocacoes_fixos, gerar_candidatos
+from candidatos_03 import alocacoes_fixos, gerar_candidatos, resumir_dominios
 from modelo_ocupacao_03 import ModeloOcupacao, carregar_modelo
-from modelo_otimizacao_03 import construir_modelo_cp_sat, resolver_solucao_a
+from modelo_otimizacao_03 import (
+    adicionar_objetivo_solucao_a,
+    construir_modelo_cp_sat,
+    resolver_solucao_a,
+)
 from restricoes_03 import (
     TURNOS_ALVO,
     _minutos,
@@ -78,13 +84,84 @@ def _tipo_mudanca(original: dict[str, str], proposta: dict[str, str]) -> str:
     return "+".join(mudancas) if mudancas else "sem_alteracao"
 
 
+def preflight_solucao_a(
+    caminho_csv: Path,
+    usar_grade_horaria_meia_hora: bool = False,
+) -> dict[str, Any]:
+    """Valida dimensões e construção do modelo sem iniciar a busca CP-SAT."""
+
+    caminho_csv = Path(caminho_csv)
+    hash_inicial = hashlib.sha256(caminho_csv.read_bytes()).hexdigest()
+    rastreamento_proprio = not tracemalloc.is_tracing()
+    if rastreamento_proprio:
+        tracemalloc.start()
+
+    inicio_total = time.perf_counter()
+    try:
+        inicio = time.perf_counter()
+        ocupacao = carregar_modelo(caminho_csv)
+        tempo_carga = time.perf_counter() - inicio
+
+        inicio = time.perf_counter()
+        dominios = gerar_candidatos(
+            ocupacao,
+            usar_grade_horaria_meia_hora=usar_grade_horaria_meia_hora,
+        )
+        tempo_dominios = time.perf_counter() - inicio
+
+        inicio = time.perf_counter()
+        modelagem = construir_modelo_cp_sat(ocupacao, dominios)
+        adicionar_objetivo_solucao_a(ocupacao, modelagem)
+        validacao = modelagem.modelo.validate()
+        tempo_modelo = time.perf_counter() - inicio
+        tempo_total = time.perf_counter() - inicio_total
+        _, pico_python_bytes = tracemalloc.get_traced_memory()
+    finally:
+        if rastreamento_proprio:
+            tracemalloc.stop()
+
+    hash_final = hashlib.sha256(caminho_csv.read_bytes()).hexdigest()
+    resumo_dominios = resumir_dominios(dominios)
+    modelo_valido = not validacao and resumo_dominios["dominios_vazios"] == 0
+    return {
+        "entrada": caminho_csv.name,
+        "politica_inicios": "horaria_meia_hora_limites_fonte" if usar_grade_horaria_meia_hora else "pares_observados",
+        "sha256_fonte": hash_inicial,
+        "sha256_fonte_inalterado": hash_inicial == hash_final,
+        "resumo_ocupacao": ocupacao.resumo(),
+        "dominios": resumo_dominios,
+        "modelo": {
+            "status": "VALIDO" if modelo_valido else "INVALIDO",
+            "mensagem_validacao": validacao or None,
+            "intervalo_minutos": modelagem.intervalo_minutos,
+            "variaveis": len(modelagem.modelo.proto.variables),
+            "restricoes": len(modelagem.modelo.proto.constraints),
+        },
+        "tempos_segundos": {
+            "carga_normalizacao": round(tempo_carga, 3),
+            "geracao_dominios": round(tempo_dominios, 3),
+            "construcao_modelo": round(tempo_modelo, 3),
+            "total": round(tempo_total, 3),
+        },
+        "memoria": {
+            "pico_python_bytes": pico_python_bytes if rastreamento_proprio else None,
+            "observacao": "Pico de alocações Python via tracemalloc; não inclui memória nativa do OR-Tools.",
+        },
+        "solver_executado": False,
+    }
+
+
 def calcular_solucao_a(
     ocupacao: ModeloOcupacao,
     limite_segundos: float = 300.0,
+    usar_grade_horaria_meia_hora: bool = False,
 ) -> dict[str, Any]:
     """Resolve e valida A; nenhum arquivo é escrito por esta função."""
 
-    dominios = gerar_candidatos(ocupacao)
+    dominios = gerar_candidatos(
+        ocupacao,
+        usar_grade_horaria_meia_hora=usar_grade_horaria_meia_hora,
+    )
     modelagem = construir_modelo_cp_sat(ocupacao, dominios)
     status, escolhidos, detalhes_solver = resolver_solucao_a(
         ocupacao, modelagem, limite_segundos
@@ -303,18 +380,44 @@ def main() -> int:
     parser.add_argument("--entrada", type=Path, default=Path(__file__).with_name("mapa_salas_tidy_03.csv"))
     parser.add_argument("--saida-dir", type=Path, default=Path(__file__).parent)
     parser.add_argument("--limite-segundos", type=float, default=300.0)
+    parser.add_argument("--preflight", action="store_true", help="Valida domínios e modelo sem executar o solver.")
     args = parser.parse_args()
 
+    if args.preflight:
+        relatorio = preflight_solucao_a(args.entrada, usar_grade_horaria_meia_hora=True)
+        print(json.dumps(relatorio, ensure_ascii=False, indent=2))
+        return 0 if relatorio["modelo"]["status"] == "VALIDO" and relatorio["sha256_fonte_inalterado"] else 4
+
     ocupacao = carregar_modelo(args.entrada)
-    resultado = calcular_solucao_a(ocupacao, args.limite_segundos)
+    resultado = calcular_solucao_a(
+        ocupacao,
+        args.limite_segundos,
+        usar_grade_horaria_meia_hora=True,
+    )
+    args.saida_dir.mkdir(parents=True, exist_ok=True)
+    caminho_status = args.saida_dir / "status_execucao_A.json"
+    status_execucao = {
+        "entrada": args.entrada.name,
+        "sha256_fonte": hashlib.sha256(args.entrada.read_bytes()).hexdigest(),
+        "status_solver": resultado["solver"]["status"],
+        "status_codigo": int(resultado["status_codigo"]),
+        "politica_inicios": "horaria_meia_hora_limites_fonte",
+        "solucao_encontrada": bool(resultado["alocacoes"]),
+        "limite_segundos": args.limite_segundos,
+        "violacoes_bloqueantes": resultado.get("violacoes_bloqueantes", []),
+    }
+    caminho_status.write_text(
+        json.dumps(status_execucao, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
     if resultado["status_codigo"] not in (cp_model.FEASIBLE, cp_model.OPTIMAL):
-        print(json.dumps(resultado["solver"], ensure_ascii=False, indent=2))
+        print(json.dumps({**status_execucao, "arquivo_status": str(caminho_status)}, ensure_ascii=False, indent=2))
         return 2
     if resultado["violacoes_bloqueantes"]:
-        print(json.dumps(resultado["violacoes_bloqueantes"], ensure_ascii=False, indent=2))
+        print(json.dumps({**status_execucao, "arquivo_status": str(caminho_status)}, ensure_ascii=False, indent=2))
         return 3
     arquivos = exportar_solucao_a(ocupacao, resultado, args.entrada, args.saida_dir)
-    print(json.dumps({"solver": resultado["solver"], "arquivos": {
+    print(json.dumps({"status": status_execucao, "arquivo_status": str(caminho_status), "solver": resultado["solver"], "arquivos": {
         chave: str(caminho) for chave, caminho in arquivos.items()
     }}, ensure_ascii=False, indent=2))
     return 0

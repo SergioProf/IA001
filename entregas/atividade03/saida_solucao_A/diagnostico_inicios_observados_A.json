@@ -1,0 +1,28 @@
+{
+  "tipo": "viabilidade_estrita_inicios_observados_duracoes_existentes",
+  "fonte": "mapa_salas_tidy_03.csv",
+  "sha256_fonte": "6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2f3ab5e0",
+  "fonte_inalterada": true,
+  "status": "INFEASIBLE",
+  "solver_limit_seconds": 60,
+  "workers": 8,
+  "solve_seconds": 47.661,
+  "build_seconds": 6.664,
+  "domains": {
+    "encontros_moveis": 285,
+    "candidatos_totais": 219665,
+    "dominios_vazios": 0,
+    "menor_dominio": 49,
+    "maior_dominio": 1370,
+    "dominio_medio": 770.75
+  },
+  "model": {
+    "variables": 219665,
+    "constraints": 25921
+  },
+  "solution_found": false,
+  "hard_diagnostics": {},
+  "blocking_count": 0,
+  "allocations": {},
+  "target_exceptions": {}
+}

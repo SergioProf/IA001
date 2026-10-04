@@ -1,0 +1,2049 @@
+{
+  "type": "diagnostic_hourly_halfhour_without_H006",
+  "status": "OPTIMAL",
+  "status_code": 4,
+  "solve_seconds": 19.563,
+  "time_limit_seconds": 30,
+  "workers": 8,
+  "source_sha256": "6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2f3ab5e0",
+  "source_unchanged": true,
+  "domain_summary": {
+    "encontros_moveis": 285,
+    "candidatos_totais": 210450,
+    "dominios_vazios": 0,
+    "menor_dominio": 44,
+    "maior_dominio": 1485,
+    "dominio_medio": 738.42
+  },
+  "diagnostics_by_rule_severity": {
+    "H006/baseline": 8,
+    "H006/inviolavel": 75,
+    "H010/excecao": 114
+  },
+  "other_hard_violations": [],
+  "allocations": {
+    "EV-01c60ed8ce6204ef": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-215addad1e6b6427": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-7bfc2ac839d1db21": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-be6af8960afea7c9": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-012c030554394718": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "17:30"
+    },
+    "EV-021bebb126472257": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "10:30"
+    },
+    "EV-0449477aec1ca0a2": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "19:30"
+    },
+    "EV-06e09e763b4e465a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "19:30"
+    },
+    "EV-07d07ac7ee470f92": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "12:30"
+    },
+    "EV-07f22a32771ab205": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-0ae557b20d28883b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "17:30"
+    },
+    "EV-0bff37f493a8def6": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-0c43eac822e49bcc": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "17:30"
+    },
+    "EV-0cf6371e978c979c": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "15:30"
+    },
+    "EV-0d8e8ae8b4728c27": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "17:30"
+    },
+    "EV-0dc8360acc1cca47": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "20:30"
+    },
+    "EV-0df7f99f74153c58": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-0e3c6202acf0daef": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "11:30"
+    },
+    "EV-1030cdb9a6e88d96": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-1043e9daf09f5d56": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-108442588b688a9c": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "19:30"
+    },
+    "EV-10d0d2e56377312a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "19:30"
+    },
+    "EV-11bb4409d9029e28": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-11ea73b67b3b1bd5": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "19:30"
+    },
+    "EV-126d22efd0c8026b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-133389ab84a7d614": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-13448541363f99a3": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-136c2622d21bd812": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 103",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "17:30"
+    },
+    "EV-13b3327e185d87b4": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "18:30"
+    },
+    "EV-16dee92f4a29495a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-17ae881fe637ac80": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-19022c475a0008a1": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 403",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "20:30"
+    },
+    "EV-19b3aa72e73d996e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "15:30"
+    },
+    "EV-1b3d850a9da976a9": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 403",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "19:30"
+    },
+    "EV-1b9bb21c43eaa816": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 103",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-1e588af610057a37": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "19:30"
+    },
+    "EV-1ef58236cd30203b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "18:30"
+    },
+    "EV-204a77360c1f6486": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "09:30"
+    },
+    "EV-22377ba592ff5286": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "15:30"
+    },
+    "EV-22c6a432b9a9bb18": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "10:30"
+    },
+    "EV-22c8f9835eb20f3e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "11:30"
+    },
+    "EV-23a8b8d5c65791e1": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "16:30"
+    },
+    "EV-240dc9f311caf6a0": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-24cb984c2c1dc965": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "17:30"
+    },
+    "EV-25d4940088fd73ea": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "17:30"
+    },
+    "EV-270a0f4ab381a71d": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "15:30"
+    },
+    "EV-275552664244e1ea": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "20:30"
+    },
+    "EV-283177d05ce877fd": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-293bd616dcd629ae": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-297b8a1a31688ccd": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-2ac9000dc20b8164": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "18:30"
+    },
+    "EV-2b0da82f918bfb6e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "17:30"
+    },
+    "EV-2b0e319976339ca0": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-2c9786e4a6a08968": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "17:30"
+    },
+    "EV-2d5d66817fd600e9": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "12:30"
+    },
+    "EV-2e4cf490635ec137": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "16:30"
+    },
+    "EV-2e70c37e302c3e85": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-2efabe6a93b3d620": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "20:30"
+    },
+    "EV-305a4cf3acc72385": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "18:30"
+    },
+    "EV-3147d3f1619e79fe": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "19:30"
+    },
+    "EV-31bd967180becc7a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-3429bff61fdc745b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "10:30"
+    },
+    "EV-35f999a7f73283ed": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-361c308d9c193af7": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "19:30"
+    },
+    "EV-3640e1e402a958fb": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-365980fadd8011f4": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-37f3ae256ffa7c90": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "12:30"
+    },
+    "EV-382d00e98a0a504c": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-38c2fff0b5b6ae23": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-38d1888947ba5c8c": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-39b506fa42dafc26": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-3a250c9367c70ff7": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "14:30"
+    },
+    "EV-3ab498853e4d0cb0": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-3aedd68c7df1b8b3": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "19:30"
+    },
+    "EV-3b0a1502ba8f4505": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "19:30"
+    },
+    "EV-3b3624112c7808bb": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "17:30"
+    },
+    "EV-3bd6dbfef3fc519e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-3c07ee717b7d73e4": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-3c4ff458aa61690e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "19:30"
+    },
+    "EV-3ed4d94be4952ae8": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "10:30"
+    },
+    "EV-3ee098190ccd6c04": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "11:30"
+    },
+    "EV-3fe52a7e544f4183": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-40445b3691aa2601": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-4163e324466e8d30": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-4173e5746aaff868": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "20:30"
+    },
+    "EV-417818449d9aeafb": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "18:30"
+    },
+    "EV-41fb432abe7d5c2e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "18:30"
+    },
+    "EV-433ab36486d2764f": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "17:30"
+    },
+    "EV-44eb880e0551502b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-460142d34c59287f": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "18:30"
+    },
+    "EV-475ccfa9cb52a1dc": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "15:30"
+    },
+    "EV-48954290e8d4e262": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "20:30"
+    },
+    "EV-498dbd9c6e977728": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-4a2b85b018082647": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-4ac7f018128ef7e0": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "20:30"
+    },
+    "EV-4d2669be6404eaf1": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "18:30"
+    },
+    "EV-4d9844691dea14f3": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "11:30"
+    },
+    "EV-4e6d544db3b90e03": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 405",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-4f5275eb28c19e2c": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-4fa73dfa1a2727e8": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-4fcd9acf89b12d42": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-504e1fb8fc34094e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-50a781086939a0ff": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "19:30"
+    },
+    "EV-536d8d1688a3b400": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "12:30"
+    },
+    "EV-54bf507ec9ef8a11": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "16:30"
+    },
+    "EV-54fe9acd95929c42": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-5523eb384afae1cc": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-5692f3158c566783": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "11:30"
+    },
+    "EV-59a4bfdb40ac646a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "10:30"
+    },
+    "EV-5b7dc458bc02220e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "12:30"
+    },
+    "EV-5cf388e4942848f3": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "19:30"
+    },
+    "EV-5d6386d387e7f199": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-602f2f121e87a822": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "10:30"
+    },
+    "EV-60f50b38f7a339a4": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-610000f3f4debcf1": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 404",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-6233b0861fc3abfc": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "21:30"
+    },
+    "EV-64d607db745d98b1": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "17:30"
+    },
+    "EV-651606854a844f7b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-6afc4591ee934227": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "10:30"
+    },
+    "EV-6b279518bd43c339": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "17:30"
+    },
+    "EV-6cd11af03f827831": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "12:30"
+    },
+    "EV-6d01eca377647ce7": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "10:30"
+    },
+    "EV-6d69ccea22179bc1": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-6e3e601fbf03a899": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-6ead94ba1bbbfc4b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-6fc976504553a0dc": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "10:30"
+    },
+    "EV-6fdd9b047de74760": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "20:30"
+    },
+    "EV-6ff2f43fab70c473": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-7160fc9821cfef94": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-71d99781f4bea6e6": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "18:30"
+    },
+    "EV-7297f6c5d68ebd65": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 407",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "11:30"
+    },
+    "EV-730566545466985e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-757f68b344c9abed": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-786f98a05a31cdf1": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-7963cb195b8a8789": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 103",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-79fbdfa2de31d1a6": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "17:30"
+    },
+    "EV-7aab6391690bd371": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "20:30"
+    },
+    "EV-7d430f46b122ea96": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "11:30"
+    },
+    "EV-7dac7f1ffecdc2bb": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-7fa343c8c9f70207": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "18:30"
+    },
+    "EV-7fe204603d1fd40a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "20:30"
+    },
+    "EV-803ae5fb50195851": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 103",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "11:30"
+    },
+    "EV-80c005c98e79809e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "11:30"
+    },
+    "EV-810ab87abe6cac00": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-82f32d38bfe5e5c7": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 103",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-83548703f081d7f1": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "17:30"
+    },
+    "EV-836b4818dbe5c0ba": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-8371321b16bca952": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "19:30"
+    },
+    "EV-83f1930c0be259eb": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-843b5417071667a8": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "20:30"
+    },
+    "EV-878c1db5237a3f7f": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "16:30"
+    },
+    "EV-883002dbb8621b55": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "20:30"
+    },
+    "EV-884f67d790f45a98": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "19:30"
+    },
+    "EV-88bc362ec54481d9": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "18:30"
+    },
+    "EV-89b897810a973637": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "19:30"
+    },
+    "EV-8a71f19e52169df3": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-8a82d85d493676e8": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "11:30"
+    },
+    "EV-8a8cbdff16827ad2": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "17:30"
+    },
+    "EV-8be6cb958d238c02": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "20:30"
+    },
+    "EV-8cd8f07b600f9f9b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "18:30"
+    },
+    "EV-8d2dc4d683bb4a3c": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "20:30"
+    },
+    "EV-8d8c437962614d5f": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-8de72e64f02965ce": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-8f4fb85021039dfb": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "20:30"
+    },
+    "EV-8f5583db46b8cd80": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-8f8fd8f31d240e90": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-9038dcffdd88155a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "12:30"
+    },
+    "EV-904717fbc8a0286c": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "17:30"
+    },
+    "EV-90b9d2530ed0ee51": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-91e156b03da23fc8": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-95ed337a73f6dec7": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "19:30"
+    },
+    "EV-96ca5081d49e28b7": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-980b240b11a6466d": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-99631bd878901695": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "10:30"
+    },
+    "EV-99e5386dc4ccbe1b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "15:30"
+    },
+    "EV-9a0db8f85665d3ed": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "19:30"
+    },
+    "EV-9b0d2ff877782c6d": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "17:30"
+    },
+    "EV-9b5198461809810a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-9b5b48135331756d": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "11:30"
+    },
+    "EV-9b77b0dadb98f033": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "20:30"
+    },
+    "EV-9bb2261157db5862": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-9bc4b373fac4dd46": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-9e68aa31b824ab50": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "10:30"
+    },
+    "EV-9f12575043cd081d": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "10:30"
+    },
+    "EV-9fdaaa3b27ff1e45": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "12:30"
+    },
+    "EV-a000c4344e9cb263": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "20:30"
+    },
+    "EV-a0566be5653dfb5f": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "18:30"
+    },
+    "EV-a0f3541b176cff08": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "20:30"
+    },
+    "EV-a1910ab8d1e63677": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "15:30"
+    },
+    "EV-a2cf9038d61d1ac3": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-a3412bc8256627b1": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "18:30"
+    },
+    "EV-a41fdfe73238fdc2": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 103",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-a4ea5fff648729db": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "19:30"
+    },
+    "EV-a516e20b0b7ddcff": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-a5b5c8f11f553992": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-a5c3b8791cc35741": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "19:30"
+    },
+    "EV-a6a5fada14ef243c": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 407",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "18:30"
+    },
+    "EV-a794dda0ac19cd35": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 103",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-a81507b173691394": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "17:30"
+    },
+    "EV-a81f3552712bf131": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "20:30"
+    },
+    "EV-aac447998a34901a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-ab1e1970fbee3ac6": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 103",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "20:30"
+    },
+    "EV-ab6cfbb9b7d1a82d": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-abd3d3cab2ad96ba": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "20:30"
+    },
+    "EV-ac951cedaf88c529": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-ad400c60c579416f": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-adf4e6218be6c1cc": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-ae1860280cca984e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-ae324b9320ad779c": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-af458b1d1445cf38": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-af63f1c9cd4c1080": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "20:30"
+    },
+    "EV-afba449db6c05669": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "19:30"
+    },
+    "EV-b0f77ec7c71c740a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "17:30"
+    },
+    "EV-b13f2886444dbc4f": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "20:30"
+    },
+    "EV-b16052baed891741": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "12:30"
+    },
+    "EV-b1b416e8704f7959": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-b214be5c2ac78dfe": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "20:30"
+    },
+    "EV-b24136486aea0584": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "10:30"
+    },
+    "EV-b2a451f9412794e4": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-b3d316081a5cb2ef": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "18:30"
+    },
+    "EV-b407c843b8a50b1e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "19:30"
+    },
+    "EV-b423766b22f85e61": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-b4424df95e3c05f7": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-b617a8510b1b30fd": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-ba0909922ea0229c": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "10:30"
+    },
+    "EV-bb62fb447550bc62": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "15:30"
+    },
+    "EV-bb6dbc07dace1582": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "17:30"
+    },
+    "EV-bbbe32e4a943d737": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "20:30"
+    },
+    "EV-bc2a17d270a11dc7": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-bc8d4a3ce3f54f8f": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "10:30"
+    },
+    "EV-bd84e642181785e6": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "12:30"
+    },
+    "EV-bdd3037126cbbd05": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-bdf30cf11a74cce5": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "16:30"
+    },
+    "EV-be761c4eb3c75d10": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301A",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "12:30"
+    },
+    "EV-bed3f1d842e319b6": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-bfc01f1486274fd3": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-c2ff25437902c998": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-c331a1edfc7dbe31": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "18:30"
+    },
+    "EV-c3545f1b684ee6bf": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-c53673df8b7b1771": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "11:30"
+    },
+    "EV-c71ee83b9e45bd7e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "19:30"
+    },
+    "EV-c762f88f70b1d4a8": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "11:30"
+    },
+    "EV-c799ee6ce44c101e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "12:30"
+    },
+    "EV-c85d32d36649fa87": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "20:30"
+    },
+    "EV-c87941b03ed122b3": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-c8ecf8ef4a57a5cd": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-c93db3eb7229cefe": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 304",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "18:30"
+    },
+    "EV-cc1c1b5b4e68ae0b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "10:30"
+    },
+    "EV-ce3eda40307f0a18": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "19:30"
+    },
+    "EV-d0ae84b71c8e02dd": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "15:30"
+    },
+    "EV-d264fd8c96a86aa3": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-d3369f1d525bd5b7": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 313",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-d494b2e95a1f368a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-d5ebdd60f746e3e1": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-d892ccf5275994b7": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-d894a77d65ed1ed5": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 302",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-d974cc08b6645d74": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 504",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "11:30"
+    },
+    "EV-dbc4b3454ad09078": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "17:30",
+      "hora_fim": "19:30"
+    },
+    "EV-dd1cf834100877ea": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 405",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "11:30",
+      "hora_fim": "12:30"
+    },
+    "EV-ddb811e252a75f45": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-e0955a52904f1672": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "11:30"
+    },
+    "EV-e0e163807e98abcf": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "10:30"
+    },
+    "EV-e264d08fce3c0753": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "18:30"
+    },
+    "EV-e345062a33afb4aa": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 103",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-e5a6b4d9cc25489a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 103",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-e664008277d8f681": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "15:30"
+    },
+    "EV-e66dd2990c32bc82": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 409",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "14:30",
+      "hora_fim": "17:30"
+    },
+    "EV-e6e2e1cd49d946b8": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-e7d238562b663cc7": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 502",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "17:30"
+    },
+    "EV-eb29d599791807c5": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "15:30",
+      "hora_fim": "17:30"
+    },
+    "EV-eb3caf07ac77261a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-ed17f0c7b0c59372": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 501",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "12:30"
+    },
+    "EV-ed811cb2144f5f2b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 303",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "11:30"
+    },
+    "EV-eeedf150f7ce0bc6": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "20:30",
+      "hora_fim": "22:30"
+    },
+    "EV-efbadc0c9ac4075a": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "15:30"
+    },
+    "EV-f0101705b6a8f51c": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "08:30",
+      "hora_fim": "12:30"
+    },
+    "EV-f090d31919da0f70": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 413",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "12:30"
+    },
+    "EV-f3cf630034b8240b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 103",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-f4dfaa5fffe740ca": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 314",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "16:30",
+      "hora_fim": "19:30"
+    },
+    "EV-f5262af882669ebd": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 103",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "10:30",
+      "hora_fim": "12:30"
+    },
+    "EV-f5c87436e69051b3": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 401",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "17:30"
+    },
+    "EV-f5d4076d68e11e19": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-fa87fba543650abe": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 402",
+      "dia_semana": "SEXTA-FEIRA",
+      "hora_inicio": "13:30",
+      "hora_fim": "16:30"
+    },
+    "EV-fa8a13ea8f7a004e": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "SEGUNDA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "22:30"
+    },
+    "EV-fba7c731100bfce9": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 503",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-fbb02f06f6828713": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 301B",
+      "dia_semana": "QUARTA-FEIRA",
+      "hora_inicio": "07:30",
+      "hora_fim": "09:30"
+    },
+    "EV-fbd2d5484f3bb50b": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "QUINTA-FEIRA",
+      "hora_inicio": "09:30",
+      "hora_fim": "12:30"
+    },
+    "EV-fc4c84fe69d3c0e6": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 415",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "19:30",
+      "hora_fim": "22:30"
+    },
+    "EV-ffdec6771729059d": {
+      "predio": "Faculdade de Arquitetura - 12103",
+      "sala": "Sala 312",
+      "dia_semana": "TERÇA-FEIRA",
+      "hora_inicio": "18:30",
+      "hora_fim": "20:30"
+    }
+  }
+}

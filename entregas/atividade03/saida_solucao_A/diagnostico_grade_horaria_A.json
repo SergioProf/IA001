@@ -1,0 +1,28 @@
+{
+  "tipo": "viabilidade_estrita_grade_horaria_meia_hora",
+  "fonte": "mapa_salas_tidy_03.csv",
+  "sha256_fonte": "6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2f3ab5e0",
+  "fonte_inalterada": true,
+  "status": "UNKNOWN",
+  "status_codigo": 0,
+  "solver_limit_seconds": 60,
+  "workers": 8,
+  "solve_seconds": 61.576,
+  "build_seconds": 6.375,
+  "domains": {
+    "encontros_moveis": 285,
+    "candidatos_totais": 210450,
+    "dominios_vazios": 0,
+    "menor_dominio": 44,
+    "maior_dominio": 1485,
+    "dominio_medio": 738.42
+  },
+  "model": {
+    "variables": 210450,
+    "constraints": 24601
+  },
+  "solution_found": false,
+  "hard_diagnostics": {},
+  "blocking_count": 0,
+  "allocations": {}
+}

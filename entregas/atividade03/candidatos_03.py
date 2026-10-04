@@ -99,24 +99,43 @@ def _minutos_fora_do_alvo(cursos: set[str], inicio: int, fim: int) -> int:
 
 def gerar_candidatos(
     modelo: ModeloOcupacao,
+    *,
+    combinar_inicios_observados: bool = False,
+    usar_grade_horaria_meia_hora: bool = False,
 ) -> dict[str, tuple[Candidato, ...]]:
     """Gera domínios móveis; encontros externos ficam fixos na posição original.
 
-    Os intervalos são pares início/fim observados na fonte, reutilizados somente
-    para encontros da mesma duração. Conflitos entre encontros móveis ficam para
-    o modelo global; colisões com encontros externos fixos são removidas aqui.
+    Por padrão, reutiliza pares início/fim observados para a mesma duração. O modo
+    diagnóstico combina inícios observados com durações existentes. O modo
+    `usar_grade_horaria_meia_hora` permite somente inícios `HH:30`, de hora em
+    hora, dentro dos limites observados; ambos preservam durações existentes.
+    Conflitos móveis ficam para o modelo global; colisões fixas são removidas aqui.
     """
+
+    if combinar_inicios_observados and usar_grade_horaria_meia_hora:
+        raise ValueError("Escolha somente uma política de expansão de inícios.")
 
     linhas = _linhas_por_encontro(modelo)
     docentes = _docentes_por_encontro(modelo)
     fixos = [encontro for encontro in modelo.encontros_fisicos if _encontro_externo(encontro, linhas)]
 
     intervalos_por_duracao: dict[int, set[tuple[int, int]]] = defaultdict(set)
+    inicios_observados = set()
+    fins_observados = set()
     for encontro in modelo.encontros_fisicos:
         inicio = _minutos(encontro.atributos_fisicos["hora_inicio"])
         fim = _minutos(encontro.atributos_fisicos["hora_fim"])
+        inicios_observados.add(inicio)
+        fins_observados.add(fim)
         if not _intervalos_sobrepostos(inicio, fim, *ALMOCO):
             intervalos_por_duracao[fim - inicio].add((inicio, fim))
+
+    if usar_grade_horaria_meia_hora:
+        if not inicios_observados or any(inicio % 60 != 30 for inicio in inicios_observados):
+            raise ValueError("A grade de inícios exige que todos os inícios-fonte estejam em HH:30.")
+        menor_inicio = min(inicios_observados)
+        maior_inicio = max(inicios_observados)
+        maior_fim = max(fins_observados)
 
     salas: dict[tuple[str, str], dict[str, Any]] = {}
     for registros in linhas.values():
@@ -157,6 +176,22 @@ def gerar_candidatos(
         duracao = fim_original - inicio_original
         vagas = _vagas_do_encontro(registros)
         dependente_computador = "laborat" in _normalizar(atributos["tipo_sala"])
+        if usar_grade_horaria_meia_hora:
+            intervalos = {
+                (inicio, inicio + duracao)
+                for inicio in range(menor_inicio, maior_inicio + 1, 60)
+                if inicio + duracao <= maior_fim
+                and not _intervalos_sobrepostos(inicio, inicio + duracao, *ALMOCO)
+            }
+        elif combinar_inicios_observados:
+            intervalos = {
+                (inicio, inicio + duracao)
+                for inicio in inicios_observados
+                if inicio + duracao <= 24 * 60
+                and not _intervalos_sobrepostos(inicio, inicio + duracao, *ALMOCO)
+            }
+        else:
+            intervalos = intervalos_por_duracao[duracao]
         etapas = {
             (registro["curso"], registro["etapa"])
             for registro in registros
@@ -164,7 +199,7 @@ def gerar_candidatos(
         }
         candidatos: set[Candidato] = set()
 
-        for inicio, fim in sorted(intervalos_por_duracao[duracao]):
+        for inicio, fim in sorted(intervalos):
             for dia in ORDEM_DIAS:
                 minutos_fora = _minutos_fora_do_alvo(cursos, inicio, fim)
                 for (predio, sala_nome), informacao in sorted(salas.items()):

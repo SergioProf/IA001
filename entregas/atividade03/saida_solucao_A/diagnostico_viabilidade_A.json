@@ -1,0 +1,27 @@
+{
+  "tipo": "viabilidade_sem_objetivo_A",
+  "fonte": "mapa_salas_tidy_03.csv",
+  "sha256_fonte": "6101ab290feb8feee0cb7714692ef6aa8c67f647bf0bb970f92bf09a2f3ab5e0",
+  "sha256_fonte_inalterado": true,
+  "status": "UNKNOWN",
+  "status_codigo": 0,
+  "solucao_encontrada": false,
+  "encontros_alocados": 4,
+  "solver_limit_seconds": 60,
+  "solver_wall_seconds": 60.033,
+  "build_seconds": 4.654,
+  "domain_summary": {
+    "encontros_moveis": 285,
+    "candidatos_totais": 155133,
+    "dominios_vazios": 0,
+    "menor_dominio": 31,
+    "maior_dominio": 1255,
+    "dominio_medio": 544.33
+  },
+  "model": {
+    "variables": 155133,
+    "constraints": 24479,
+    "time_granularity_minutes": 30
+  },
+  "allocations": {}
+}
