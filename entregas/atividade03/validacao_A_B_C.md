@@ -2,8 +2,8 @@
 
 - Fonte: `mapa_salas_tidy_03.csv` (SHA-256 `5980965c9e96effa0d44f879551425e2f67f44b2c6b81cb7cc3e4fcd6a10c086`).
 - Linhas da fonte: 452; encontros fisicos: 289.
-- Validacao executada sobre CSVs exportados; nenhum estado interno do solver e lido.
-- A carga por etapa contabiliza todas as ofertas/turmas da etapa, nao uma matricula individual.
+- As regras sao validadas nos CSVs exportados; nenhum objeto interno do CP-SAT e lido.
+- A CH diaria por etapa conta uma turma por disciplina em uma combinacao sem sobreposicoes. A escolha pode variar entre propostas; A/C usam uma combinacao valida reconstruida, e B preserva a selecao do JSON quando compativel com o CSV.
 
 ## Resultado
 

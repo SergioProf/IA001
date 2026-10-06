@@ -8,6 +8,7 @@ from restricoes_03 import (
     classificar_preservacao,
     diagnosticos_bloqueantes,
     metricas_preferencia,
+    selecionar_turmas_etapa,
     validar_grade,
 )
 
@@ -133,6 +134,38 @@ class TestRestricoes(unittest.TestCase):
             linha("ARQ002", turma="A", etapa="2", docente="Prof02", sala="S2"),
         )
         self.assertIn("H006", regras(validar_grade(sem_alternativa)))
+
+    def test_seleciona_uma_turma_por_disciplina_sem_conflitos(self):
+        disciplinas = {
+            "ARQ001": {"A": {"a"}, "B": {"b"}, "C": {"d"}},
+            "ARQ002": {"A": {"c"}},
+        }
+        horarios = {
+            "a": ("SEGUNDA-FEIRA", 540, 600),
+            "b": ("TERÇA-FEIRA", 540, 600),
+            "c": ("SEGUNDA-FEIRA", 540, 600),
+            "d": ("QUARTA-FEIRA", 540, 600),
+        }
+
+        selecao = selecionar_turmas_etapa(disciplinas, horarios)
+        selecao_preferida = selecionar_turmas_etapa(
+            disciplinas,
+            horarios,
+            {"ARQ001": "C", "ARQ002": "A"},
+        )
+        preferida_conflitante = selecionar_turmas_etapa(
+            disciplinas,
+            horarios,
+            {"ARQ001": "A", "ARQ002": "A"},
+        )
+
+        self.assertEqual(selecao, {"ARQ001": "B", "ARQ002": "A"})
+        self.assertEqual(selecao_preferida, {"ARQ001": "C", "ARQ002": "A"})
+        self.assertEqual(preferida_conflitante, {"ARQ001": "B", "ARQ002": "A"})
+        self.assertIsNone(selecionar_turmas_etapa(
+            {"ARQ001": {"A": {"a"}}, "ARQ002": {"A": {"c"}}},
+            horarios,
+        ))
 
     def test_cursos_externos_imoveis(self):
         grade = modelo(linha("MUS001", curso="MUS", dia="TERÇA-FEIRA"))

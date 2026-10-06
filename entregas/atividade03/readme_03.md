@@ -120,7 +120,7 @@ Com a H006 antiga (qualquer sobreposição de etapa proibida), capacidade de 110
 
 `solucao_b_03.py` gerou `saida_solucao_B/candidato_B.csv` com status `FEASIBLE` em 2.572 s de um limite de 3.000 s. A proposta tem 178 encontros alterados e nenhuma violação dura nova. Não se declara ótimo: a candidata é uma proposta viável, sem prova de otimalidade.
 
-As métricas do objetivo de B, usando as mesmas turmas escolhidas pelo modelo, estão em `saida_solucao_B/candidato_B.md` e `.json`. A comparação independente também resume a oferta completa de cada etapa: desvio absoluto médio diário de etapas cai de 3,935 h no ANTES para 2,519 h em B; para docentes, de 1,487 h para 1,261 h. A oferta completa inclui turmas alternativas e não representa a carga de um estudante individual.
+As métricas do objetivo de B, usando as mesmas turmas escolhidas pelo modelo, estão em `saida_solucao_B/candidato_B.md` e `.json`. Na comparação diária por etapa, cada proposta conta uma combinação sem sobreposição, com uma turma por disciplina obrigatória; turmas alternativas não são somadas. B usa as turmas registradas no JSON quando compatíveis com o CSV; A e C usam uma combinação válida reconstruída deterministicamente. A combinação pode variar entre propostas, então o gráfico mostra uma grade possível de aluno para cada proposta, não a comparação da mesma matrícula individual nas três.
 
 ## Solução C — turnos (fase 8)
 
@@ -137,7 +137,7 @@ Execute a partir da raiz:
 .venv/Scripts/python.exe -m unittest discover -s entregas/atividade03 -p "test_*.py"
 ```
 
-A validação gera `validacao_A_B_C.md`, `comparacao_A_B_C.csv`, `excecoes_A_B_C.csv`, `ocupacao_salas_A_B_C.csv`, `ocupacao_salas_por_curso_A_B_C.csv`, `distribuicao_semanal_A_B_C.csv` e `equilibrio_semanal_A_B_C.csv`. CH é contada por turma acadêmica e encontro, sem multiplicar linhas de docentes. O gráfico de ocupação comparativa usa a mesma regra da página inicial: cada encontro físico conta uma vez por curso em cada sala, com barras empilhadas por curso. O total físico da sala continua separado; salas usadas no ANTES e vazias depois ficam marcadas como liberadas.
+A validação gera `validacao_A_B_C.md`, `comparacao_A_B_C.csv`, `excecoes_A_B_C.csv`, `ocupacao_salas_A_B_C.csv`, `ocupacao_salas_por_curso_A_B_C.csv`, `distribuicao_semanal_A_B_C.csv` e `equilibrio_semanal_A_B_C.csv`. `distribuicao_semanal_A_B_C.csv` registra a CH diária selecionada em `grupo_tipo=etapa_aluno` e lista as `turmas_selecionadas`; a categoria `docente` permanece separada. Encontros compartilhados não são multiplicados por linhas de docentes. O gráfico de ocupação comparativa usa a mesma regra da página inicial: cada encontro físico conta uma vez por curso em cada sala, com barras empilhadas por curso. O total físico da sala continua separado; salas usadas no ANTES e vazias depois ficam marcadas como liberadas.
 
 ## Página Streamlit (`app_03.py`)
 

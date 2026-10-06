@@ -126,7 +126,20 @@ def etapa_cursavel(
 ) -> bool:
     """Há uma turma por disciplina tal que nenhuma escolhida se sobrepõe a outra?"""
 
-    opcoes = sorted((list(turmas.values()) for turmas in disciplinas.values()), key=len)
+    return selecionar_turmas_etapa(disciplinas, horarios) is not None
+
+
+def selecionar_turmas_etapa(
+    disciplinas: Mapping[str, Mapping[str, set[str]]],
+    horarios: Mapping[str, tuple[str, int, int]],
+    preferida: Mapping[str, str] | None = None,
+) -> dict[str, str] | None:
+    """Escolhe uma turma por disciplina sem sobreposição, se houver combinação."""
+
+    opcoes = sorted(
+        ((codigo, sorted(turmas.items())) for codigo, turmas in disciplinas.items()),
+        key=lambda item: (len(item[1]), item[0]),
+    )
 
     def sobrepoe(secao_a: set[str], secao_b: set[str]) -> bool:
         for a in secao_a:
@@ -138,14 +151,32 @@ def etapa_cursavel(
                     return True
         return False
 
-    def buscar(indice: int, escolhidas: list[set[str]]) -> bool:
+    if preferida is not None and set(preferida) == set(disciplinas):
+        secoes_preferidas = [
+            disciplinas[codigo].get(turma)
+            for codigo, turma in preferida.items()
+        ]
+        if all(secao is not None for secao in secoes_preferidas) and not any(
+            sobrepoe(secoes_preferidas[indice], secoes_preferidas[posterior])
+            for indice in range(len(secoes_preferidas))
+            for posterior in range(indice + 1, len(secoes_preferidas))
+        ):
+            return dict(preferida)
+
+    def buscar(
+        indice: int,
+        escolhidas: list[set[str]],
+    ) -> dict[str, str] | None:
         if indice == len(opcoes):
-            return True
-        return any(
-            not any(sobrepoe(secao, outra) for outra in escolhidas)
-            and buscar(indice + 1, [*escolhidas, secao])
-            for secao in opcoes[indice]
-        )
+            return {}
+        codigo, turmas = opcoes[indice]
+        for turma, secao in turmas:
+            if any(sobrepoe(secao, outra) for outra in escolhidas):
+                continue
+            restante = buscar(indice + 1, [*escolhidas, secao])
+            if restante is not None:
+                return {codigo: turma, **restante}
+        return None
 
     return buscar(0, [])
 

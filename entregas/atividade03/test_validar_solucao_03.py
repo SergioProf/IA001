@@ -47,6 +47,35 @@ class TestValidacaoIndependente(unittest.TestCase):
         self.assertEqual(por_curso[0]["curso"], "ARQU")
         self.assertEqual(por_curso[0]["horas_aula"], 2.0)
 
+    def test_ch_diaria_da_etapa_conta_uma_turma_por_disciplina(self):
+        registros = [
+            linha("ARQ001", turma="A", sala="S1", docente="Prof01"),
+            linha("ARQ001", turma="B", sala="S2", docente="Prof02", dia="TERÇA-FEIRA"),
+            linha("ARQ002", turma="A", sala="S3", docente="Prof03"),
+        ]
+        modelo_etapa = normalizar_registros(CABECALHO, registros)
+        alocacoes = {
+            encontro.id: {
+                campo: encontro.atributos_fisicos[campo]
+                for campo in ("predio", "sala", "dia_semana", "hora_inicio", "hora_fim")
+            }
+            for encontro in modelo_etapa.encontros_fisicos
+        }
+
+        _, _, distribuicao, _ = _inventarios(modelo_etapa, alocacoes, "A")
+        etapa = [
+            item for item in distribuicao
+            if item["grupo_tipo"] == "etapa_aluno" and item["grupo"] == "ARQU/1"
+        ]
+        horas_por_dia = {item["dia_semana"]: item["horas"] for item in etapa}
+
+        self.assertEqual(horas_por_dia["SEGUNDA-FEIRA"], 1.0)
+        self.assertEqual(horas_por_dia["TERÇA-FEIRA"], 1.0)
+        self.assertTrue(all(
+            item["turmas_selecionadas"] == "ARQ001:B, ARQ002:A"
+            for item in etapa
+        ))
+
     def test_integridade_aceita_colunas_extras_e_linhagem_original(self):
         dados = _validar_integridade_csv(
             self.modelo, CABECALHO, self.registros,

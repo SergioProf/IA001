@@ -34,7 +34,6 @@ CAMINHO_COMPARACAO = PASTA_APP / "comparacao_A_B_C.csv"
 CAMINHO_OCUPACAO_COMPARATIVA = PASTA_APP / "ocupacao_salas_A_B_C.csv"
 CAMINHO_OCUPACAO_CURSOS_COMPARATIVA = PASTA_APP / "ocupacao_salas_por_curso_A_B_C.csv"
 CAMINHO_DISTRIBUICAO_COMPARATIVA = PASTA_APP / "distribuicao_semanal_A_B_C.csv"
-CAMINHO_EQUILIBRIO_COMPARATIVO = PASTA_APP / "equilibrio_semanal_A_B_C.csv"
 CAMINHO_EXCECOES_COMPARATIVAS = PASTA_APP / "excecoes_A_B_C.csv"
 
 # Estas colunas identificam um encontro físico da disciplina. A coluna `curso`
@@ -913,8 +912,12 @@ def _rgba(hex_cor: str, alpha: float) -> str:
     return f"rgba({r},{g},{b},{alpha})"
 
 
-def exibir_animacao_plantas(dados: pd.DataFrame, contexto: str = "original") -> None:
-    st.subheader("5. Ocupação das salas nas plantas baixas")
+def exibir_animacao_plantas(
+    dados: pd.DataFrame,
+    contexto: str = "original",
+    numero_grafico: int = 5,
+) -> None:
+    st.subheader(f"{numero_grafico}. Ocupação das salas nas plantas baixas")
     st.caption(
         "Escolha o dia e use o controle deslizante ou o botão Play para animar a "
         "ocupação das salas ao longo do dia. Biblioteca: Plotly."
@@ -1323,7 +1326,7 @@ def pagina_agenda() -> None:
 
     exibir_animacao_plantas(dados)
 
-    st.subheader("6. Uso dos cursos fora do turno-alvo")
+    st.subheader("Uso dos cursos fora do turno-alvo")
     exibir_uso_fora_do_turno_alvo(dados)
 
 
@@ -1372,9 +1375,18 @@ def pagina_proposta(codigo: str, titulo: str, descricao: str) -> None:
         exibir_equilibrio_proposta_b()
     elif codigo == "C":
         exibir_turnos_proposta_c()
-    st.subheader("Agenda interativa por sala")
+    numero_agenda, numero_planta = {
+        "A": (6, 7),
+        "B": (10, 11),
+        "C": (13, 14),
+    }[codigo]
+    st.subheader(f"{numero_agenda}. Agenda interativa por sala")
     exibir_agenda_sala(dados, contexto=f"proposta_{codigo}")
-    exibir_animacao_plantas(dados, contexto=f"proposta_{codigo}")
+    exibir_animacao_plantas(
+        dados,
+        contexto=f"proposta_{codigo}",
+        numero_grafico=numero_planta,
+    )
     st.subheader("Uso dos cursos fora do turno-alvo")
     exibir_uso_fora_do_turno_alvo(dados)
 
@@ -1472,7 +1484,7 @@ def exibir_turnos_proposta_c() -> None:
             yaxis_range=[0, 110],
             legend_title_text="",
         )
-        st.subheader("Carga horária no turno-alvo")
+        st.subheader("12. Carga horária no turno-alvo")
         st.plotly_chart(figura, use_container_width=True)
         st.dataframe(
             pd.DataFrame([
@@ -1515,13 +1527,6 @@ def carregar_metricas_proposta_b() -> dict | None:
         return json.loads(caminho.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return None
-
-
-def rotulo_grupo_equilibrio(grupo: list | str, categoria: str) -> str:
-    if categoria == "etapas_obrigatorias" and isinstance(grupo, list) and len(grupo) == 3:
-        semestre, curso, etapa = grupo
-        return f"{ROTULOS_CURSO.get(curso, curso)} · Etapa {etapa} · {semestre}"
-    return str(grupo)
 
 
 def figura_desvio_equilibrio(metricas: dict) -> go.Figure:
@@ -1605,23 +1610,29 @@ def figura_cargas_diarias_equilibrio(
             chaves,
             key=lambda chave: (
                 -desvio(grupos_propostos[chave]),
-                rotulo_grupo_equilibrio(grupos_propostos[chave]["grupo"], categoria),
+                str(grupos_propostos[chave]["grupo"]),
             ),
         )
     if limite_grupos is not None:
         chaves_ordenadas = chaves_ordenadas[:limite_grupos]
+
     dias_curto = ["Seg", "Ter", "Qua", "Qui", "Sex"]
-    dias = ORDEM_DIAS
     rotulos_x = [f"Orig. {dia}" for dia in dias_curto] + [f"B · {dia}" for dia in dias_curto]
     valores = []
     rotulos_y = []
     for chave in chaves_ordenadas:
         item_original = grupos_originais[chave]
         item_proposto = grupos_propostos[chave]
-        rotulos_y.append(rotulo_grupo_equilibrio(item_proposto["grupo"], categoria))
+        grupo = item_proposto["grupo"]
+        if categoria == "etapas_obrigatorias" and isinstance(grupo, list) and len(grupo) == 3:
+            _, curso, etapa = grupo
+            rotulo = f"{ROTULOS_CURSO.get(curso, curso)} · Etapa {etapa}"
+        else:
+            rotulo = str(grupo)
+        rotulos_y.append(rotulo)
         valores.append(
-            [item_original["carga_diaria_horas"].get(dia, 0) for dia in dias]
-            + [item_proposto["carga_diaria_horas"].get(dia, 0) for dia in dias]
+            [item_original["carga_diaria_horas"].get(dia, 0) for dia in ORDEM_DIAS]
+            + [item_proposto["carga_diaria_horas"].get(dia, 0) for dia in ORDEM_DIAS]
         )
 
     altura = min(1100, max(420, len(rotulos_y) * 25 + 130))
@@ -1644,6 +1655,71 @@ def figura_cargas_diarias_equilibrio(
     )
     figura.add_vline(x=4.5, line_color="#44515C", line_width=2)
     return figura
+
+
+def exibir_comparacao_carga_diaria_etapas() -> None:
+    if not CAMINHO_DISTRIBUICAO_COMPARATIVA.is_file():
+        st.info("Execute `validar_solucao_03.py` para gerar os dados comparativos de carga diária.")
+        return
+
+    distribuicao = pd.read_csv(CAMINHO_DISTRIBUICAO_COMPARATIVA)
+    dados_etapas = distribuicao[
+        (distribuicao["grupo_tipo"] == "etapa_aluno")
+        & distribuicao["solucao"].isin(["A", "B", "C"])
+    ]
+    grupos = sorted(dados_etapas["grupo"].dropna().unique())
+    if not grupos:
+        st.info("Não há dados de etapas obrigatórias para comparar.")
+        return
+
+    def rotulo_etapa(grupo: str) -> str:
+        curso, etapa = grupo.split("/", maxsplit=1)
+        return f"{ROTULOS_CURSO.get(curso, curso)} · Etapa {etapa}"
+
+    st.subheader("16. CH obrigatória diária por etapa")
+    st.caption(
+        "Cada proposta contabiliza uma turma por disciplina, em uma combinação sem sobreposições. "
+        "B usa a seleção exportada pelo solver quando compatível; A e C usam uma combinação válida reconstruída. "
+        "A seleção pode variar entre propostas; passe o cursor sobre as barras para ver as turmas incluídas."
+    )
+    grupo = st.selectbox(
+        "Curso e etapa",
+        grupos,
+        format_func=rotulo_etapa,
+        key="comparacao_carga_diaria_etapa",
+    )
+    carga = dados_etapas[dados_etapas["grupo"] == grupo]
+    limite_y = max(float(carga["horas"].max()) * 1.1, 1)
+    colunas = st.columns(3)
+    cores = {"A": "#287C72", "B": "#D07A3E", "C": "#3478A5"}
+    for coluna, solucao in zip(colunas, ("A", "B", "C")):
+        carga_proposta = carga[carga["solucao"] == solucao]
+        with coluna:
+            st.markdown(f"**Proposta {solucao}**")
+            figura = px.bar(
+                carga_proposta,
+                x="dia_semana",
+                y="horas",
+                category_orders={"dia_semana": ORDEM_DIAS},
+                color_discrete_sequence=[cores[solucao]],
+                hover_data={"turmas_selecionadas": True},
+                labels={
+                    "dia_semana": "Dia da semana",
+                    "horas": "Horas-aula obrigatórias",
+                    "turmas_selecionadas": "Turmas contabilizadas",
+                },
+            )
+            figura.update_layout(
+                height=360,
+                margin={"t": 20, "b": 20},
+                yaxis={"range": [0, limite_y]},
+                showlegend=False,
+            )
+            st.plotly_chart(
+                figura,
+                use_container_width=True,
+                key=f"carga_etapa_{solucao}",
+            )
 
 
 def exibir_equilibrio_proposta_b() -> None:
@@ -1676,7 +1752,7 @@ def exibir_equilibrio_proposta_b() -> None:
     segunda.metric("Violações duras novas", len(bloqueantes))
     terceira.metric("Status do solver", status)
 
-    st.subheader("Equilíbrio semanal")
+    st.subheader("8. Equilíbrio semanal")
     st.caption(
         "Menor desvio absoluto médio diário indica uma distribuição mais uniforme. "
         "A comparação da grade original usa as mesmas turmas escolhidas para a B."
@@ -1685,7 +1761,7 @@ def exibir_equilibrio_proposta_b() -> None:
 
     original = metricas["equilibrio_grade_original_mesmas_turmas"]
     proposta = metricas["equilibrio_proposto"]
-    st.subheader("Carga diária por etapa obrigatória")
+    st.subheader("9. Carga diária por etapa obrigatória")
     figura_etapas = figura_cargas_diarias_equilibrio(
         original["etapas_obrigatorias"],
         proposta["etapas_obrigatorias"],
@@ -1718,7 +1794,6 @@ def pagina_comparacao() -> None:
         CAMINHO_OCUPACAO_COMPARATIVA,
         CAMINHO_OCUPACAO_CURSOS_COMPARATIVA,
         CAMINHO_DISTRIBUICAO_COMPARATIVA,
-        CAMINHO_EQUILIBRIO_COMPARATIVO,
     )
     if not all(caminho.is_file() for caminho in caminhos):
         st.warning("Execute `validar_solucao_03.py` para gerar os relatórios comparativos.")
@@ -1728,9 +1803,8 @@ def pagina_comparacao() -> None:
     ocupacao = pd.read_csv(CAMINHO_OCUPACAO_COMPARATIVA)
     ocupacao_cursos = pd.read_csv(CAMINHO_OCUPACAO_CURSOS_COMPARATIVA)
     distribuicao = pd.read_csv(CAMINHO_DISTRIBUICAO_COMPARATIVA)
-    equilibrio = pd.read_csv(CAMINHO_EQUILIBRIO_COMPARATIVO)
 
-    st.subheader("Carga horária no turno-alvo")
+    st.subheader("15. Carga horária no turno-alvo")
     figura_ch = px.bar(
         comparacao,
         x="curso",
@@ -1753,13 +1827,48 @@ def pagina_comparacao() -> None:
         hide_index=True,
         use_container_width=True,
     )
+    exibir_comparacao_carga_diaria_etapas()
     if (comparacao["solucao"] == "B").any():
         st.caption("B é viável, mas o solver não comprovou a otimalidade do equilíbrio.")
 
-    st.subheader("Ocupação das salas")
+    st.subheader("17. Ocupação física das salas")
     solucao_sala = st.selectbox("Grade", ["ANTES", "A", "B", "C"], key="comparacao_sala")
     salas = ocupacao[ocupacao["solucao"] == solucao_sala].sort_values("horas_ocupadas", ascending=False)
     cursos_sala = ocupacao_cursos[ocupacao_cursos["solucao"] == solucao_sala]
+    if not salas.empty:
+        ordem_salas_fisicas = salas["sala"].tolist()
+        figura_ocupacao_fisica = px.bar(
+            salas,
+            x="horas_ocupadas",
+            y="sala",
+            orientation="h",
+            category_orders={"sala": ordem_salas_fisicas},
+            color_discrete_sequence=["#3478A5"],
+            hover_data={"encontros": True, "situacao": True},
+            labels={
+                "horas_ocupadas": "Horas de ocupação física por semana",
+                "sala": "Sala",
+                "encontros": "Encontros físicos",
+                "situacao": "Situação",
+            },
+        )
+        figura_ocupacao_fisica.update_layout(
+            height=520,
+            margin={"l": 20, "r": 20},
+            showlegend=False,
+        )
+        st.plotly_chart(figura_ocupacao_fisica, use_container_width=True)
+        st.caption(
+            "Cada encontro físico conta uma única vez, mesmo quando atende mais de um curso."
+        )
+    else:
+        st.info("Não há ocupação física para esta grade.")
+
+    st.subheader("18. Horas de ocupação atribuídas por curso")
+    st.caption(
+        "Este detalhamento distribui horas por curso. Aulas compartilhadas aparecem em cada curso atendido, "
+        "portanto a soma das barras não representa a ocupação física exclusiva da sala."
+    )
     if not cursos_sala.empty:
         ordem_salas = (
             cursos_sala.groupby("sala")["horas_aula"].sum().sort_values().index.tolist()
@@ -1786,9 +1895,14 @@ def pagina_comparacao() -> None:
     if not liberadas.empty:
         st.dataframe(liberadas[["predio", "sala", "horas_ocupadas"]], hide_index=True, use_container_width=True)
 
-    st.subheader("Distribuição semanal")
+    st.subheader("19. Distribuição semanal")
     col_grupo, col_grade = st.columns(2)
-    tipo_grupo = col_grupo.selectbox("Grupo", ["etapa_ofertas", "docente"], key="comparacao_grupo")
+    tipo_grupo = col_grupo.selectbox(
+        "Grupo",
+        ["etapa_aluno", "docente"],
+        format_func=lambda tipo: "CH obrigatória por etapa" if tipo == "etapa_aluno" else "Docente",
+        key="comparacao_grupo",
+    )
     grade_distribuicao = col_grade.selectbox("Grade ", ["ANTES", "A", "B", "C"], key="comparacao_distribuicao")
     carga = distribuicao[
         (distribuicao["solucao"] == grade_distribuicao)
@@ -1807,9 +1921,6 @@ def pagina_comparacao() -> None:
         )
         figura_carga.update_layout(height=320, margin={"t": 20, "b": 20})
         st.plotly_chart(figura_carga, use_container_width=True)
-    resumo_equilibrio = equilibrio[equilibrio["solucao"] == grade_distribuicao]
-    st.dataframe(resumo_equilibrio, hide_index=True, use_container_width=True)
-
     if CAMINHO_EXCECOES_COMPARATIVAS.is_file():
         excecoes = pd.read_csv(CAMINHO_EXCECOES_COMPARATIVAS)
         if not excecoes.empty:

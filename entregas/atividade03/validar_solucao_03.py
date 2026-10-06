@@ -5,12 +5,20 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import json
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
 from modelo_ocupacao_03 import ModeloOcupacao, carregar_modelo
-from restricoes_03 import CAMPOS_ALOCACAO, CURSOS_ALVO, TURNOS_ALVO, validar_grade
+from restricoes_03 import (
+    CAMPOS_ALOCACAO,
+    CURSOS_ALVO,
+    TURNOS_ALVO,
+    secoes_por_etapa,
+    selecionar_turmas_etapa,
+    validar_grade,
+)
 
 
 CAMPOS_POSICAO = tuple(sorted(CAMPOS_ALOCACAO))
@@ -125,12 +133,39 @@ def _metricas_curso(
     return resultado
 
 
+def _turmas_escolhidas_json(caminho_csv: Path) -> dict[tuple[str, str, str], dict[str, str]]:
+    caminho_json = caminho_csv.with_suffix(".json")
+    if not caminho_json.is_file():
+        return {}
+    try:
+        metadados = json.loads(caminho_json.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+    selecoes = {}
+    for chave, turmas in metadados.get("turmas_escolhidas_por_etapa", {}).items():
+        try:
+            semestre, curso, etapa = chave.rsplit("/", 2)
+            selecoes[(semestre, curso, etapa)] = {
+                disciplina: turma
+                for item in turmas
+                for disciplina, turma in [item.split(":", 1)]
+            }
+        except (AttributeError, TypeError, ValueError):
+            continue
+    return selecoes
+
+
 def _inventarios(
-    modelo: ModeloOcupacao, alocacoes: dict[str, dict[str, str]], rotulo: str
+    modelo: ModeloOcupacao,
+    alocacoes: dict[str, dict[str, str]],
+    rotulo: str,
+    selecoes_preferidas: dict[tuple[str, str, str], dict[str, str]] | None = None,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     por_sala: dict[tuple[str, str], dict[str, Any]] = defaultdict(lambda: {"encontros": set(), "minutos": 0})
     por_sala_curso: dict[tuple[str, str, str], dict[str, Any]] = defaultdict(lambda: {"encontros": set(), "minutos": 0})
     por_etapa: dict[tuple[str, str], dict[str, int]] = defaultdict(lambda: defaultdict(int))
+    turmas_por_etapa: dict[tuple[str, str], str] = {}
     por_docente: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
     turmas = {turma.id: turma for turma in modelo.turmas_academicas}
     tipos_sala: dict[tuple[str, str], str] = {}
@@ -159,12 +194,39 @@ def _inventarios(
             sala_curso["encontros"].add(encontro.id)
             sala_curso["minutos"] += minutos
         dia = posicao["dia_semana"].upper()
-        for turma_id in encontro.turmas_academicas:
-            turma = turmas[turma_id]
-            if turma.curso in CURSOS_ALVO and turma.etapa != "0":
-                por_etapa[(turma.curso, turma.etapa)][dia] += minutos
         for docente in docentes_por_evento[encontro.id]:
             por_docente[docente][dia] += minutos
+
+    horarios = {
+        encontro.id: (
+            alocacoes[encontro.id]["dia_semana"].strip().upper(),
+            _minutos(alocacoes[encontro.id]["hora_inicio"]),
+            _minutos(alocacoes[encontro.id]["hora_fim"]),
+        )
+        for encontro in modelo.encontros_fisicos
+    }
+    for chave, disciplinas in secoes_por_etapa(modelo).items():
+        selecionadas = selecionar_turmas_etapa(
+            disciplinas,
+            horarios,
+            (selecoes_preferidas or {}).get(chave),
+        )
+        if selecionadas is None:
+            continue
+        eventos_selecionados = {
+            encontro_id
+            for codigo, turma in selecionadas.items()
+            for encontro_id in disciplinas[codigo][turma]
+        }
+        grupo_etapa = (chave[1], chave[2])
+        turmas_por_etapa[grupo_etapa] = ", ".join(
+            f"{codigo}:{turma}" for codigo, turma in sorted(selecionadas.items())
+        )
+        for encontro_id in eventos_selecionados:
+            posicao = alocacoes[encontro_id]
+            dia = posicao["dia_semana"].strip().upper()
+            minutos = _minutos(posicao["hora_fim"]) - _minutos(posicao["hora_inicio"])
+            por_etapa[grupo_etapa][dia] += minutos
 
     salas = [{
         "solucao": rotulo, "predio": predio, "sala": sala,
@@ -178,7 +240,7 @@ def _inventarios(
     } for (predio, sala, curso), info in sorted(por_sala_curso.items())]
     distribuicao = []
     equilibrio = []
-    for tipo, grupos in (("etapa_ofertas", por_etapa), ("docente", por_docente)):
+    for tipo, grupos in (("etapa_aluno", por_etapa), ("docente", por_docente)):
         desvios = []
         amplitudes = []
         for grupo, cargas in sorted(grupos.items(), key=lambda item: str(item[0])):
@@ -192,6 +254,7 @@ def _inventarios(
                 distribuicao.append({
                     "solucao": rotulo, "grupo_tipo": tipo, "grupo": identificador,
                     "dia_semana": dia, "horas": round(cargas.get(dia, 0) / 60, 2),
+                    "turmas_selecionadas": turmas_por_etapa.get(grupo, "") if tipo == "etapa_aluno" else "",
                 })
         equilibrio.append({
             "solucao": rotulo, "grupo_tipo": tipo, "grupos": len(desvios),
@@ -229,8 +292,8 @@ def validar_e_comparar(
         "# Validacao independente das propostas A, B e C", "",
         f"- Fonte: `{arquivo_fonte.name}` (SHA-256 `{hash_fonte}`).",
         f"- Linhas da fonte: {len(registros_fonte)}; encontros fisicos: {len(modelo.encontros_fisicos)}.",
-        "- Validacao executada sobre CSVs exportados; nenhum estado interno do solver e lido.",
-        "- A carga por etapa contabiliza todas as ofertas/turmas da etapa, nao uma matricula individual.", "",
+        "- As regras sao validadas nos CSVs exportados; nenhum objeto interno do CP-SAT e lido.",
+        "- A CH diaria por etapa conta uma turma por disciplina em uma combinacao sem sobreposicoes. A escolha pode variar entre propostas; A/C usam uma combinacao valida reconstruida, e B preserva a selecao do JSON quando compativel com o CSV.", "",
         "## Resultado", "",
         "| Proposta | Estado do artefato | Encontros | Alterados | Duras baseline | Duras novas | Excecoes turno | Resultado |",
         "| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |",
@@ -306,7 +369,10 @@ def validar_e_comparar(
                 "excecoes_turno": excecoes_turno,
                 **{f"{regra}_novas": violacoes_por_regra[regra] for regra in ("H002", "H003", "H004", "H005", "H006", "H007", "H008", "H009", "H010")},
             })
-        salas, salas_por_curso, distribuicao, equilibrio = _inventarios(modelo, alocacoes, rotulo)
+        selecoes_preferidas = _turmas_escolhidas_json(caminhos[rotulo]) if rotulo == "B" else None
+        salas, salas_por_curso, distribuicao, equilibrio = _inventarios(
+            modelo, alocacoes, rotulo, selecoes_preferidas
+        )
         for sala in salas:
             chave_sala = (sala["predio"], sala["sala"])
             if rotulo != "ANTES" and sala["situacao"] == "sem_ocupacao":
@@ -341,7 +407,7 @@ def validar_e_comparar(
     _gravar_csv(pasta_saida / "ocupacao_salas_por_curso_A_B_C.csv", ocupacao_cursos_csv,
                 ["solucao", "predio", "sala", "tipo_sala", "curso", "encontros", "horas_aula"])
     _gravar_csv(pasta_saida / "distribuicao_semanal_A_B_C.csv", distribuicao_csv,
-                ["solucao", "grupo_tipo", "grupo", "dia_semana", "horas"])
+                ["solucao", "grupo_tipo", "grupo", "dia_semana", "horas", "turmas_selecionadas"])
     _gravar_csv(pasta_saida / "equilibrio_semanal_A_B_C.csv", equilibrio_csv,
                 ["solucao", "grupo_tipo", "grupos", "desvio_absoluto_medio_diario_horas", "amplitude_diaria_media_horas"])
     print(f"Fonte SHA-256: {hash_fonte}")
