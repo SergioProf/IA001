@@ -1358,7 +1358,26 @@ def carregar_proposta_para_pagina(codigo: str) -> pd.DataFrame | None:
 
 
 def pagina_proposta(codigo: str, titulo: str, descricao: str) -> None:
-    st.title(titulo)
+    if codigo == "A":
+        st.title(titulo)
+        st.subheader(
+            "Como reorganizar os horários atuais, tentando acomodar apenas as "
+            "disciplinas fora do turno-alvo, considerando um mínimo de intervenção?"
+        )
+    elif codigo == "B":
+        st.title(titulo)
+        st.subheader(
+            "Como reorganizar os horários para que a carga horária semanal dos "
+            "alunos fique mais equilibrada?"
+        )
+    elif codigo == "C":
+        st.title(titulo)
+        st.subheader(
+            "Como reorganizar os horários para concentrar o máximo possível das "
+            "aulas nos turnos-alvo, respeitando as restrições da grade?"
+        )
+    else:
+        st.title(titulo)
     st.write(descricao)
 
     dados = carregar_proposta_para_pagina(codigo)
